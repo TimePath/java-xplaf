@@ -1,10 +1,10 @@
-package com.timepath.ftp;
+package com.timepath.vfs;
 
 /**
  *
  * @author timepath
  */
-public interface FTPUpdateListener {
+public interface FileChangeListener {
 
     public void fileChanged(String newLines);
     

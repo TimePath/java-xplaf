@@ -20,8 +20,13 @@ public class XFileDialogFileChooser extends BaseFileChooser {
 
     public File[] choose() {
         String[] selection;
-        XFileDialog fd = new XFileDialog(parent);
-        fd.setTitle(dialogTitle);
+        XFileDialog fd;
+        if(parent != null) {
+            fd = new XFileDialog(parent);
+            fd.setTitle(dialogTitle);
+        } else {
+            fd = new XFileDialog(dialogTitle);
+        }
         if(directory != null) {
             fd.setDirectory(directory.getPath());
         }
