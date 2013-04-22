@@ -3,6 +3,7 @@ package com.timepath.plaf.x.filechooser;
 import com.timepath.plaf.OS;
 import java.io.File;
 import java.util.logging.Logger;
+import net.tomahawk.ExtensionsFilter;
 import net.tomahawk.XFileDialog;
 
 /**
@@ -26,6 +27,9 @@ public class XFileDialogFileChooser extends BaseFileChooser {
             fd.setTitle(dialogTitle);
         } else {
             fd = new XFileDialog(dialogTitle);
+        }
+        for(ExtensionFilter ef : filters) {
+            fd.addFilters(new ExtensionsFilter(ef.getDescription(), ef.getExtensions()));
         }
         if(directory != null) {
             fd.setDirectory(directory.getPath());

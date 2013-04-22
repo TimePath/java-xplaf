@@ -3,6 +3,9 @@ package com.timepath.plaf.x.filechooser;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -150,4 +153,33 @@ public abstract class BaseFileChooser {
     }
 
     public abstract File[] choose() throws IOException;
+    
+    protected ArrayList<ExtensionFilter> filters = new ArrayList<ExtensionFilter>();
+    
+    public BaseFileChooser addFilter(ExtensionFilter ef) {
+        filters.add(ef);
+        return this;
+    }
+    
+    public static class ExtensionFilter {
+        
+        public ExtensionFilter(String shortDescription, String... extensions) {
+            this.description = shortDescription;
+            this.extensions = Arrays.asList(extensions);
+        }
+
+        private final List<String> extensions;
+
+        public List<String> getExtensions() {
+            return extensions;
+        }
+
+        private final String description;
+
+        public String getDescription() {
+            return description;
+        }
+        
+    }
+    
 }

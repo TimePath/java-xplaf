@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class NativeFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(NativeFileChooser.class.getName());
-    
+
     private BaseFileChooser getChooser() {
         BaseFileChooser chooser;
         if(OS.isWindows()) {
@@ -21,7 +21,7 @@ public class NativeFileChooser extends BaseFileChooser {
             chooser = new AWTFileChooser();
         } else if(OS.isLinux()) {
 //            try {
-                chooser = new ZenityFileChooser();
+            chooser = new ZenityFileChooser();
 //            } catch(IOException ex) {
 //                chooser = new SwingFileChooser();  
 //            }
@@ -36,9 +36,11 @@ public class NativeFileChooser extends BaseFileChooser {
                 .setFile(file)
                 .setFileMode(fileMode)
                 .setMultiSelectionEnabled(multiSelectionEnabled)
-                .setParent(parent)
-                ;
-        
+                .setParent(parent);
+        for(ExtensionFilter ef : filters) {
+            chooser.addFilter(ef);
+        }
+
         return chooser;
     }
 

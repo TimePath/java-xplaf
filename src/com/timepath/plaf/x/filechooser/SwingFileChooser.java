@@ -4,6 +4,7 @@ import com.timepath.plaf.OS;
 import java.io.File;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -17,6 +18,34 @@ public class SwingFileChooser extends BaseFileChooser {
 //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
         JFileChooser fd = new JFileChooser(directory);
+        fd.setAcceptAllFileFilterUsed(true);
+        for(final ExtensionFilter ef : filters) {
+            FileFilter ff = new FileFilter() {
+                public boolean accept(File file) {
+                    for(String e : ef.getExtensions()) {
+                        if(file.getName().matches(".+." + e)) {
+                            return true;
+                        }
+                    }
+                    return file.isDirectory();
+                }
+
+                public String getDescription() {
+                    StringBuilder filter = new StringBuilder();
+                    filter.append(" (*.").append(ef.getExtensions().get(0));
+                    for(String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
+                        filter.append(", *.").append(e);
+                    }
+                    filter.append(")");
+                    return ef.getDescription() + filter.toString();
+                }
+            };
+            fd.addChoosableFileFilter(ff);
+            if(fd.isAcceptAllFileFilterUsed()) {
+                fd.setAcceptAllFileFilterUsed(false);
+                fd.setFileFilter(ff);
+            }
+        }
         fd.setDialogTitle(dialogTitle);
         fd.setDialogType(this.isSaveDialog() ? JFileChooser.SAVE_DIALOG : JFileChooser.OPEN_DIALOG);
         if(directory != null) {

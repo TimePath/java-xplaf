@@ -2,6 +2,7 @@ package com.timepath.plaf.x.filechooser.test;
 
 import com.timepath.plaf.x.filechooser.AWTFileChooser;
 import com.timepath.plaf.x.filechooser.BaseFileChooser;
+import com.timepath.plaf.x.filechooser.BaseFileChooser.ExtensionFilter;
 import com.timepath.plaf.x.filechooser.BaseFileChooser.FileMode;
 import com.timepath.plaf.x.filechooser.NativeFileChooser;
 import com.timepath.plaf.x.filechooser.SwingFileChooser;
@@ -269,6 +270,8 @@ public class FileChooserTest extends javax.swing.JFrame {
                     .setMultiSelectionEnabled(this.checkMulti.isSelected())
                     .setTitle(this.textTitle.getText());
 
+            c.addFilter(new ExtensionFilter("All files", "*"));
+            
             File[] f = c.choose();
 
             if(f == null) {

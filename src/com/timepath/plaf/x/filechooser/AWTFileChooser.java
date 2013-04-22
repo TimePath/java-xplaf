@@ -1,5 +1,6 @@
 package com.timepath.plaf.x.filechooser;
 
+import com.timepath.FileUtils;
 import com.timepath.plaf.OS;
 import com.timepath.plaf.mac.OSXProps;
 import java.awt.FileDialog;
@@ -19,6 +20,16 @@ public class AWTFileChooser extends BaseFileChooser {
             OSXProps.fileDialogDirectoryMode(this.isDirectoryMode());
         }
         FileDialog fd = new FileDialog(parent, dialogTitle);
+        fd.setFilenameFilter(new FilenameFilter() {
+            public boolean accept(File file, String string) {
+                for(final ExtensionFilter ef : filters) {
+                    if(ef.getExtensions().contains(FileUtils.extension(file))) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         if(directory != null) {
             fd.setDirectory(directory.getPath());
         }
