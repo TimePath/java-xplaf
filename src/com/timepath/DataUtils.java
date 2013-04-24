@@ -57,7 +57,7 @@ public class DataUtils {
         sub.order(ByteOrder.LITTLE_ENDIAN);
         return sub;
     }
-    
+
     public static ByteBuffer getSafeSlice(ByteBuffer source, int length) {
         if(length > source.remaining()) {
             length = source.remaining();
@@ -72,11 +72,11 @@ public class DataUtils {
         mbb.order(ByteOrder.LITTLE_ENDIAN);
         return mbb;
     }
-    
+
     public static String getText(ByteBuffer source) {
         return getText(source, false);
     }
-    
+
     public static String getText(ByteBuffer source, boolean terminator) {
         return Charset.forName("UTF-8").decode(getTextBuffer(source, terminator)).toString();
     }
@@ -87,7 +87,7 @@ public class DataUtils {
         if(terminatorCheck) {
             while(source.remaining() > 0) {
                 if(source.get() == 0x00) { // Check for null terminator
-                    end = source.position() - 1;
+                    end = source.position();
                     break;
                 }
             }
@@ -97,7 +97,7 @@ public class DataUtils {
 
         return source;
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="Old stuff">
     public static byte readByte(RandomAccessFile f) throws IOException {
         byte b = f.readByte();
@@ -246,6 +246,14 @@ public class DataUtils {
 
     public static int updateChecksumAdd(int value) {
         return value;
+    }
+
+    public static String hexDump(ByteBuffer buf) {
+        int originalPosition = buf.position();
+        byte[] byt = new byte[buf.limit()];
+        buf.get(byt);
+        buf.position(originalPosition);
+        return Utils.hex(byt);
     }
 
     private DataUtils() {
