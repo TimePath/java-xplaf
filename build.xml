@@ -11,7 +11,7 @@
             </fileset>
             <patternset>
                 <exclude name="META-INF/**"/>
-                <!--<exclude name="/*"/>-->
+                <exclude name="/*"/>
             </patternset>
         </unjar>
     </target>
