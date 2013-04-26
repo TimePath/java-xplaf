@@ -23,7 +23,7 @@ public class SwingFileChooser extends BaseFileChooser {
             FileFilter ff = new FileFilter() {
                 public boolean accept(File file) {
                     for(String e : ef.getExtensions()) {
-                        if(file.getName().matches(".+." + e)) {
+                        if(file.getName().matches(".+" + e)) {
                             return true;
                         }
                     }

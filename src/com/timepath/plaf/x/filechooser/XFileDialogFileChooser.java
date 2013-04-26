@@ -29,7 +29,7 @@ public class XFileDialogFileChooser extends BaseFileChooser {
             fd = new XFileDialog(dialogTitle);
         }
         for(ExtensionFilter ef : filters) {
-            fd.addFilters(new ExtensionsFilter(ef.getDescription(), ef.getExtensions()));
+            fd.addFilters(new ExtensionsFilter(ef.getDescription(), ef.getExtensions())); // is this broken?
         }
         if(directory != null) {
             fd.setDirectory(directory.getPath());

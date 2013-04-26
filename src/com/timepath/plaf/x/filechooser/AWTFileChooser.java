@@ -23,8 +23,10 @@ public class AWTFileChooser extends BaseFileChooser {
         fd.setFilenameFilter(new FilenameFilter() {
             public boolean accept(File file, String string) {
                 for(final ExtensionFilter ef : filters) {
-                    if(ef.getExtensions().contains(FileUtils.extension(file))) {
-                        return true;
+                    for(String e : ef.getExtensions()) {
+                        if(file.getName().endsWith(e)) {
+                            return true;
+                        }
                     }
                 }
                 return false;

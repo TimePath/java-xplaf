@@ -270,7 +270,7 @@ public class FileChooserTest extends javax.swing.JFrame {
                     .setMultiSelectionEnabled(this.checkMulti.isSelected())
                     .setTitle(this.textTitle.getText());
 
-            c.addFilter(new ExtensionFilter("All files", "*"));
+            c.addFilter(new ExtensionFilter("All files", ".*"));
             
             File[] f = c.choose();
 

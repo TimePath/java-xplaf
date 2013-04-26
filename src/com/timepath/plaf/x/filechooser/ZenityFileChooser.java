@@ -26,17 +26,28 @@ public class ZenityFileChooser extends BaseFileChooser {
         ArrayList<String> cmd = new ArrayList<String>();
         cmd.add("zenity");
         cmd.add("--file-selection");
+        StringBuilder allDesc = new StringBuilder();
+        StringBuilder allExt = new StringBuilder();
+        StringBuilder allExt2 = new StringBuilder();
+        for(ExtensionFilter ef : filters) {
+            allDesc.append(", ").append(ef.getDescription());
+            for(String e : ef.getExtensions()) {
+                allExt.append(", *").append(e);
+                allExt2.append("*").append(e).append(" ");
+            }
+        }
+        cmd.add("--file-filter=" + allDesc.toString().substring(2) + "(" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(2));
         for(ExtensionFilter ef : filters) {
             StringBuilder filter = new StringBuilder();
             filter.append(ef.getDescription());
-            filter.append(" (*.").append(ef.getExtensions().get(0));
+            filter.append(" (*").append(ef.getExtensions().get(0));
             for(String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
-                filter.append(", *.").append(e);
+                filter.append(", *").append(e);
             }
             filter.append(")");
             filter.append(" | ");
             for(String e : ef.getExtensions()) {
-                filter.append("*.").append(e).append(" ");
+                filter.append("*").append(e).append(" ");
             }
             cmd.add("--file-filter=" + filter.toString());
         }
