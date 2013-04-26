@@ -33,10 +33,10 @@ public class ZenityFileChooser extends BaseFileChooser {
             allDesc.append(", ").append(ef.getDescription());
             for(String e : ef.getExtensions()) {
                 allExt.append(", *").append(e);
-                allExt2.append("*").append(e).append(" ");
+                allExt2.append(" *").append(e);
             }
         }
-        cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(2));
+        cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(1));
         for(ExtensionFilter ef : filters) {
             StringBuilder filter = new StringBuilder();
             filter.append(ef.getDescription());
@@ -88,7 +88,7 @@ public class ZenityFileChooser extends BaseFileChooser {
 
         String[] exec = new String[cmd.size()];
         cmd.toArray(exec);
-        LOG.log(Level.FINE, "zenity: {0}", Arrays.toString(exec));
+        LOG.log(Level.INFO, "zenity: {0}", Arrays.toString(exec));
         final Process proc = Runtime.getRuntime().exec(exec);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
