@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author timepath
  */
 public class ZenityFileChooser extends BaseFileChooser {
-    
+
     private static final Logger LOG = Logger.getLogger(ZenityFileChooser.class.getName());
 
     @Override
@@ -36,7 +36,9 @@ public class ZenityFileChooser extends BaseFileChooser {
                 allExt2.append(" *").append(e);
             }
         }
-        cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(1));
+        if(filters.size() > 1) {
+            cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(1));
+        }
         for(ExtensionFilter ef : filters) {
             StringBuilder filter = new StringBuilder();
             filter.append(ef.getDescription());
@@ -100,7 +102,7 @@ public class ZenityFileChooser extends BaseFileChooser {
         String selection = br.readLine();
 //        String selection;
 //        while((selection = br.readLine()) != null) {
-            LOG.log(Level.INFO, "Zenity selection: {0}", selection);
+        LOG.log(Level.INFO, "Zenity selection: {0}", selection);
 //        }
         if(selection == null) {
             return null;
@@ -113,5 +115,4 @@ public class ZenityFileChooser extends BaseFileChooser {
             return f;
         }
     }
-    
 }

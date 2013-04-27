@@ -72,30 +72,43 @@ public class DataUtils {
         mbb.order(ByteOrder.LITTLE_ENDIAN);
         return mbb;
     }
+    
+    public static String getString(ByteBuffer source) {
+        ByteBuffer[] cloned = DataUtils.getTextBuffer(source.duplicate(), true);
+        source.position(source.position() + (cloned[0].limit() - cloned[0].position()));
+        return Charset.forName("UTF-8").decode(cloned[1]).toString();
+    }
 
     public static String getText(ByteBuffer source) {
         return getText(source, false);
     }
 
     public static String getText(ByteBuffer source, boolean terminator) {
-        return Charset.forName("UTF-8").decode(getTextBuffer(source, terminator)).toString();
+        return Charset.forName("UTF-8").decode(getTextBuffer(source, terminator)[1]).toString();
     }
 
-    public static ByteBuffer getTextBuffer(ByteBuffer source, boolean terminatorCheck) {
-        int pos = source.position();
-        int end = source.limit();
+    public static ByteBuffer[] getTextBuffer(ByteBuffer source, boolean terminatorCheck) {
+        int originalPosition = source.position();
+        int originalLimit = source.limit();
+        int inclusiveEnd = source.limit();
+        int trimmedEnd = source.limit();
         if(terminatorCheck) {
             while(source.remaining() > 0) {
                 if(source.get() == 0x00) { // Check for null terminator
-                    end = source.position();
+                    inclusiveEnd = source.position();
+                    trimmedEnd = source.position() - 1;
                     break;
                 }
             }
         }
-        source.position(pos);
-        source.limit(end);
+        source.position(originalPosition);
+        source.limit(inclusiveEnd);
+        ByteBuffer inclusive = source.slice();
+        source.limit(trimmedEnd);
+        ByteBuffer trimmed = source.slice();
+        source.limit(originalLimit);
 
-        return source;
+        return new ByteBuffer[]{inclusive, trimmed};
     }
 
     //<editor-fold defaultstate="collapsed" desc="Old stuff">

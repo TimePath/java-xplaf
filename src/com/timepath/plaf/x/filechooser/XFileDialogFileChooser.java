@@ -1,7 +1,9 @@
 package com.timepath.plaf.x.filechooser;
 
+import com.timepath.Utils;
 import com.timepath.plaf.OS;
 import java.io.File;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.tomahawk.ExtensionsFilter;
 import net.tomahawk.XFileDialog;
@@ -21,6 +23,11 @@ public class XFileDialogFileChooser extends BaseFileChooser {
 
     public File[] choose() {
         String[] selection;
+//        try {
+//            Utils.setFinalStatic(ExtensionsFilter.class.getField("POINT"), "");
+//        } catch(Exception ex) {
+//            Logger.getLogger(XFileDialogFileChooser.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         XFileDialog fd;
         if(parent != null) {
             fd = new XFileDialog(parent);
