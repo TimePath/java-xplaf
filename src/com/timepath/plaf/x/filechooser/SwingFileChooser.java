@@ -32,9 +32,9 @@ public class SwingFileChooser extends BaseFileChooser {
 
                 public String getDescription() {
                     StringBuilder filter = new StringBuilder();
-                    filter.append(" (*.").append(ef.getExtensions().get(0));
+                    filter.append(" (*").append(ef.getExtensions().get(0));
                     for(String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
-                        filter.append(", *.").append(e);
+                        filter.append(", *").append(e);
                     }
                     filter.append(")");
                     return ef.getDescription() + filter.toString();

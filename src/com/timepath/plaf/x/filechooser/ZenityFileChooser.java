@@ -47,9 +47,9 @@ public class ZenityFileChooser extends BaseFileChooser {
                 filter.append(", *").append(e);
             }
             filter.append(")");
-            filter.append(" | ");
+            filter.append(" |");
             for(String e : ef.getExtensions()) {
-                filter.append("*").append(e).append(" ");
+                filter.append(" *").append(e);
             }
             cmd.add("--file-filter=" + filter.toString());
         }
@@ -82,13 +82,15 @@ public class ZenityFileChooser extends BaseFileChooser {
         if(WindowToolkit.getWindowClass() != null) {
             cmd.add("--window-icon=" + LinuxUtils.getLinuxStore() + "icons/" + WindowToolkit.getWindowClass() + ".png");
         }
-        cmd.add("--title=" + this.getTitle());
+        if(this.getTitle() != null && this.getTitle().trim().length() > 0) {
+            cmd.add("--title=" + this.getTitle());
+        }
         if(this.getApproveButtonText() != null) {
             cmd.add("--ok-label=" + this.getApproveButtonText());
         }
 //        cmd.add("--cancel-label=TEXT ");
 
-        String[] exec = new String[cmd.size()];
+        final String[] exec = new String[cmd.size()];
         cmd.toArray(exec);
         LOG.log(Level.INFO, "zenity: {0}", Arrays.toString(exec));
         final Process proc = Runtime.getRuntime().exec(exec);
@@ -100,7 +102,7 @@ public class ZenityFileChooser extends BaseFileChooser {
         });
         BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         String selection = br.readLine();
-//        String selection;
+//        String selection = null;
 //        while((selection = br.readLine()) != null) {
         LOG.log(Level.INFO, "Zenity selection: {0}", selection);
 //        }
