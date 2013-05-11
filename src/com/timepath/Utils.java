@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,98 +34,15 @@ public class Utils {
 
     private Utils() {
     }
-    
+
     public static void setFinalStatic(Field field, Object newValue) throws Exception {
-      field.setAccessible(true);
+        field.setAccessible(true);
 
-      Field modifiersField = Field.class.getDeclaredField("modifiers");
-      modifiersField.setAccessible(true);
-      modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
-      field.set(null, newValue);
-   }
-
-    public static String timePeriod(long diffInSeconds) {
-        StringBuilder sb = new StringBuilder();
-
-        long sec = (diffInSeconds >= 60 ? diffInSeconds % 60 : diffInSeconds);
-        long min = (diffInSeconds = (diffInSeconds / 60)) >= 60 ? diffInSeconds % 60 : diffInSeconds;
-        long hrs = (diffInSeconds = (diffInSeconds / 60)) >= 24 ? diffInSeconds % 24 : diffInSeconds;
-        long days = (diffInSeconds = (diffInSeconds / 24)) >= 30 ? diffInSeconds % 30 : diffInSeconds;
-        //<editor-fold defaultstate="collapsed" desc="approximate months/years">
-        //                long months = (diffInSeconds = (diffInSeconds / 30)) >= 12 ? diffInSeconds % 12 : diffInSeconds;
-        //                long years = (diffInSeconds = (diffInSeconds / 12));
-
-        //                if(years > 0) {
-        //                    if(years == 1) {
-        //                        sb.append("a year");
-        //                    } else {
-        //                        sb.append(years + " years");
-        //                    }
-        //                    if(years <= 6 && months > 0) {
-        //                        if(months == 1) {
-        //                            sb.append(" and a month");
-        //                        } else {
-        //                            sb.append(" and " + months + " months");
-        //                        }
-        //                    }
-        //                } else if(months > 0) {
-        //                    if(months == 1) {
-        //                        sb.append("a month");
-        //                    } else {
-        //                        sb.append(months + " months");
-        //                    }
-        //                    if(months <= 6 && days > 0) {
-        //                        if(days == 1) {
-        //                            sb.append(" and a day");
-        //                        } else {
-        //                            sb.append(" and " + days + " days");
-        //                        }
-        //                    }
-        //                } else 
-        //</editor-fold>
-        if(days > 0) {
-            if(days == 1) {
-                sb.append("a day");
-            } else {
-                sb.append(days).append(" days");
-            }
-            if(days <= 3 && hrs > 0) {
-                if(hrs == 1) {
-                    sb.append(" and an hour");
-                } else {
-                    sb.append(" and ").append(hrs).append(" hours");
-                }
-            }
-        } else if(hrs > 0) {
-            if(hrs == 1) {
-                sb.append("an hour");
-            } else {
-                sb.append(hrs).append(" hours");
-            }
-            if(min > 1) {
-                sb.append(" and ").append(min).append(" minutes");
-            }
-        } else if(min > 0) {
-            if(min == 1) {
-                sb.append("a minute");
-            } else {
-                sb.append(min).append(" minutes");
-            }
-            if(sec > 1) {
-                sb.append(" and ").append(sec).append(" seconds");
-            }
-        } else {
-            if(sec <= 1) {
-                sb.append("about a second");
-            } else {
-                sb.append("about ").append(sec).append(" seconds");
-            }
-        }
-
-        sb.append(" ago");
-
-        return sb.toString();
+        field.set(null, newValue);
     }
 
     public static String hex(byte[] a) {
@@ -245,9 +164,16 @@ public class Utils {
     public static HyperlinkListener linkListener = new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent he) {
             if(he.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                if(Desktop.isDesktopSupported()) {
+                if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                     try {
-                        Desktop.getDesktop().browse(he.getURL().toURI());
+                        URI u = null;
+                        URL l = he.getURL();
+                        if(l == null) {
+                            u = new URI(he.getDescription());
+                        } else if(u == null) {
+                            u = l.toURI();
+                        }
+                        Desktop.getDesktop().browse(u);
                     } catch(Exception e) {
                         LOG.log(Level.WARNING, null, e);
                     }
