@@ -1,8 +1,10 @@
 package com.timepath;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -66,13 +68,35 @@ public class DataUtils {
     }
 
     public static ByteBuffer mapFile(File f) throws IOException {
-        FileInputStream fis = new FileInputStream(f);
-        FileChannel fc = fis.getChannel();
+        RandomAccessFile raf = new RandomAccessFile(f, "r");
+//        FileInputStream fis = new FileInputStream(f);
+        FileChannel fc = raf.getChannel();
         MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, f.length());
         mbb.order(ByteOrder.LITTLE_ENDIAN);
         return mbb;
     }
-    
+
+    public static ByteBuffer mapInputStream(InputStream is) throws IOException {
+        int bs = 8192;
+        if(!(is instanceof BufferedInputStream)) {
+//            is = new BufferedInputStream(is);
+            bs = is.available();
+        }
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[bs];
+        while((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        buffer.flush();
+
+        ByteBuffer mbb = ByteBuffer.wrap(buffer.toByteArray());
+        mbb.order(ByteOrder.LITTLE_ENDIAN);
+        return mbb;
+    }
+
     public static String getString(ByteBuffer source) {
         ByteBuffer[] cloned = DataUtils.getTextBuffer(source.duplicate(), true);
         source.position(source.position() + (cloned[0].limit() - cloned[0].position()));

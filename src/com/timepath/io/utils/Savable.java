@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.timepath.io;
+package com.timepath.io.utils;
 
 import java.io.File;
 import java.io.InputStream;

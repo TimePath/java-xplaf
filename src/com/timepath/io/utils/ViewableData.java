@@ -1,4 +1,4 @@
-package com.timepath.io;
+package com.timepath.io.utils;
 
 import javax.swing.Icon;
 
