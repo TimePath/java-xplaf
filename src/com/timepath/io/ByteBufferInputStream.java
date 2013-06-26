@@ -45,8 +45,9 @@ public class ByteBufferInputStream extends InputStream {
 
     @Override
     public synchronized void reset() throws IOException {
-        if (markpos < 0)
+        if(markpos < 0) {
             throw new IOException("Resetting to invalid mark");
+        }
         buf.position(markpos);
     }
 
@@ -70,4 +71,5 @@ public class ByteBufferInputStream extends InputStream {
         }
         return len;
     }
+
 }

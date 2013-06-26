@@ -10,7 +10,7 @@ import javax.swing.tree.TreePath;
  * @author timepath
  */
 public class TreeUtils {
-    
+
     public static void expand(JTree tree) {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
         Enumeration e = root.breadthFirstEnumeration();
@@ -26,16 +26,18 @@ public class TreeUtils {
 
     /**
      * @param source
-     * @param dest 
+     * @param dest
      */
     public static void moveChildren(DefaultMutableTreeNode source, DefaultMutableTreeNode dest) {
         moveChildren(source, dest, false);
     }
-    
-    public static void moveChildren(DefaultMutableTreeNode source, DefaultMutableTreeNode dest, boolean safe) {
+
+    public static void moveChildren(DefaultMutableTreeNode source, DefaultMutableTreeNode dest,
+                                    boolean safe) {
         if(safe) {
             dest.add(source);
         } else {
+            @SuppressWarnings("unchecked")
             Enumeration<DefaultMutableTreeNode> e = source.children();
             while(e.hasMoreElements()) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) source.getChildAt(0);
@@ -44,5 +46,5 @@ public class TreeUtils {
             }
         }
     }
-    
+
 }

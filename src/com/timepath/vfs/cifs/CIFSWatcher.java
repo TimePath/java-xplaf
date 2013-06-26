@@ -104,7 +104,8 @@ public class CIFSWatcher {
                                     }
                                     LOG.info("Socket closed");
                                 } catch(IOException ex) {
-                                    Logger.getLogger(CIFSWatcher.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(CIFSWatcher.class.getName()).log(Level.SEVERE,
+                                                                                      null, ex);
                                 }
                             }
 
@@ -205,8 +206,8 @@ public class CIFSWatcher {
                                 byte[] getBytes() {
                                     return null;
                                 }
-                            }
 
+                            }
                         }).start();
                     }
                 }
@@ -215,4 +216,5 @@ public class CIFSWatcher {
             Logger.getLogger(CIFSWatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }

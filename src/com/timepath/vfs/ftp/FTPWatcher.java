@@ -92,7 +92,8 @@ public class FTPWatcher {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                                            client.getInputStream()));
                                     PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
                                     out(pw, "220 Welcome");
                                     while(!client.isClosed()) {
@@ -119,8 +120,10 @@ public class FTPWatcher {
                                                 String[] args = cmd.substring(5).split(",");
                                                 String sep = ".";
                                                 String dataAddress = args[0] + sep + args[1] + sep + args[2] + sep + args[3];
-                                                int dataPort = (Integer.parseInt(args[4]) * 256) + Integer.parseInt(args[5]);
-                                                data = new Socket(InetAddress.getByName(dataAddress), dataPort);
+                                                int dataPort = (Integer.parseInt(args[4]) * 256) + Integer.parseInt(
+                                                        args[5]);
+                                                data = new Socket(InetAddress.getByName(dataAddress),
+                                                                  dataPort);
                                                 LOG.log(Level.FINE, "=== Data receiver: {0}", data);
                                                 out(pw, "200 PORT command successful.");
                                             } else if(cmd.startsWith("LIST")) {
@@ -128,8 +131,10 @@ public class FTPWatcher {
                                                 if(pasv != null) {
                                                     data = pasv.accept();
                                                 }
-                                                PrintWriter out = new PrintWriter(data.getOutputStream(), true);
-                                                out(out, "-rw-rw-rw- 1 timepath users 0 Jan 1 00:00 out.log");
+                                                PrintWriter out = new PrintWriter(
+                                                        data.getOutputStream(), true);
+                                                out(out,
+                                                    "-rw-rw-rw- 1 timepath users 0 Jan 1 00:00 out.log");
                                                 data.close();
                                                 out(pw, "226 Listing completed");
                                             } else if(cmd.startsWith("RETR")) {
@@ -137,7 +142,8 @@ public class FTPWatcher {
                                                 if(pasv != null) {
                                                     data = pasv.accept();
                                                 }
-                                                PrintWriter out = new PrintWriter(data.getOutputStream(), true);
+                                                PrintWriter out = new PrintWriter(
+                                                        data.getOutputStream(), true);
                                                 //                                        out(out, "");
                                                 data.close();
                                                 out(pw, "226 File sent");
@@ -147,7 +153,8 @@ public class FTPWatcher {
                                                 if(dirAccessible) {
                                                     out(pw, "250 Okay");
                                                 } else {
-                                                    out(pw, "550 " + dir + ": No such file or directory.");
+                                                    out(pw,
+                                                        "550 " + dir + ": No such file or directory.");
                                                 }
                                             } else if(cmd.startsWith("PWD")) {
                                                 String dir = "/";
@@ -162,12 +169,16 @@ public class FTPWatcher {
                                             } else if(cmd.startsWith("PASV")) {
                                                 pasv = new ServerSocket(0);
                                                 byte[] h = pasv.getInetAddress().getAddress();
-                                                int[] p = {pasv.getLocalPort() / 256, pasv.getLocalPort() % 256};
-                                                out(pw, "227 =" + h[0] + "," + h[1] + "," + h[2] + "," + h[3] + "," + p[0] + "," + p[1]);
+                                                int[] p = {pasv.getLocalPort() / 256,
+                                                           pasv.getLocalPort() % 256};
+                                                out(pw,
+                                                    "227 =" + h[0] + "," + h[1] + "," + h[2] + "," + h[3] + "," + p[0] + "," + p[1]);
                                             } else if(cmd.startsWith("SIZE")) {
                                                 out(pw, "200 1024");
                                             } else if(cmd.startsWith("MDTM")) {
-                                                out(pw, "200 " + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date(System.currentTimeMillis() / 1000)));
+                                                out(pw, "200 " + new SimpleDateFormat(
+                                                        "yyyyMMddhhmmss").format(new Date(
+                                                        System.currentTimeMillis() / 1000)));
                                             } else if(cmd.startsWith("FEAT")) {
                                                 //<editor-fold defaultstate="collapsed" desc="Supported features">
                                                 out(pw, "211-Extensions supported");
@@ -205,8 +216,10 @@ public class FTPWatcher {
                                                 if(pasv != null) {
                                                     data = pasv.accept();
                                                 }
-                                                BufferedReader in = new BufferedReader(new InputStreamReader(data.getInputStream()));
-                                                PrintWriter out = new PrintWriter(data.getOutputStream(), true);
+                                                BufferedReader in = new BufferedReader(
+                                                        new InputStreamReader(data.getInputStream()));
+                                                PrintWriter out = new PrintWriter(
+                                                        data.getOutputStream(), true);
                                                 String line;
                                                 while((line = in.readLine()) != null) {
                                                     LOG.log(Level.FINE, "=== {0}", line);
@@ -225,7 +238,8 @@ public class FTPWatcher {
                                                 out(pw, "226 File uploaded successfully");
                                                 //</editor-fold>
                                             } else {
-                                                LOG.log(Level.WARNING, "Unsupported operation {0}", cmd);
+                                                LOG.log(Level.WARNING, "Unsupported operation {0}",
+                                                        cmd);
                                             }
                                         } catch(Exception ex) {
                                             LOG.log(Level.SEVERE, null, ex);
@@ -233,7 +247,8 @@ public class FTPWatcher {
                                     }
                                     LOG.info("Socket closed");
                                 } catch(IOException ex) {
-                                    Logger.getLogger(FTPWatcher.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(FTPWatcher.class.getName()).log(Level.SEVERE,
+                                                                                     null, ex);
                                 }
                             }
                         }).start();
@@ -256,4 +271,5 @@ public class FTPWatcher {
             Logger.getLogger(FTPWatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }

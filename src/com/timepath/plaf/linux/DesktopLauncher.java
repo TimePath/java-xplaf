@@ -32,7 +32,8 @@ public class DesktopLauncher {
         sb.append("[Desktop Entry]").append("\n");
         sb.append("Version=1.0").append("\n");
         sb.append("StartupWMClass=").append(desktop).append("\n");
-        sb.append("Exec=java -jar Dropbox/Public/tf/Hud\\ Editor/TF2\\ HUD\\ Editor.jar %U").append("\n"); // TODO: fixme. Get a dedicated install directory.
+        sb.append("Exec=java -jar Dropbox/Public/tf/Hud\\ Editor/TF2\\ HUD\\ Editor.jar %U").append(
+                "\n"); // TODO: fixme. Get a dedicated install directory.
         if(icon != null) {
             sb.append("Icon=").append(icon).append("\n");
         }
@@ -55,7 +56,7 @@ public class DesktopLauncher {
             md51 = Utils.takeMD5(Utils.loadFile(destFile));
             md52 = Utils.takeMD5(sb.toString().getBytes());
             if(!md51.equals(md52)) { // TODO: Check date to allow for user customisation
-                LOG.log(Level.INFO, "{0} vs {1}", new Object[]{md51, md52});
+                LOG.log(Level.INFO, "{0} vs {1}", new Object[] {md51, md52});
                 flag = true;
             }
         } catch(Exception e) {
@@ -90,7 +91,9 @@ public class DesktopLauncher {
         }
         for(int i = 0; i < icons.length; i++) {
             try {
-                File destFile = new File(LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] + icons[i].substring(icons[i].lastIndexOf('.') > 0 ? icons[i].lastIndexOf('.') : icons[i].length()));
+                File destFile = new File(
+                        LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] + icons[i].substring(
+                        icons[i].lastIndexOf('.') > 0 ? icons[i].lastIndexOf('.') : icons[i].length()));
 
                 if(!destFile.getParentFile().exists()) {
                     destFile.getParentFile().mkdirs();
@@ -124,4 +127,5 @@ public class DesktopLauncher {
 
     private DesktopLauncher() {
     }
+
 }

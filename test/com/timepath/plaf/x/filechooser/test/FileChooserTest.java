@@ -233,16 +233,20 @@ public class FileChooserTest extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     private static final Logger LOG = Logger.getLogger(FileChooserTest.class.getName());
 
     private ListModel getFileChoosers() {
         return new AbstractListModel() {
             private static final long serialVersionUID = 1L;
+
             private Class<? extends BaseFileChooser>[] strings = generate();
 
             @SuppressWarnings("unchecked")
             private Class<? extends BaseFileChooser>[] generate() {
-                return new Class[] {NativeFileChooser.class, AWTFileChooser.class, SwingFileChooser.class, XFileDialogFileChooser.class, ZenityFileChooser.class};
+                return new Class[] {NativeFileChooser.class, AWTFileChooser.class,
+                                    SwingFileChooser.class, XFileDialogFileChooser.class,
+                                    ZenityFileChooser.class};
             }
 
             public int getSize() {
@@ -265,13 +269,15 @@ public class FileChooserTest extends javax.swing.JFrame {
             BaseFileChooser c = (BaseFileChooser) o;
             c
                     .setParent(this)
-                    .setFileMode(this.checkDirectories.isSelected() ? FileMode.DIRECTORIES_ONLY : (this.checkFiles.isSelected() ? FileMode.FILES_ONLY : FileMode.FILES_AND_DIRECTORIES))
-                    .setDialogType(this.checkSave.isSelected() ? BaseFileChooser.DialogType.SAVE_DIALOG : BaseFileChooser.DialogType.OPEN_DIALOG)
+                    .setFileMode(
+                    this.checkDirectories.isSelected() ? FileMode.DIRECTORIES_ONLY : (this.checkFiles.isSelected() ? FileMode.FILES_ONLY : FileMode.FILES_AND_DIRECTORIES))
+                    .setDialogType(
+                    this.checkSave.isSelected() ? BaseFileChooser.DialogType.SAVE_DIALOG : BaseFileChooser.DialogType.OPEN_DIALOG)
                     .setMultiSelectionEnabled(this.checkMulti.isSelected())
                     .setTitle(this.textTitle.getText());
 
             c.addFilter(new ExtensionFilter("All files", ".*"));
-            
+
             File[] f = c.choose();
 
             if(f == null) {

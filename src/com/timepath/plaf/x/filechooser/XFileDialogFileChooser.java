@@ -46,16 +46,16 @@ public class XFileDialogFileChooser extends BaseFileChooser {
             if(multi) {
                 selection = fd.getFolders();
             } else {
-                selection = new String[]{fd.getFolder()};
+                selection = new String[] {fd.getFolder()};
             }
         } else {
             if(this.isSaveDialog()) {
-                selection = new String[]{fd.getSaveFile()};
+                selection = new String[] {fd.getSaveFile()};
             } else {
                 if(multi) {
                     selection = fd.getFiles();
                 } else {
-                    selection = new String[]{fd.getFile()};
+                    selection = new String[] {fd.getFile()};
                 }
             }
         }

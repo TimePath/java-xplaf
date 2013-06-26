@@ -25,7 +25,7 @@ public class NativeFileChooser extends BaseFileChooser {
                 chooser = new SwingFileChooser();
             } else {
 //            try {
-            chooser = new ZenityFileChooser();
+                chooser = new ZenityFileChooser();
 //            } catch(IOException ex) {
 //                chooser = new SwingFileChooser();  
 //            }
@@ -53,4 +53,5 @@ public class NativeFileChooser extends BaseFileChooser {
     public File[] choose() throws IOException {
         return getChooser().choose();
     }
+
 }

@@ -30,7 +30,7 @@ public class JarClassLoader extends ClassLoader {
 
     public void run(String className, String[] args) throws Throwable {
         Class<?> clazz = loadClass(className);
-        Method method = clazz.getMethod("main", new Class<?>[]{String[].class});
+        Method method = clazz.getMethod("main", new Class<?>[] {String[].class});
         // ensure 'method' is 'public static void main(args[])'
         boolean modifiersValid = false;
         boolean returnTypeValid = false;
@@ -42,7 +42,8 @@ public class JarClassLoader extends ClassLoader {
             returnTypeValid = (returnType == void.class);
         }
         if(method == null || !modifiersValid || !returnTypeValid) {
-            throw new NoSuchMethodException("Class \"" + className + "\" does not have a main() method.");
+            throw new NoSuchMethodException(
+                    "Class \"" + className + "\" does not have a main() method.");
         }
 
         try {
@@ -63,4 +64,5 @@ public class JarClassLoader extends ClassLoader {
         LOG.log(Level.INFO, "findLibrary({0})", libname);
         return super.findLibrary(libname);
     }
+
 }

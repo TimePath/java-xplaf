@@ -220,7 +220,11 @@ public class JarClassLoader extends ClassLoader {
 
     public enum LogLevel {
 
-        ERROR, WARN, INFO, DEBUG
+        ERROR,
+        WARN,
+        INFO,
+        DEBUG
+
     }
 
     public enum LogArea {
@@ -249,6 +253,7 @@ public class JarClassLoader extends ClassLoader {
          * Enable native libraries loading related logging.
          */
         NATIVE
+
     }
 
     /**
@@ -367,7 +372,7 @@ public class JarClassLoader extends ClassLoader {
         try {
             if(jarFileInfo == null) {
                 throw new IOException(String.format(
-                    "Unknown protocol %s", protocol));
+                        "Unknown protocol %s", protocol));
             }
             loadJar(jarFileInfo);
         } catch(IOException e) {
@@ -454,7 +459,7 @@ public class JarClassLoader extends ClassLoader {
      * @throws JarClassLoaderException
      */
     private File createTempFile(JarEntryInfo inf)
-        throws JarClassLoaderException {
+            throws JarClassLoaderException {
         // Temp files directory:
         //   WinXP: C:/Documents and Settings/username/Local Settings/Temp/JarClassLoader
         //    Unix: /var/tmp/JarClassLoader
@@ -466,7 +471,7 @@ public class JarClassLoader extends ClassLoader {
             chmod777(dir); // Unix - allow temp directory RW access to all users.
             if(!dir.exists() || !dir.isDirectory()) {
                 throw new JarClassLoaderException(
-                    "Cannot create temp directory " + dir.getAbsolutePath());
+                        "Cannot create temp directory " + dir.getAbsolutePath());
             }
             dirTemp = dir;
         }
@@ -477,13 +482,13 @@ public class JarClassLoader extends ClassLoader {
             chmod777(fileTmp); // Unix - allow temp file deletion by any user
             byte[] a_by = inf.getJarBytes();
             BufferedOutputStream os = new BufferedOutputStream(
-                new FileOutputStream(fileTmp));
+                    new FileOutputStream(fileTmp));
             os.write(a_by);
             os.close();
             return fileTmp;
         } catch(IOException e) {
             throw new JarClassLoaderException(String.format(
-                "Cannot create temp file '%s' for %s", fileTmp, inf.jarEntry), e);
+                    "Cannot create temp file '%s' for %s", fileTmp, inf.jarEntry), e);
         }
     } // createTempFile()
 
@@ -510,12 +515,13 @@ public class JarClassLoader extends ClassLoader {
                     File fileTemp = createTempFile(inf);
                     logInfo(LogArea.JAR, "Loading inner JAR %s from temp file %s",
                             inf.jarEntry, getFilename4Log(fileTemp));
-                    loadJar(new JarFileInfo(new JarFile(fileTemp), inf.getName(), jarFileInfo, fileTemp));
+                    loadJar(new JarFileInfo(new JarFile(fileTemp), inf.getName(), jarFileInfo,
+                                            fileTemp));
                 }
             }
         } catch(JarClassLoaderException e) {
             throw new RuntimeException(
-                "ERROR on loading inner JAR: " + e.getMessageAll());
+                    "ERROR on loading inner JAR: " + e.getMessageAll());
         }
     } // loadJar()
 
@@ -800,11 +806,11 @@ public class JarClassLoader extends ClassLoader {
      * @param args   arguments for the main() method or null.
      *
      * @throws Throwable wrapper for many exceptions thrown while
-     *                   <p>(1) main() method lookup:
-     *                   ClassNotFoundException, SecurityException, NoSuchMethodException
-     *                   <p>(2) main() method launch:
-     *                   IllegalArgumentException, IllegalAccessException (disabled)
-     *                   <p>(3) Actual cause of InvocationTargetException
+     * <p>(1) main() method lookup:
+     * ClassNotFoundException, SecurityException, NoSuchMethodException
+     * <p>(2) main() method launch:
+     * IllegalArgumentException, IllegalAccessException (disabled)
+     * <p>(3) Actual cause of InvocationTargetException
      *
      * See
      * {@link http://java.sun.com/developer/Books/javaprogramming/JAR/api/jarclassloader.html}
@@ -814,7 +820,7 @@ public class JarClassLoader extends ClassLoader {
     public void invokeMain(String sClass, String[] args) throws Throwable {
         Class<?> clazz = loadClass(sClass);
         logInfo(LogArea.CONFIG, "Launch: %s.main(); Loader: %s", sClass, clazz.getClassLoader());
-        Method method = clazz.getMethod("main", new Class<?>[]{String[].class});
+        Method method = clazz.getMethod("main", new Class<?>[] {String[].class});
 
         boolean bValidModifiers = false;
         boolean bValidVoid = false;
@@ -829,7 +835,7 @@ public class JarClassLoader extends ClassLoader {
         }
         if(method == null || !bValidModifiers || !bValidVoid) {
             throw new NoSuchMethodException(
-                "The main() method in class \"" + sClass + "\" not found.");
+                    "The main() method in class \"" + sClass + "\" not found.");
         }
 
         // Invoke method.
@@ -855,7 +861,8 @@ public class JarClassLoader extends ClassLoader {
      */
     public void initApplet(String sClass, final JApplet appletParent) throws Throwable {
         Class<?> clazz = loadClass(sClass);
-        logInfo(LogArea.CONFIG, "initApplet() --> %s.init(); Loader: %s", sClass, clazz.getClassLoader());
+        logInfo(LogArea.CONFIG, "initApplet() --> %s.init(); Loader: %s", sClass,
+                clazz.getClassLoader());
         applet = (JApplet) clazz.newInstance();
         applet.setStub(new AppletStub() {
             public boolean isActive() {
@@ -927,7 +934,7 @@ public class JarClassLoader extends ClassLoader {
      */
     @Override
     protected synchronized Class<?> loadClass(String sClassName, boolean bResolve)
-        throws ClassNotFoundException {
+            throws ClassNotFoundException {
         logDebug(LogArea.CLASS, "LOADING %s (resolve=%b)", sClassName, bResolve);
         // Each thread must have THIS class loader set as a context class loader.
         // This is required to prevent failure finding a class or resource from
@@ -1072,7 +1079,8 @@ public class JarClassLoader extends ClassLoader {
                     hsDeleteOnExit.add(file);
                     return file.getAbsolutePath();
                 } catch(JarClassLoaderException e) {
-                    logInfo(LogArea.NATIVE, "Failure to load native library %s: %s", sLib, e.toString());
+                    logInfo(LogArea.NATIVE, "Failure to load native library %s: %s", sLib,
+                            e.toString());
                 }
             }
             return null;
@@ -1100,7 +1108,7 @@ public class JarClassLoader extends ClassLoader {
      *                                  class loader or one of its ancestors.
      */
     private void definePackage(String sClassName, JarEntryInfo inf)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         int pos = sClassName.lastIndexOf('.');
         String sPackageName = pos > 0 ? sClassName.substring(0, pos) : "";
         if(getPackage(sPackageName) == null) {
@@ -1203,7 +1211,8 @@ public class JarClassLoader extends ClassLoader {
          *                         Used only to delete temporary file on exit.
          *                         Could be null if not required to delete on exit (top level JAR)
          */
-        JarFileInfo(JarFile jarFile, String simpleName, JarFileInfo jarFileParent, File fileDeleteOnExit) {
+        JarFileInfo(JarFile jarFile, String simpleName, JarFileInfo jarFileParent,
+                    File fileDeleteOnExit) {
             this.simpleName = (jarFileParent == null ? "" : jarFileParent.simpleName + "!") + simpleName;
             this.jarFile = jarFile;
             this.fileDeleteOnExit = fileDeleteOnExit;
@@ -1252,6 +1261,7 @@ public class JarClassLoader extends ClassLoader {
             }
             return null;
         }
+
     } // inner class JarFileInfo
 
     /**
@@ -1302,7 +1312,7 @@ public class JarClassLoader extends ClassLoader {
                 long lSize = jarEntry.getSize();
                 if(lSize <= 0 || lSize >= Integer.MAX_VALUE) {
                     throw new JarClassLoaderException(
-                        "Invalid size " + lSize + " for entry " + jarEntry);
+                            "Invalid size " + lSize + " for entry " + jarEntry);
                 }
                 a_by = new byte[(int) lSize];
                 InputStream is = jarFileInfo.jarFile.getInputStream(jarEntry);
@@ -1320,6 +1330,7 @@ public class JarClassLoader extends ClassLoader {
             }
             return a_by;
         } // getJarBytes()
+
     } // inner class JarEntryInfo
 
     /**
@@ -1350,5 +1361,6 @@ public class JarClassLoader extends ClassLoader {
             }
             return sb.toString();
         }
+
     } // inner class JarClassLoaderException
 } // class JarClassLoader

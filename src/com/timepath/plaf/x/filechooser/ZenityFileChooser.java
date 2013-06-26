@@ -37,7 +37,8 @@ public class ZenityFileChooser extends BaseFileChooser {
             }
         }
         if(filters.size() > 1) {
-            cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(2) + ") | " + allExt2.toString().substring(1));
+            cmd.add("--file-filter=" + allDesc.toString().substring(2) + " (" + allExt.toString().substring(
+                    2) + ") | " + allExt2.toString().substring(1));
         }
         for(ExtensionFilter ef : filters) {
             StringBuilder filter = new StringBuilder();
@@ -117,4 +118,5 @@ public class ZenityFileChooser extends BaseFileChooser {
             return f;
         }
     }
+
 }

@@ -9,4 +9,5 @@ package com.timepath;
 public interface EnumFlags<C extends Enum<C> & EnumFlags<C>> {
 
     public int getId();
+
 }

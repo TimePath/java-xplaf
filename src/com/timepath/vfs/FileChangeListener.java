@@ -7,5 +7,5 @@ package com.timepath.vfs;
 public interface FileChangeListener {
 
     public void fileChanged(String newLines);
-    
+
 }

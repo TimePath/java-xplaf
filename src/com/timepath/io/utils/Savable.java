@@ -14,11 +14,11 @@ import java.nio.ByteBuffer;
  * @author timepath
  */
 public interface Savable {
-    
+
     public void readExternal(InputStream in);
-    
+
     public void readExternal(ByteBuffer buf);
 
     public void writeExternal(OutputStream out);
-    
+
 }

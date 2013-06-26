@@ -51,7 +51,7 @@ public abstract class BaseFileChooser {
         this.directory = directory;
         return this;
     }
-    
+
     public BaseFileChooser setDirectory(String directoryPath) {
         if(directoryPath == null) {
             this.directory = null;
@@ -60,7 +60,7 @@ public abstract class BaseFileChooser {
         }
         return this;
     }
-    
+
     protected String file;
 
     public BaseFileChooser setFile(String file) {
@@ -79,7 +79,7 @@ public abstract class BaseFileChooser {
         }
         return this;
     }
-    
+
     protected String approveButtonText;
 
     public String getApproveButtonText() {
@@ -90,11 +90,14 @@ public abstract class BaseFileChooser {
         this.approveButtonText = approveButtonText;
         return this;
     }
-    
+
     public static enum DialogType {
-        SAVE_DIALOG, OPEN_DIALOG
+
+        SAVE_DIALOG,
+        OPEN_DIALOG
+
     }
-    
+
     protected DialogType dialogType = DialogType.OPEN_DIALOG;
 
     public DialogType getDialogType() {
@@ -105,15 +108,19 @@ public abstract class BaseFileChooser {
         this.dialogType = dialogType;
         return this;
     }
-    
+
     public boolean isSaveDialog() {
         return dialogType == DialogType.SAVE_DIALOG;
     }
-    
+
     public static enum FileMode {
-        DIRECTORIES_ONLY, FILES_ONLY, FILES_AND_DIRECTORIES
+
+        DIRECTORIES_ONLY,
+        FILES_ONLY,
+        FILES_AND_DIRECTORIES
+
     }
-    
+
     protected FileMode fileMode = FileMode.FILES_ONLY;
 
     public FileMode getFileMode() {
@@ -124,45 +131,44 @@ public abstract class BaseFileChooser {
         this.fileMode = fileMode;
         return this;
     }
-    
+
     public boolean isDirectoryMode() {
         return this.getFileMode() == FileMode.DIRECTORIES_ONLY;
     }
-    
+
     protected boolean multiSelectionEnabled;
-    
+
     public boolean isMultiSelectionEnabled() {
         return multiSelectionEnabled;
     }
-    
+
     public BaseFileChooser setMultiSelectionEnabled(boolean multiSelectionEnabled) {
         this.multiSelectionEnabled = multiSelectionEnabled;
         return this;
     }
-    
+
     public BaseFileChooser() {
-        
     }
-    
+
     public BaseFileChooser(File currentDirectory) {
         setDirectory(currentDirectory);
     }
-    
+
     public BaseFileChooser(String currentDirectoryPath) {
         setDirectory(currentDirectoryPath);
     }
 
     public abstract File[] choose() throws IOException;
-    
+
     protected ArrayList<ExtensionFilter> filters = new ArrayList<ExtensionFilter>();
-    
+
     public BaseFileChooser addFilter(ExtensionFilter ef) {
         filters.add(ef);
         return this;
     }
-    
+
     public static class ExtensionFilter {
-        
+
         public ExtensionFilter(String shortDescription, String... extensions) {
             this.description = shortDescription;
             this.extensions = Arrays.asList(extensions);
@@ -179,7 +185,7 @@ public abstract class BaseFileChooser {
         public String getDescription() {
             return description;
         }
-        
+
     }
-    
+
 }

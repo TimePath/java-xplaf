@@ -1,6 +1,5 @@
 package com.timepath.swing.test;
 
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -30,18 +29,26 @@ public class ScrollablePanel extends JPanel
         NONE,
         FIT,
         STRETCH;
+
     }
 
     public enum IncrementType {
 
         PERCENT,
         PIXELS;
+
     }
+
     private ScrollableSizeHint scrollableHeight = ScrollableSizeHint.NONE;
+
     private ScrollableSizeHint scrollableWidth = ScrollableSizeHint.NONE;
+
     private IncrementInfo horizontalBlock;
+
     private IncrementInfo horizontalUnit;
+
     private IncrementInfo verticalBlock;
+
     private IncrementInfo verticalUnit;
 
     /**
@@ -137,13 +144,14 @@ public class ScrollablePanel extends JPanel
      * Specify the information needed to do block scrolling.
      *
      * @param orientation specify the scrolling orientation. Must be either:
-     * SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     *                    SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     * <p/>
      * @paran type specify how the amount parameter in the calculation of the
      * scrollable amount. Valid values are: IncrementType.PERCENT - treat the
      * amount as a % of the viewport size IncrementType.PIXEL - treat the amount
      * as the scrollable amount
-     * @param amount a value used with the IncrementType to determine the
-     * scrollable amount
+     * @param amount      a value used with the IncrementType to determine the
+     *                    scrollable amount
      */
     public void setScrollableBlockIncrement(int orientation, IncrementType type, int amount) {
         IncrementInfo info = new IncrementInfo(type, amount);
@@ -154,9 +162,9 @@ public class ScrollablePanel extends JPanel
      * Specify the information needed to do block scrolling.
      *
      * @param orientation specify the scrolling orientation. Must be either:
-     * SwingContants.HORIZONTAL or SwingContants.VERTICAL.
-     * @param info An IncrementInfo object containing information of how to
-     * calculate the scrollable amount.
+     *                    SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     * @param info        An IncrementInfo object containing information of how to
+     *                    calculate the scrollable amount.
      */
     public void setScrollableBlockIncrement(int orientation, IncrementInfo info) {
         switch(orientation) {
@@ -184,13 +192,14 @@ public class ScrollablePanel extends JPanel
      * Specify the information needed to do unit scrolling.
      *
      * @param orientation specify the scrolling orientation. Must be either:
-     * SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     *                    SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     * <p/>
      * @paran type specify how the amount parameter in the calculation of the
      * scrollable amount. Valid values are: IncrementType.PERCENT - treat the
      * amount as a % of the viewport size IncrementType.PIXEL - treat the amount
      * as the scrollable amount
-     * @param amount a value used with the IncrementType to determine the
-     * scrollable amount
+     * @param amount      a value used with the IncrementType to determine the
+     *                    scrollable amount
      */
     public void setScrollableUnitIncrement(int orientation, IncrementType type, int amount) {
         IncrementInfo info = new IncrementInfo(type, amount);
@@ -201,9 +210,9 @@ public class ScrollablePanel extends JPanel
      * Specify the information needed to do unit scrolling.
      *
      * @param orientation specify the scrolling orientation. Must be either:
-     * SwingContants.HORIZONTAL or SwingContants.VERTICAL.
-     * @param info An IncrementInfo object containing information of how to
-     * calculate the scrollable amount.
+     *                    SwingContants.HORIZONTAL or SwingContants.VERTICAL.
+     * @param info        An IncrementInfo object containing information of how to
+     *                    calculate the scrollable amount.
      */
     public void setScrollableUnitIncrement(int orientation, IncrementInfo info) {
         switch(orientation) {
@@ -299,6 +308,7 @@ public class ScrollablePanel extends JPanel
     static class IncrementInfo {
 
         private IncrementType type;
+
         private int amount;
 
         public IncrementInfo(IncrementType type, int amount) {
@@ -316,9 +326,10 @@ public class ScrollablePanel extends JPanel
 
         public String toString() {
             return "ScrollablePanel["
-                    + type + ", "
-                    + amount + "]";
+                   + type + ", "
+                   + amount + "]";
         }
+
     }
 
     public static void main(String... args) {
@@ -328,11 +339,13 @@ public class ScrollablePanel extends JPanel
                 JFrame f = new JFrame();
                 ScrollablePanel sp = new ScrollablePanel();
                 sp.add(new JFileChooser());
-                JScrollPane scroller = new JScrollPane(sp, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                JScrollPane scroller = new JScrollPane(sp, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                                       JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
                 f.setContentPane(scroller);
                 f.pack();
                 f.setVisible(true);
             }
         });
     }
+
 }

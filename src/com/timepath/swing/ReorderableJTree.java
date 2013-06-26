@@ -34,49 +34,51 @@ public class ReorderableJTree extends JTree {
 
     //<editor-fold defaultstate="collapsed" desc="Drag levels">
     private int minDropLevel = -1;
-    
+
     public int getMinDropLevel() {
         return minDropLevel;
     }
-    
+
     public void setMinDropLevel(int minDropLevel) {
         this.minDropLevel = minDropLevel;
     }
-    
+
     private int maxDropLevel = -1;
-    
+
     public int getMaxDropLevel() {
         return maxDropLevel;
     }
-    
+
     /**
      * Sets the maximum dropping level
+     * <p/>
      * @param maxDropLevel s
      */
     public void setMaxDropLevel(int maxDropLevel) {
         this.maxDropLevel = maxDropLevel;
     }
-    
+
     private int minDragLevel = -1;
-    
+
     public int getMinDragLevel() {
         return minDragLevel;
     }
-    
+
     /**
      * Sets the minimum level of allowed movable nodes
+     * <p/>
      * @param minDragLevel
      */
     public void setMinDragLevel(int minDragLevel) {
         this.minDragLevel = minDragLevel;
     }
-    
+
     private int maxDragLevel = -1;
-    
+
     public int getMaxDragLevel() {
         return maxDragLevel;
     }
-    
+
     public void setMaxDragLevel(int maxDragLevel) {
         this.maxDragLevel = maxDragLevel;
     }
@@ -135,7 +137,7 @@ public class ReorderableJTree extends JTree {
                                   + javax.swing.tree.DefaultMutableTreeNode[].class.getName()
                                   + "\"";
                 nodesFlavor = new DataFlavor(mimeType);
-                flavors = new DataFlavor[]{nodesFlavor};
+                flavors = new DataFlavor[] {nodesFlavor};
             } catch(ClassNotFoundException e) {
                 LOG.log(Level.SEVERE, "ClassNotFound: {0}", e.getMessage());
             }
@@ -174,7 +176,8 @@ public class ReorderableJTree extends JTree {
                         toRemove.add(next);
                     }
                 }
-                DefaultMutableTreeNode[] nodes = copies.toArray(new DefaultMutableTreeNode[copies.size()]);
+                DefaultMutableTreeNode[] nodes = copies.toArray(
+                        new DefaultMutableTreeNode[copies.size()]);
                 nodesToRemove = toRemove.toArray(new DefaultMutableTreeNode[toRemove.size()]);
                 return new NodesTransferable(nodes);
             }
@@ -217,7 +220,8 @@ public class ReorderableJTree extends JTree {
             // Convert nodes to usable format
             DefaultMutableTreeNode[] clodedNodes;
             try {
-                clodedNodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(nodesFlavor);
+                clodedNodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(
+                        nodesFlavor);
             } catch(Exception ex) {
                 return false;
             }
@@ -227,7 +231,7 @@ public class ReorderableJTree extends JTree {
             }
 
             // Sanity check
-            
+
             if((maxDropLevel > -1 && target.getLevel() > maxDropLevel) || (minDropLevel > -1 && target.getLevel() < minDropLevel)) {
                 return false;
             }
@@ -273,7 +277,8 @@ public class ReorderableJTree extends JTree {
             // Extract transfer data.
             DefaultMutableTreeNode[] nodes = null;
             try {
-                nodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(nodesFlavor);
+                nodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(
+                        nodesFlavor);
             } catch(UnsupportedFlavorException ufe) {
                 LOG.log(Level.WARNING, "UnsupportedFlavor: {0}", ufe.getMessage());
             } catch(java.io.IOException ioe) {
@@ -327,6 +332,7 @@ public class ReorderableJTree extends JTree {
             public boolean isDataFlavorSupported(DataFlavor flavor) {
                 return nodesFlavor.equals(flavor);
             }
+
         }
 
     }

@@ -61,7 +61,7 @@ public class FileMonitor {
      * @throws FileNotFoundException
      */
     public void addFileChangeListener(FileChangeListener listener, String fileName, long period)
-        throws FileNotFoundException {
+            throws FileNotFoundException {
         addFileChangeListener(listener, new File(fileName), period);
     }
 
@@ -75,7 +75,7 @@ public class FileMonitor {
      * @throws FileNotFoundException
      */
     public void addFileChangeListener(FileChangeListener listener, File file, long period)
-        throws FileNotFoundException {
+            throws FileNotFoundException {
         removeFileChangeListener(listener, file);
         FileMonitorTask task = new FileMonitorTask(listener, file);
         timerEntries.put(file.toString() + listener.hashCode(), task);
@@ -150,7 +150,9 @@ public class FileMonitor {
                 fireFileChangeEvent(this.listener, monitoredFile);
             }
         }
+
     }
 
     private static final Logger LOG = Logger.getLogger(FileMonitor.class.getName());
+
 }

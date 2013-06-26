@@ -45,4 +45,5 @@ public class TestMenuFix extends JFrame {
     }
 
     private static final Logger LOG = Logger.getLogger(TestMenuFix.class.getName());
+
 }

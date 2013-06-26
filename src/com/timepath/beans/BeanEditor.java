@@ -74,7 +74,7 @@ public class BeanEditor extends JPanel {
                         });
                     }
                 }
-                Object[] data = new Object[]{p.getName(), value, jb};
+                Object[] data = new Object[] {p.getName(), value, jb};
                 ((DefaultTableModel) this.jTable1.getModel()).addRow(data);
             }
         } catch(Exception ex) {
@@ -116,7 +116,8 @@ public class BeanEditor extends JPanel {
             }
         }
 
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
+                                                     int row, int column) {
             if(value instanceof Component) {
                 Component c = (Component) value;
                 updateData(c, true, table);
@@ -129,7 +130,9 @@ public class BeanEditor extends JPanel {
             return null;
         }
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus, int row,
+                                                       int column) {
             if(value instanceof Component) {
                 Component c = (Component) value;
                 updateData(c, isSelected, table);
@@ -137,6 +140,7 @@ public class BeanEditor extends JPanel {
             }
             return panel;
         }
+
     }
 
     /**

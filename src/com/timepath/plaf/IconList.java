@@ -25,7 +25,7 @@ public class IconList {
             list.add(new ImageIcon(getClass().getResource(path + i + "." + ext)).getImage());
         }
     }
-    
+
     public List<Image> getIcons() {
         return list;
     }

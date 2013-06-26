@@ -11,7 +11,8 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author http://www.ailis.de/~k/archives/67-Workaround-for-borderless-Java-Swing-menus-on-Linux.html
+ * @author
+ * http://www.ailis.de/~k/archives/67-Workaround-for-borderless-Java-Swing-menus-on-Linux.html
  * @author timepath
  */
 public class GtkFixer {
@@ -94,7 +95,8 @@ public class GtkFixer {
      *
      * @throws Exception When reflection fails.
      */
-    private static Object getGtkStyle(Object styleFactory, JComponent component, String regionName) throws Exception {
+    private static Object getGtkStyle(Object styleFactory, JComponent component, String regionName)
+            throws Exception {
         // Create the region object
         Class<?> regionClass = Class.forName("javax.swing.plaf.synth.Region");
         Field field = regionClass.getField(regionName);
@@ -102,7 +104,8 @@ public class GtkFixer {
 
         // Get and return the style
         Class<?> styleFactoryClass = styleFactory.getClass();
-        Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[]{JComponent.class, regionClass});
+        Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[] {JComponent.class,
+                                                                                regionClass});
         boolean accessible = method.isAccessible();
         method.setAccessible(true);
         Object style = method.invoke(styleFactory, component, region); // javax.swing.plaf.synth.SynthStyle, com.sun.java.swing.plaf.gtk.GTKStyle
@@ -114,4 +117,5 @@ public class GtkFixer {
 
     private GtkFixer() {
     }
+
 }

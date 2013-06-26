@@ -13,8 +13,12 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class DirectoryTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
+                                                  boolean expanded, boolean leaf, int row,
+                                                  boolean hasFocus) {
         return super.getTreeCellRendererComponent(tree, value, sel, sel, false, row, hasFocus);
     }
+
     private static final Logger LOG = Logger.getLogger(DirectoryTreeCellRenderer.class.getName());
+
 }

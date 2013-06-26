@@ -164,7 +164,8 @@ public class Utils {
     public static HyperlinkListener linkListener = new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent he) {
             if(he.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(
+                        Desktop.Action.BROWSE)) {
                     try {
                         URI u = null;
                         URL l = he.getURL();

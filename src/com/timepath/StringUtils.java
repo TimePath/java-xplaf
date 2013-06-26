@@ -22,4 +22,5 @@ public class StringUtils {
     }
 
     private static final Logger LOG = Logger.getLogger(StringUtils.class.getName());
+
 }

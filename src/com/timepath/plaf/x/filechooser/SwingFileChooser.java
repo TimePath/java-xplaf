@@ -55,7 +55,8 @@ public class SwingFileChooser extends BaseFileChooser {
                 fd.setSelectedFile(directory);
             }
         }
-        fd.setFileSelectionMode(this.isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
+        fd.setFileSelectionMode(
+                this.isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
         if(!this.isSaveDialog()) {
             fd.setMultiSelectionEnabled(multiSelectionEnabled);
         }
@@ -64,7 +65,7 @@ public class SwingFileChooser extends BaseFileChooser {
             if(this.multiSelectionEnabled) {
                 selection = fd.getSelectedFiles();
             } else {
-                selection = new File[]{fd.getSelectedFile()};
+                selection = new File[] {fd.getSelectedFile()};
             }
         }
         return selection;

@@ -53,7 +53,7 @@ public class AWTFileChooser extends BaseFileChooser {
         if(fd.getDirectory() == null || fd.getFile() == null) { // cancelled
             return null;
         }
-        return new File[]{new File(fd.getDirectory() + File.pathSeparator + fd.getFile())};
+        return new File[] {new File(fd.getDirectory() + File.pathSeparator + fd.getFile())};
     }
 
     private static final Logger LOG = Logger.getLogger(AWTFileChooser.class.getName());

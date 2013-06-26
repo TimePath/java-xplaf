@@ -35,4 +35,5 @@ public class StatusBar extends JToolBar {
     // End of variables declaration//GEN-END:variables
 
     private static final Logger LOG = Logger.getLogger(StatusBar.class.getName());
+
 }

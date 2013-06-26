@@ -12,9 +12,9 @@ import org.java.ayatana.AyatanaDesktop;
  * @author timepath
  */
 public class Ayatana {
-    
+
     private static final Logger LOG = Logger.getLogger(Ayatana.class.getName());
-    
+
     public static boolean installMenu(JFrame frame, JMenuBar jmb) {
         try {
             if(!AyatanaDesktop.isSupported()) {
@@ -39,5 +39,5 @@ public class Ayatana {
 
     private Ayatana() {
     }
-    
+
 }

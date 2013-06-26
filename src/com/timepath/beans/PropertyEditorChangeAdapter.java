@@ -20,4 +20,5 @@ public class PropertyEditorChangeAdapter extends PropertyEditorAdapter {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
+
 }

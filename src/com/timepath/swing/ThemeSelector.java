@@ -21,11 +21,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author timepath
  */
 @SuppressWarnings("serial")
-public class ThemeSelector extends JComboBox {
+public class ThemeSelector extends JComboBox<String> {
 
     public ThemeSelector() {
-        Vector comboBoxItems = new Vector();
-        final DefaultComboBoxModel model = new DefaultComboBoxModel(comboBoxItems);
+        Vector<String> comboBoxItems = new Vector<String>();
+        final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(comboBoxItems);
         this.setModel(model);
 
         String lafId = UIManager.getLookAndFeel().getClass().getName();
@@ -53,11 +53,14 @@ public class ThemeSelector extends JComboBox {
                             try {
                                 UIManager.setLookAndFeel(info.getClassName());
                             } catch(InstantiationException ex) {
-                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE,
+                                                                                    null, ex);
                             } catch(IllegalAccessException ex) {
-                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE,
+                                                                                    null, ex);
                             } catch(UnsupportedLookAndFeelException ex) {
-                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE,
+                                                                                    null, ex);
                             } catch(ClassNotFoundException ex) {
 //                                Logger.getLogger(ThemeSelector.class.getName()).log(Level.SEVERE, null, ex);
                                 LOG.warning("Unable to load user L&F");

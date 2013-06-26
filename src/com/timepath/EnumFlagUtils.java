@@ -12,10 +12,13 @@ import java.util.logging.Logger;
 public class EnumFlagUtils {
 
     @SuppressWarnings("unchecked")
-    public static <C extends Enum<C> & EnumFlags<C>> EnumSet<C> decode(int encoded, Class<C> enumClass) {
+    public static <C extends Enum<C> & EnumFlags<C>> EnumSet<C> decode(int encoded,
+                                                                       Class<C> enumClass) {
         C[] map = enumClass
-                 /*.getDeclaringClass()*/
-                 .getEnumConstants();
+                /*
+                 * .getDeclaringClass()
+                 */
+                .getEnumConstants();
         Arrays.sort(map, new Comparator<C>() {
             public int compare(C e1, C e2) {
                 // Mixed bits at the top, single bits at the bottom, in order of size
@@ -65,4 +68,5 @@ public class EnumFlagUtils {
 
     private EnumFlagUtils() {
     }
+
 }

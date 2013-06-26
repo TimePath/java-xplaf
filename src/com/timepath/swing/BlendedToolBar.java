@@ -60,7 +60,6 @@ public class BlendedToolBar extends JToolBar implements MouseListener, MouseMoti
 //        g.setColor(this.getBackground());
 //        g.fillRect(0, 0, this.getWidth(), this.getHeight());
 //    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,4 +107,5 @@ public class BlendedToolBar extends JToolBar implements MouseListener, MouseMoti
 
     public void mouseExited(MouseEvent me) {
     }
+
 }

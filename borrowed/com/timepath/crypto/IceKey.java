@@ -9,20 +9,27 @@ package com.timepath.crypto;
 public class IceKey {
 
     private int size;
+
     private int rounds;
+
     private int keySchedule[][];
+
     private static int spBox[][];
+
     private static boolean spBoxInitialised = false;
+
     private static final int sMod[][] = {
         {333, 313, 505, 369},
         {379, 375, 319, 391},
         {361, 445, 451, 397},
         {397, 425, 395, 505}};
+
     private static final int sXor[][] = {
         {0x83, 0x85, 0x9b, 0xcd},
         {0xcc, 0xa7, 0xad, 0x41},
         {0x4b, 0x2e, 0xd4, 0x33},
         {0xea, 0xcb, 0x2e, 0x04}};
+
     private static final int pBox[] = {
         0x00000001, 0x00000080, 0x00000400, 0x00002000,
         0x00080000, 0x00200000, 0x01000000, 0x40000000,
@@ -32,6 +39,7 @@ public class IceKey {
         0x00020000, 0x00400000, 0x08000000, 0x10000000,
         0x00000002, 0x00000040, 0x00000800, 0x00001000,
         0x00040000, 0x00100000, 0x02000000, 0x80000000};
+
     private static final int keyrot[] = {
         0, 1, 2, 3, 2, 1, 3, 0,
         1, 3, 2, 0, 3, 1, 0, 2};
@@ -44,15 +52,15 @@ public class IceKey {
     private int gf_mult(int a, int b, int m) {
         int res = 0;
 
-        while (b != 0) {
-            if ((b & 1) != 0) {
+        while(b != 0) {
+            if((b & 1) != 0) {
                 res ^= a;
             }
 
             a <<= 1;
             b >>>= 1;
 
-            if (a >= 256) {
+            if(a >= 256) {
                 a ^= m;
             }
         }
@@ -67,7 +75,7 @@ public class IceKey {
     private int gf_exp7(int b, int m) {
         int x;
 
-        if (b == 0) {
+        if(b == 0) {
             return (0);
         }
 
@@ -84,8 +92,8 @@ public class IceKey {
         int res = 0;
         int i = 0;
 
-        while (x != 0) {
-            if ((x & 1) != 0) {
+        while(x != 0) {
+            if((x & 1) != 0) {
                 res |= pBox[i];
             }
             i++;
@@ -103,7 +111,7 @@ public class IceKey {
 
         spBox = new int[4][1024];
 
-        for (i = 0; i < 1024; i++) {
+        for(i = 0; i < 1024; i++) {
             int col = (i >>> 1) & 0xff;
             int row = (i & 0x1) | ((i & 0x200) >>> 8);
             int x;
@@ -126,12 +134,12 @@ public class IceKey {
      * Create a new ICE key with the specified level.
      */
     public IceKey(int level) {
-        if (!spBoxInitialised) {
+        if(!spBoxInitialised) {
             spBoxInit();
             spBoxInitialised = true;
         }
 
-        if (level < 1) {
+        if(level < 1) {
             size = 1;
             rounds = 8;
         } else {
@@ -148,20 +156,20 @@ public class IceKey {
     private void scheduleBuild(int kb[], int n, int krot_idx) {
         int i;
 
-        for (i = 0; i < 8; i++) {
+        for(i = 0; i < 8; i++) {
             int j;
             int kr = keyrot[krot_idx + i];
             int subkey[] = keySchedule[n + i];
 
-            for (j = 0; j < 3; j++) {
+            for(j = 0; j < 3; j++) {
                 keySchedule[n + i][j] = 0;
             }
 
-            for (j = 0; j < 15; j++) {
+            for(j = 0; j < 15; j++) {
                 int k;
                 int curr_sk = j % 3;
 
-                for (k = 0; k < 4; k++) {
+                for(k = 0; k < 4; k++) {
                     int curr_kb = kb[(kr + k) & 3];
                     int bit = curr_kb & 1;
 
@@ -179,22 +187,22 @@ public class IceKey {
         int i;
         int kb[] = new int[4];
 
-        if (rounds == 8) {
-            for (i = 0; i < 4; i++) {
+        if(rounds == 8) {
+            for(i = 0; i < 4; i++) {
                 kb[3 - i] = ((key[i * 2] & 0xff) << 8)
-                        | (key[i * 2 + 1] & 0xff);
+                            | (key[i * 2 + 1] & 0xff);
             }
 
             scheduleBuild(kb, 0, 0);
             return;
         }
 
-        for (i = 0; i < size; i++) {
+        for(i = 0; i < size; i++) {
             int j;
 
-            for (j = 0; j < 4; j++) {
+            for(j = 0; j < 4; j++) {
                 kb[3 - j] = ((key[i * 8 + j * 2] & 0xff) << 8)
-                        | (key[i * 8 + j * 2 + 1] & 0xff);
+                            | (key[i * 8 + j * 2 + 1] & 0xff);
             }
 
             scheduleBuild(kb, i * 8, 0);
@@ -208,8 +216,8 @@ public class IceKey {
     public void clear() {
         int i, j;
 
-        for (i = 0; i < rounds; i++) {
-            for (j = 0; j < 3; j++) {
+        for(i = 0; i < rounds; i++) {
+            for(j = 0; j < 3; j++) {
                 keySchedule[i][j] = 0;
             }
         }
@@ -247,17 +255,17 @@ public class IceKey {
         int i;
         int l = 0, r = 0;
 
-        for (i = 0; i < 4; i++) {
+        for(i = 0; i < 4; i++) {
             l |= (plaintext[i] & 0xff) << (24 - i * 8);
             r |= (plaintext[i + 4] & 0xff) << (24 - i * 8);
         }
 
-        for (i = 0; i < rounds; i += 2) {
+        for(i = 0; i < rounds; i += 2) {
             l ^= roundFunc(r, keySchedule[i]);
             r ^= roundFunc(l, keySchedule[i + 1]);
         }
 
-        for (i = 0; i < 4; i++) {
+        for(i = 0; i < 4; i++) {
             ciphertext[3 - i] = (byte) (r & 0xff);
             ciphertext[7 - i] = (byte) (l & 0xff);
 
@@ -273,17 +281,17 @@ public class IceKey {
         int i;
         int l = 0, r = 0;
 
-        for (i = 0; i < 4; i++) {
+        for(i = 0; i < 4; i++) {
             l |= (ciphertext[i] & 0xff) << (24 - i * 8);
             r |= (ciphertext[i + 4] & 0xff) << (24 - i * 8);
         }
 
-        for (i = rounds - 1; i > 0; i -= 2) {
+        for(i = rounds - 1; i > 0; i -= 2) {
             l ^= roundFunc(r, keySchedule[i]);
             r ^= roundFunc(l, keySchedule[i - 1]);
         }
 
-        for (i = 0; i < 4; i++) {
+        for(i = 0; i < 4; i++) {
             plaintext[3 - i] = (byte) (r & 0xff);
             plaintext[7 - i] = (byte) (l & 0xff);
 
@@ -305,4 +313,5 @@ public class IceKey {
     public int blockSize() {
         return (8);
     }
+
 }

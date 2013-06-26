@@ -24,4 +24,5 @@ public class ByteBufferOutputStream extends OutputStream {
     public void write(byte[] bytes, int off, int len) throws IOException {
         buf.put(bytes, off, len);
     }
+
 }

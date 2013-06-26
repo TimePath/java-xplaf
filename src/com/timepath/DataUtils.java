@@ -132,7 +132,7 @@ public class DataUtils {
         ByteBuffer trimmed = source.slice();
         source.limit(originalLimit);
 
-        return new ByteBuffer[]{inclusive, trimmed};
+        return new ByteBuffer[] {inclusive, trimmed};
     }
 
     //<editor-fold defaultstate="collapsed" desc="Old stuff">
@@ -295,4 +295,5 @@ public class DataUtils {
 
     private DataUtils() {
     }
+
 }

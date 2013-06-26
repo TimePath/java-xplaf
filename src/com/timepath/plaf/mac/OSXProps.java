@@ -52,4 +52,5 @@ public class OSXProps {
 
     private OSXProps() {
     }
+
 }

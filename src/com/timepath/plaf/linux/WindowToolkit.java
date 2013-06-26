@@ -45,8 +45,8 @@ public class WindowToolkit {
         }
 
         DesktopLauncher.create(windowClass, "/com/timepath/tf2/hudeditor/resources",
-                               new String[]{"Icon.png", "Icon.svg"},
-                               new String[]{windowClass, windowClass});
+                               new String[] {"Icon.png", "Icon.svg"},
+                               new String[] {windowClass, windowClass});
     }
 
     private WindowToolkit() {

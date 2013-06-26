@@ -169,7 +169,7 @@ import sun.swing.AccumulativeRunnable;
  * @param <T> the result type returned by this {@code SwingWorker's}
  *        {@code doInBackground} and {@code get} methods
  * @param <V> the type used for carrying out intermediate results by this
- * {@code SwingWorker's} {@code publish} and {@code process} methods
+ *            {@code SwingWorker's} {@code publish} and {@code process} methods
  *
  * @since 1.6
  */
@@ -179,31 +179,38 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
      * number of worker threads.
      */
     private static final int MAX_WORKER_THREADS = 10;
+
     /**
      * current progress.
      */
     private volatile int progress;
+
     /**
      * current state.
      */
     private volatile StateValue state;
+
     /**
      * everything is run inside this FutureTask. Also it is used as a delegatee
      * for the Future API.
      */
     private final FutureTask<T> future;
+
     /**
      * all propertyChangeSupport goes through this.
      */
     private final PropertyChangeSupport propertyChangeSupport;
+
     /**
      * handler for {@code process} method.
      */
     private AccumulativeRunnable<V> doProcess;
+
     /**
      * handler for progress property change notifications.
      */
     private AccumulativeRunnable<Integer> doNotifyProgressChange;
+
     private final AccumulativeRunnable<Runnable> doSubmit = getDoSubmit();
 
     /**
@@ -227,6 +234,7 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
          * method is finished.
          */
         DONE
+
     };
 
     /**
@@ -430,7 +438,7 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
         synchronized(this) {
             if(doNotifyProgressChange == null) {
                 doNotifyProgressChange =
-                        new AccumulativeRunnable<Integer>() {
+                new AccumulativeRunnable<Integer>() {
                     @Override
                     public void run(List<Integer> args) {
                         firePropertyChange("progress", args.get(0), args.get(args.size() - 1));
@@ -540,7 +548,8 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
      * <p>
      * Please refer to {@link #get} for more details.
      */
-    public final T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public final T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException,
+                                                           TimeoutException {
         return future.get(timeout, unit);
     }
 
@@ -598,9 +607,9 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
      *
      *
      * @param propertyName the programmatic name of the property that was
-     * changed
-     * @param oldValue the old value of the property
-     * @param newValue the new value of the property
+     *                     changed
+     * @param oldValue     the old value of the property
+     * @param newValue     the new value of the property
      */
     public final void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
@@ -694,7 +703,10 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
                 }
             };
 
-            executorService = new ThreadPoolExecutor(MAX_WORKER_THREADS, MAX_WORKER_THREADS, 10L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(), threadFactory);
+            executorService = new ThreadPoolExecutor(MAX_WORKER_THREADS, MAX_WORKER_THREADS, 10L,
+                                                     TimeUnit.MINUTES,
+                                                     new LinkedBlockingQueue<Runnable>(),
+                                                     threadFactory);
 
             appContext.put(SwingWorker.class, executorService);
 
@@ -702,12 +714,14 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
             // AppContext disposal instead of JVM shutdown, see 6799345 for details
             final ExecutorService es = executorService;
 
-            appContext.addPropertyChangeListener(AppContext.DISPOSED_PROPERTY_NAME, new PropertyChangeListener() {
+            appContext.addPropertyChangeListener(AppContext.DISPOSED_PROPERTY_NAME,
+                                                 new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent pce) {
                     boolean disposed = (Boolean) pce.getNewValue();
                     if(disposed) {
-                        final WeakReference<ExecutorService> executorServiceRef = new WeakReference<ExecutorService>(es);
+                        final WeakReference<ExecutorService> executorServiceRef = new WeakReference<ExecutorService>(
+                                es);
                         final ExecutorService executorService = executorServiceRef.get();
                         if(executorService != null) {
                             AccessController.doPrivileged(new PrivilegedAction<Void>() {
@@ -723,6 +737,7 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
         }
         return executorService;
     }
+
     private static final Object DO_SUBMIT_KEY = new Object(); // doSubmit
 
     private static AccumulativeRunnable<Runnable> getDoSubmit() {
@@ -759,6 +774,7 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
         public void actionPerformed(ActionEvent event) {
             run();
         }
+
     }
 
     private class SwingWorkerPropertyChangeSupport extends PropertyChangeSupport {
@@ -779,5 +795,7 @@ public abstract class SwingWorker<T, V> implements RunnableFuture<T> {
                 });
             }
         }
+
     }
+
 }

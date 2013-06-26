@@ -31,7 +31,7 @@ public class BitBuffer {
         return 0f;
     }
 
-    private static final int[] masks = new int[]{0, 1, 2, 4, 8, 16, 32, 64, 128};
+    private static final int[] masks = new int[] {0, 1, 2, 4, 8, 16, 32, 64, 128};
 
     public int ReadBits(int bits) {
         int data = 0;
