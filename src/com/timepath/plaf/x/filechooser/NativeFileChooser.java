@@ -20,16 +20,16 @@ public class NativeFileChooser extends BaseFileChooser {
         } else if(OS.isMac()) {
             chooser = new AWTFileChooser();
         } else if(OS.isLinux()) {
-            if(System.getProperties().getProperty("java.class.path").contains("NetBeansProjects")) {
-                LOG.warning("Running from NetBeans, ZenityFileChooser may not work");
-                chooser = new SwingFileChooser();
-            } else {
+//            if(System.getProperties().getProperty("java.class.path").contains("NetBeansProjects")) {
+//                LOG.warning("Running from NetBeans, ZenityFileChooser may not work");
+//                chooser = new SwingFileChooser();
+//            } else {
 //            try {
                 chooser = new ZenityFileChooser();
 //            } catch(IOException ex) {
 //                chooser = new SwingFileChooser();  
 //            }
-            }
+//            }
         } else {
             chooser = new SwingFileChooser();
         }

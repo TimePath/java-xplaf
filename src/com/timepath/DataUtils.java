@@ -134,6 +134,19 @@ public class DataUtils {
 
         return new ByteBuffer[] {inclusive, trimmed};
     }
+    
+    public static String readZeroString(ByteBuffer buf) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for(;;) {
+            byte b = buf.get();
+            if(b == 0) {
+                break;
+            }
+            baos.write(b);
+        }
+//        LOG.info(Arrays.toString(baos.toByteArray()) + "");
+        return Charset.forName("UTF-8").decode(ByteBuffer.wrap(baos.toByteArray())).toString();
+    }
 
     //<editor-fold defaultstate="collapsed" desc="Old stuff">
     public static byte readByte(RandomAccessFile f) throws IOException {

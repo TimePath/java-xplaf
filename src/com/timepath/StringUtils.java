@@ -23,4 +23,15 @@ public class StringUtils {
 
     private static final Logger LOG = Logger.getLogger(StringUtils.class.getName());
 
+    public static String fromDoubleArray(Object[][] debug) {
+        StringBuilder sb = new StringBuilder();
+        for(int l = 0; l < debug.length; l++) {
+            for(int x = 0; x < debug[l].length; x++) {
+                sb.append(debug[l][x]);
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
 }
