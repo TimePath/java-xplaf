@@ -11,6 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 /**
@@ -74,6 +75,17 @@ public class DataUtils {
         MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, f.length());
         mbb.order(ByteOrder.LITTLE_ENDIAN);
         return mbb;
+    }
+    
+    public static String readEntire(InputStream in, String encoding) {
+        Scanner s = new Scanner(in, encoding);
+        s.useDelimiter("\\A");
+        String str = s.hasNext() ? s.next() : "";
+        return str;
+    }
+    
+    public static String readEntire(InputStream in) {
+        return readEntire(in, "UTF-8");
     }
 
     public static ByteBuffer mapInputStream(InputStream is) throws IOException {
