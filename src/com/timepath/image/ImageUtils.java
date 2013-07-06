@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  * @author timepath
  */
 public class ImageUtils {
-    
+
     /**
      * 8 bytes per 4*4
      */
@@ -24,42 +24,44 @@ public class ImageUtils {
                 int color_0 = ((b[pos++] & 0xFF) + ((b[pos++] & 0xFF) << 8)) & 0xFFFF; // 2 bytes
                 int color_1 = ((b[pos++] & 0xFF) + ((b[pos++] & 0xFF) << 8)) & 0xFFFF; // 2 bytes
                 Color[] colour = new Color[4];
+                colour[0] = extract565(color_0);
+                colour[1] = extract565(color_1);
 
                 if(color_0 > color_1) {
-                    colour[0] = extract565(color_0);
-                    colour[1] = extract565(color_1);
-                    colour[2] = new Color(Math.round(
-                            ((2 * colour[0].getRed()) + colour[1].getRed()) / 3), Math.round(
-                            ((2 * colour[0].getGreen()) + colour[1].getGreen()) / 3), Math.round(
-                            ((2 * colour[0].getBlue()) + colour[1].getBlue()) / 3));
-                    colour[3] = new Color(Math.round(
-                            ((2 * colour[1].getRed()) + colour[0].getRed()) / 3), Math.round(
-                            ((2 * colour[1].getGreen()) + colour[0].getGreen()) / 3), Math.round(
-                            ((2 * colour[1].getBlue()) + colour[0].getBlue()) / 3));
+                    colour[2] = new Color(
+                            Math.round(((2 * colour[0].getRed()) + colour[1].getRed()) / 3),
+                            Math.round(((2 * colour[0].getGreen()) + colour[1].getGreen()) / 3),
+                            Math.round(((2 * colour[0].getBlue()) + colour[1].getBlue()) / 3));
+                    colour[3] = new Color(
+                            Math.round(((2 * colour[1].getRed()) + colour[0].getRed()) / 3),
+                            Math.round(((2 * colour[1].getGreen()) + colour[0].getGreen()) / 3),
+                            Math.round(((2 * colour[1].getBlue()) + colour[0].getBlue()) / 3));
                 } else {
-                    colour[0] = extract565(color_0);
-                    colour[1] = extract565(color_1);
-                    colour[2] = new Color(Math.round((colour[0].getRed() + colour[1].getRed()) / 2),
-                                          Math.round(
-                            (colour[0].getGreen() + colour[1].getGreen()) / 2), Math.round(
-                            (colour[0].getBlue() + colour[1].getBlue()) / 2));
+                    colour[2] = new Color(
+                            Math.round((colour[0].getRed() + colour[1].getRed()) / 2),
+                            Math.round((colour[0].getGreen() + colour[1].getGreen()) / 2),
+                            Math.round((colour[0].getBlue() + colour[1].getBlue()) / 2));
                     colour[3] = new Color(0, 0, 0, 0);
                 }
-                
+
                 for(int y1 = 0; y1 < 4; y1++) { // 16 bits / 4 rows = 4 bits/line = 1 byte/row
                     byte rowData = b[pos++];
                     int[] rowBits = {(rowData & 0xC0) >>> 6, (rowData & 0x30) >>> 4,
                                      (rowData & 0xC) >>> 2, rowData & 0x3};
 
                     for(int x1 = 0; x1 < 4; x1++) { // column scan
-                        bi.setRGB((x) + x1, (y) + y1, colour[rowBits[3 - x1]].getRGB());
+                        Color col = new Color(colour[rowBits[3 - x1]].getRed(),
+                                              colour[rowBits[3 - x1]].getGreen(),
+                                              colour[rowBits[3 - x1]].getBlue(),
+                                              colour[rowBits[3 - x1]].getAlpha());
+                        bi.setRGB(x + x1, y + y1, col.getRGB());
                     }
                 }
             }
         }
         return bi;
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="Currently unimplemented">
     /**
      *
@@ -144,21 +146,19 @@ public class ImageUtils {
         return bi;
     }
     //</editor-fold>
-    
+
     /**
      * 8 bytes for alpha channel, additional 8 per 4*4 chunk
      */
     public static BufferedImage loadDXT5(byte[] b, int width, int height) {
-        boolean alphaEnabled = true;
         BufferedImage bi = new BufferedImage(Math.max(width, 4), Math.max(height, 4),
                                              BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D) bi.getGraphics();
-        g.setComposite(AlphaComposite.Src);
         int pos = 0;
 
         for(int y = 0; y < height; y += 4) {
             for(int x = 0; x < width; x += 4) {
 
+                //<editor-fold defaultstate="collapsed" desc="Alpha">
                 int[] a = new int[8];
                 a[0] = (b[pos++] & 0xFF); // 64 bits of alpha channel data (two 8 bit alpha values and a 4x4 3 bit lookup table)
                 a[1] = (b[pos++] & 0xFF);
@@ -179,65 +179,69 @@ public class ImageUtils {
                 }
 
                 int[][] alphas = new int[4][4];
-                if(alphaEnabled) {
-                    int[] alphaByte = {b[pos++] & 0xFF, b[pos++] & 0xFF, b[pos++] & 0xFF,
-                                       b[pos++] & 0xFF, b[pos++] & 0xFF, b[pos++] & 0xFF};
-                    int sel1 = (((alphaByte[2] << 16) & 0xFF0000) | ((alphaByte[1] << 8) & 0xFF00) | alphaByte[0]) & 0xFFFFFF;
-                    int sel2 = (((alphaByte[5] << 16) & 0xFF0000) | ((alphaByte[4] << 8) & 0xFF00) | alphaByte[3]) & 0xFFFFFF;
-                    for(int yi = 0; yi < 2; yi++) {
-                        for(int xi = 0; xi < 4; xi++) {
-                            alphas[yi][xi] = a[((sel1) & 0x7)];
-                            sel1 >>= 3;
-                        }
+                int[] alphaByte = {b[pos++] & 0xFF, b[pos++] & 0xFF, b[pos++] & 0xFF,
+                                   b[pos++] & 0xFF, b[pos++] & 0xFF, b[pos++] & 0xFF};
+                int sel1 = ((alphaByte[2] << 16) | (alphaByte[1] << 8) | alphaByte[0]) & 0xFFFFFF;
+                int sel2 = ((alphaByte[5] << 16) | (alphaByte[4] << 8) | alphaByte[3]) & 0xFFFFFF;
+                for(int yi = 0; yi < 2; yi++) {
+                    for(int xi = 0; xi < 4; xi++) {
+                        alphas[yi][xi] = a[sel1 & 0x7];
+                        sel1 >>>= 3;
                     }
-                    for(int yi = 0; yi < 2; yi++) {
-                        for(int xi = 0; xi < 4; xi++) {
-                            alphas[2 + yi][xi] = a[((sel2) & 0x7)];
-                            sel2 >>= 3;
-                        }
-                    }
-                } else {
-                    pos += 8;
                 }
+                for(int yi = 2; yi < 4; yi++) {
+                    for(int xi = 0; xi < 4; xi++) {
+                        alphas[yi][xi] = a[sel2 & 0x7];
+                        sel2 >>>= 3;
+                    }
+                }
+                //</editor-fold>
 
-                int c0 = (b[pos++] & 0xff);
-                c0 |= ((b[pos++] & 0xff) << 8); // 2 bytes
-                int c1 = (b[pos++] & 0xff);
-                c1 |= ((b[pos++] & 0xff) << 8); // 2 bytes
+                //<editor-fold defaultstate="collapsed" desc="DXT1 color info">
+                int color_0 = ((b[pos++] & 0xFF) + ((b[pos++] & 0xFF) << 8)) & 0xFFFF; // 2 bytes
+                int color_1 = ((b[pos++] & 0xFF) + ((b[pos++] & 0xFF) << 8)) & 0xFFFF; // 2 bytes
                 Color[] colour = new Color[4];
-                colour[0] = extract565(c0);
-                colour[1] = extract565(c1);
-                colour[2] = new Color(
-                        Math.round(((2 * colour[0].getRed()) + colour[1].getRed()) / 3), Math.round(
-                        ((2 * colour[0].getGreen()) + colour[1].getGreen()) / 3), Math.round(
-                        ((2 * colour[0].getBlue()) + colour[1].getBlue()) / 3));
-                colour[3] = new Color(
-                        Math.round(((2 * colour[1].getRed()) + colour[0].getRed()) / 3), Math.round(
-                        ((2 * colour[1].getGreen()) + colour[0].getGreen()) / 3), Math.round(
-                        ((2 * colour[1].getBlue()) + colour[0].getBlue()) / 3));
+                colour[0] = extract565(color_0);
+                colour[1] = extract565(color_1);
 
-                // remaining 4 bytes
-                if(width >= 4 && height >= 4) {
-                    for(int y1 = 0; y1 < 4; y1++) { // 16 bits / 4 rows = 4 bits/line = 1 byte/row
-                        int rowData = b[pos++] & 0xff;
-                        int[] rowBits = {(rowData & 0xC0) >>> 6, (rowData & 0x30) >>> 4,
-                                         (rowData & 0xC) >>> 2, rowData & 0x3};
-
-                        for(int x1 = 0; x1 < 4; x1++) { // column scan
-                            Color col = new Color(colour[rowBits[3 - x1]].getRed(),
-                                                  colour[rowBits[3 - x1]].getGreen(),
-                                                  colour[rowBits[3 - x1]].getBlue(), alphas[y1][x1]);
-                            bi.setRGB((x + x1), (y + y1), col.getRGB());
-                        }
-                    }
+                if(color_0 > color_1) {
+                    colour[2] = new Color(
+                            Math.round(((2 * colour[0].getRed()) + colour[1].getRed()) / 3),
+                            Math.round(((2 * colour[0].getGreen()) + colour[1].getGreen()) / 3),
+                            Math.round(((2 * colour[0].getBlue()) + colour[1].getBlue()) / 3));
+                    colour[3] = new Color(
+                            Math.round(((2 * colour[1].getRed()) + colour[0].getRed()) / 3),
+                            Math.round(((2 * colour[1].getGreen()) + colour[0].getGreen()) / 3),
+                            Math.round(((2 * colour[1].getBlue()) + colour[0].getBlue()) / 3));
                 } else {
-                    pos += 4;
+                    colour[2] = new Color(
+                            Math.round((colour[0].getRed() + colour[1].getRed()) / 2),
+                            Math.round((colour[0].getGreen() + colour[1].getGreen()) / 2),
+                            Math.round((colour[0].getBlue() + colour[1].getBlue()) / 2));
+                    colour[3] = new Color(0, 0, 0);
                 }
+
+                for(int y1 = 0; y1 < 4; y1++) { // 16 bits / 4 rows = 4 bits/line = 1 byte/row
+                    byte rowData = b[pos++];
+                    int[] rowBits = {(rowData & 0xC0) >>> 6, (rowData & 0x30) >>> 4,
+                                     (rowData & 0xC) >>> 2, rowData & 0x3};
+
+                    for(int x1 = 0; x1 < 4; x1++) { // column scan
+                        Color col = new Color(colour[rowBits[3 - x1]].getRed(),
+                                              colour[rowBits[3 - x1]].getGreen(),
+                                              colour[rowBits[3 - x1]].getBlue(),
+                                               alphas[y1][x1]);
+                        bi.setRGB((x + x1), (y + y1), col.getRGB());
+                    }
+                }
+                //</editor-fold>
+
             }
         }
+        
         return bi;
     }
-    
+
     public static BufferedImage loadUV(byte[] b, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) bi.getGraphics();
@@ -252,7 +256,7 @@ public class ImageUtils {
         }
         return bi;
     }
-    
+
     public static BufferedImage loadBGR(byte[] b, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) bi.getGraphics();
@@ -267,7 +271,7 @@ public class ImageUtils {
         }
         return bi;
     }
-    
+
     public static BufferedImage loadBGRA(byte[] b, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) bi.getGraphics();
@@ -283,7 +287,7 @@ public class ImageUtils {
         }
         return bi;
     }
-    
+
     /**
      * First 5 bits
      */
@@ -318,9 +322,9 @@ public class ImageUtils {
                            (float) (((c & green_mask_555) >>> 5) << 3),
                            (float) ((c & blue_mask_555) << 3), (float) ((c & alpha_mask_555) << 7));
     }
-    
+
     private static Color createColor(float r, float g, float b, float a) {
         return new Color(Math.round(r), Math.round(g), Math.round(b), Math.round(a));
     }
-    
+
 }
