@@ -24,26 +24,12 @@ public class TreeUtils {
         }
     }
 
-    /**
-     * @param source
-     * @param dest
-     */
     public static void moveChildren(DefaultMutableTreeNode source, DefaultMutableTreeNode dest) {
-        moveChildren(source, dest, false);
-    }
-
-    public static void moveChildren(DefaultMutableTreeNode source, DefaultMutableTreeNode dest,
-                                    boolean safe) {
-        if(safe) {
-            dest.add(source);
-        } else {
-            @SuppressWarnings("unchecked")
-            Enumeration<DefaultMutableTreeNode> e = source.children();
-            while(e.hasMoreElements()) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) source.getChildAt(0);
-                node.removeFromParent();
-                dest.add(node);
-            }
+        Enumeration<DefaultMutableTreeNode> e = source.children();
+        while(e.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) source.getChildAt(0); // FIXME: e.nextElement() doesn't work. Why?
+            node.removeFromParent();
+            dest.add(node);
         }
     }
 
