@@ -21,11 +21,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author timepath
  */
 @SuppressWarnings("serial")
-public class ThemeSelector extends JComboBox<String> {
+public class ThemeSelector extends JComboBox/*<String>*/ {
 
     public ThemeSelector() {
         Vector<String> comboBoxItems = new Vector<String>();
-        final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(comboBoxItems);
+        final DefaultComboBoxModel/*<String>*/ model = new DefaultComboBoxModel/*<String>*/(comboBoxItems);
         this.setModel(model);
 
         String lafId = UIManager.getLookAndFeel().getClass().getName();
