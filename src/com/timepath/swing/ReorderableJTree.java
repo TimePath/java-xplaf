@@ -97,7 +97,7 @@ public class ReorderableJTree extends JTree {
         //<editor-fold defaultstate="collapsed" desc="Helpers">
         private boolean haveCompleteNode(JTree tree) {
             int[] selRows = tree.getSelectionRows(); // XXX: bad
-            if(selRows == null) {
+            if(selRows == null || selRows.length == 0) {
                 return true;
             }
             TreePath path = tree.getPathForRow(selRows[0]);
