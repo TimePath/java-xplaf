@@ -1,6 +1,6 @@
 package com.timepath.vfs.cifs;
 
-import com.timepath.vfs.FileChangeListener;
+import com.timepath.vfs.VFile.FileChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -43,16 +43,18 @@ public class AggregateOutputStream extends OutputStream {
         ArrayList<OutputStream> dereg = new ArrayList<OutputStream>();
         synchronized(out) {
             for(OutputStream os : out) {
-                try {
-                    os.write(b, off, len);
-                } catch(Exception e) {
-                    dereg.add(os);
+                synchronized(os) {
+                    try {
+                        os.write(b, off, len);
+                    } catch(Exception e) {
+                        dereg.add(os);
+                    }
                 }
             }
             out.removeAll(dereg);
         }
     }
-    
+
     @Override
     public void write(byte[] b) throws IOException {
         write(b, 0, b.length);

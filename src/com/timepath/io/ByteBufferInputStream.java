@@ -13,7 +13,7 @@ public class ByteBufferInputStream extends InputStream {
     private ByteBuffer buf;
 
     public ByteBufferInputStream(ByteBuffer buf) {
-        this.buf = buf;
+        this.buf = buf.asReadOnlyBuffer();
     }
 
     private int markpos = -1;
