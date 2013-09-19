@@ -8,10 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,14 +125,14 @@ public class FTPFS extends VFSStub implements Runnable {
 
     private static String in(BufferedReader in) throws IOException {
         String s = in.readLine();
-//        LOG.log(Level.INFO, "<<< {0}", s);
+        LOG.log(Level.INFO, "<<< {0}", s);
         return s;
     }
 
     private static void out(PrintWriter out, String cmd) {
         out.print(cmd + "\r\n");
         out.flush();
-//        LOG.log(Level.INFO, ">>> {0}", cmd);
+        LOG.log(Level.INFO, ">>> {0}", cmd);
     }
 
     private final ServerSocket servsock;
@@ -171,6 +168,12 @@ public class FTPFS extends VFSStub implements Runnable {
 
     private static final DateFormat mdtm = new SimpleDateFormat("yyyyMMddhhmmss");
 
+    private Comparator<VFile> nameComparator = new Comparator<VFile>() {
+        public int compare(VFile o1, VFile o2) {
+            return o1.name().compareTo(o2.name());
+        }
+    };
+
     private class FTPConnection implements Runnable {
 
         private final Socket client;
@@ -188,8 +191,7 @@ public class FTPFS extends VFSStub implements Runnable {
 
         public void run() {
             try {
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(client.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
                 out(pw, "220 Welcome");
                 while(!client.isClosed()) {
@@ -217,7 +219,12 @@ public class FTPFS extends VFSStub implements Runnable {
                                 out(pw, "550 Error");
                             }
                         } else if(cmd.startsWith("TYPE")) {
-                            out(pw, "200 Switching to Binary mode.");
+                            char c = cmd.charAt(5);
+                            if(c == 'I') {
+                                out(pw, "200 Switching to Binary mode.");
+                            } else if(c == 'A') {
+                                out(pw, "200 Switching to ASCII mode.");
+                            }
                         } else if(cmd.startsWith("PORT")) {
                             String[] args = cmd.substring(5).split(",");
                             String sep = ".";
@@ -305,7 +312,7 @@ public class FTPFS extends VFSStub implements Runnable {
                             PrintWriter out = new PrintWriter(data.getOutputStream(), true);
                             VFile v = get(cwd);
                             ArrayList<VFile> files = new ArrayList(v.list());
-                            Collections.sort(files);
+                            Collections.sort(files, nameComparator);
                             for(VFile f : files) {
                                 out(out, toFTPString(f));
                             }

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author timepath
  */
-public abstract class VFile implements Comparable<VFile> {
+public abstract class VFile {
 
     //<editor-fold defaultstate="collapsed" desc="Listener">
     public ArrayList<FileChangeListener> listeners = new ArrayList<FileChangeListener>();
@@ -30,10 +30,9 @@ public abstract class VFile implements Comparable<VFile> {
 
     }
     //</editor-fold>
-    
+
     public static VFile fromFile(final File f) {
         return new VFile() {
-
             @Override
             public boolean isDirectory() {
                 return f.isDirectory();
@@ -78,16 +77,21 @@ public abstract class VFile implements Comparable<VFile> {
                 }
                 return null;
             }
-            
         };
     }
-    
+
     public static final String sep = "/";
 
     public HashMap<String, VFile> files = new HashMap<String, VFile>();
 
     public void add(VFile f) {
         files.put(f.name(), f);
+    }
+
+    public void addAll(Collection<VFile> c) {
+        for(VFile f : c) {
+            add(f);
+        }
     }
 
     public VFile get(String name) {
@@ -104,7 +108,7 @@ public abstract class VFile implements Comparable<VFile> {
         }
         return f;
     }
-    
+
     public void remove(String name) {
         files.remove(name);
     }
@@ -128,9 +132,5 @@ public abstract class VFile implements Comparable<VFile> {
     public abstract String name();
 
     public abstract InputStream content();
-
-    public int compareTo(VFile o) {
-        return name().compareTo(o.name());
-    }
 
 }
