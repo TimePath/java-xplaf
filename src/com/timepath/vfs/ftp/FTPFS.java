@@ -45,7 +45,7 @@ public class FTPFS extends VFSStub implements Runnable {
         sb.append(f.isDirectory() ? "d" : "-");
         sb.append("r--r--r--");
         sb.append(" ");
-        sb.append(String.format("%4s", f.itemSize())); // >= 4 left
+        sb.append(String.format("%4s", f.fileSize())); // >= 4 left
         sb.append(" ");
         sb.append(String.format("%-8s", f.owner())); // >= 8 right
         sb.append(" ");
@@ -80,11 +80,6 @@ public class FTPFS extends VFSStub implements Runnable {
         @Override
         public boolean isDirectory() {
             return cont == null;
-        }
-
-        @Override
-        public int itemSize() {
-            return 1;
         }
 
         @Override
@@ -187,6 +182,7 @@ public class FTPFS extends VFSStub implements Runnable {
         private String cwd = "/";
 
         private FTPConnection(Socket s) {
+            LOG.log(Level.INFO, "{0} connected.", s);
             client = s;
         }
 
@@ -352,6 +348,7 @@ public class FTPFS extends VFSStub implements Runnable {
                                     os.write(buf, 0, read);
                                     os.flush();
                                 }
+                                is.close();
                                 data.close();
                                 out(pw, "226 File sent");
                             } else {
@@ -419,7 +416,7 @@ public class FTPFS extends VFSStub implements Runnable {
                         break;
                     }
                 }
-                LOG.info("Socket closed");
+                LOG.log(Level.INFO, "{0} closed.", client);
             } catch(IOException ex) {
                 Logger.getLogger(FTPFS.class.getName()).log(Level.SEVERE, null, ex);
             }

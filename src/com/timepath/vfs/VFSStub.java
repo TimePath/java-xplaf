@@ -24,11 +24,6 @@ public class VFSStub extends VFile {
     }
 
     @Override
-    public int itemSize() {
-        return 0;
-    }
-
-    @Override
     public String owner() {
         return "ftp";
     }

@@ -1,9 +1,11 @@
 package com.timepath.vfs;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +30,57 @@ public abstract class VFile implements Comparable<VFile> {
 
     }
     //</editor-fold>
+    
+    public static VFile fromFile(final File f) {
+        return new VFile() {
+
+            @Override
+            public boolean isDirectory() {
+                return f.isDirectory();
+            }
+
+            @Override
+            public String owner() {
+                return "nobody";
+            }
+
+            @Override
+            public String group() {
+                return "nobody";
+            }
+
+            @Override
+            public long fileSize() {
+                return f.length();
+            }
+
+            @Override
+            public long modified() {
+                return f.lastModified();
+            }
+
+            @Override
+            public String path() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String name() {
+                return f.getName();
+            }
+
+            @Override
+            public InputStream content() {
+                try {
+                    return new BufferedInputStream(new FileInputStream(f));
+                } catch(FileNotFoundException ex) {
+                    Logger.getLogger(VFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
+            }
+            
+        };
+    }
     
     public static final String sep = "/";
 
@@ -61,8 +114,6 @@ public abstract class VFile implements Comparable<VFile> {
     }
 
     public abstract boolean isDirectory();
-
-    public abstract int itemSize();
 
     public abstract String owner();
 
