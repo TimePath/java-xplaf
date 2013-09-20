@@ -1,5 +1,6 @@
 package com.timepath.vfs.ftp;
 
+import com.timepath.vfs.MockFile;
 import com.timepath.vfs.VFSStub;
 import com.timepath.vfs.VFile;
 import java.io.*;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
  *
  * Mounting requires CurlFtpFS
  * $ mkdir mnt
- * $ curlftpfs -o umask=0000,uid=1000,gid=1000,allow_other localhost:8000 mnt
+ * $ curlftpfs -o umask=0000,uid=1000,gid=1000,allow_other localhost:2121 mnt
  * $ cd mnt
  * $ ls -l
  * $ cd ..
@@ -64,62 +65,10 @@ public class FTPFS extends VFSStub implements Runnable {
         return str;
     }
 
-    private static class Dummy extends VFile {
-
-        String name, dir, cont;
-
-        public Dummy(String name, String dir, String cont) {
-            this.name = name;
-            this.dir = dir;
-            this.cont = cont;
-        }
-
-        @Override
-        public boolean isDirectory() {
-            return cont == null;
-        }
-
-        @Override
-        public String owner() {
-            return "ftp";
-        }
-
-        @Override
-        public String group() {
-            return "ftp";
-        }
-
-        @Override
-        public long fileSize() {
-            return cont.getBytes().length;
-        }
-
-        @Override
-        public long modified() {
-            return System.currentTimeMillis();
-        }
-
-        @Override
-        public String name() {
-            return name;
-        }
-
-        @Override
-        public InputStream content() {
-            return new ByteArrayInputStream(cont.getBytes());
-        }
-
-        @Override
-        public String path() {
-            return dir;
-        }
-
-    }
-
     public static void main(String... args) throws IOException {
         FTPFS f = new FTPFS(8000);
-        f.add(new Dummy("test.txt", "/", "It works!"));
-        f.add(new Dummy("world.txt", "/hello/", "Hello world"));
+        f.add(new MockFile("test.txt", "It works!"));
+        f.add(new MockFile("world.txt", "Hello world"));
         f.run();
     }
 
