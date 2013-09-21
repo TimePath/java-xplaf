@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * With reference to:
@@ -185,7 +186,8 @@ public class FTPFS extends VFSStub implements Runnable {
                             out(pw, "200 PORT command successful.");
                         } else if(cmd.startsWith("EPRT")) {
                             String payload = cmd.substring(5);
-                            String delimeter = "\\x" + Integer.toHexString((int) payload.charAt(0));
+//                            String delimeter = "\\x" + Integer.toHexString((int) payload.charAt(0));
+                            String delimeter = Pattern.quote(payload.charAt(0) + "");
                             String[] args = payload.substring(1).split(delimeter);
                             int type = Integer.parseInt(args[0]);
                             String dataAddress = args[1];
@@ -211,7 +213,6 @@ public class FTPFS extends VFSStub implements Runnable {
                                 pasv.close();
                             }
                             pasv = new ServerSocket(0);
-                            byte[] h = InetAddress.getLocalHost().getAddress();
                             int p = pasv.getLocalPort();
                             out(pw, "229 Entering Extended Passive Mode (|||" + p + "|).");
                         } else if(cmd.startsWith("SIZE")) {
