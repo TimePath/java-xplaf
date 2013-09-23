@@ -26,7 +26,7 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class BeanEditor extends JPanel {
 

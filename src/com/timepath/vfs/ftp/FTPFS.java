@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * ncdu
  * press 'a' for apparent size
  *
- * @author timepath
+ * @author TimePath
  */
 public class FTPFS extends VFSStub implements Runnable {
 

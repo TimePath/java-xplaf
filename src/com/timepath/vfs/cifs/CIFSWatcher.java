@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * smbclient --ip-address=localhost --port=8000 -M hi
  *
- * @author timepath
+ * @author TimePath
  */
 public class CIFSWatcher {
 

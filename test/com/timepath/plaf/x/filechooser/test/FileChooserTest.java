@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class FileChooserTest extends javax.swing.JFrame {
 

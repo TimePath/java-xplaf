@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class NativeFileChooser extends BaseFileChooser {
 

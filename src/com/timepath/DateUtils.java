@@ -9,7 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class DateUtils {
 

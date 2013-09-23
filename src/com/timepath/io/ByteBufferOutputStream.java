@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class ByteBufferOutputStream extends OutputStream {
 

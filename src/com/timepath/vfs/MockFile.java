@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class MockFile extends VFile {
 

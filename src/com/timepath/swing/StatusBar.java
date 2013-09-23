@@ -5,7 +5,7 @@ import javax.swing.JToolBar;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 @SuppressWarnings("serial")
 public class StatusBar extends JToolBar {

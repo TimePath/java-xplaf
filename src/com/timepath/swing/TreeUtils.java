@@ -7,7 +7,7 @@ import javax.swing.tree.TreePath;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class TreeUtils {
 

@@ -3,7 +3,7 @@ package com.timepath;
 /**
  * Implement this interface to use EnumFlagUtils
  *
- * @author timepath
+ * @author TimePath
  */
 public interface EnumFlag {
 

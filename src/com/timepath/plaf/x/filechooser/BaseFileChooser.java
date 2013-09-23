@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public abstract class BaseFileChooser {
 

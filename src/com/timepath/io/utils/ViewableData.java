@@ -4,7 +4,7 @@ import javax.swing.Icon;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public interface ViewableData {
 

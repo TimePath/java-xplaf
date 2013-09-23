@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class ImageUtils {
 

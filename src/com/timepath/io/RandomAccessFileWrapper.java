@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class RandomAccessFileWrapper {
 

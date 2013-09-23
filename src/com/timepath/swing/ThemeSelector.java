@@ -18,7 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 @SuppressWarnings("serial")
 public class ThemeSelector extends JComboBox/*<String>*/ {

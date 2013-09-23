@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class AggregateOutputStream extends OutputStream {
 

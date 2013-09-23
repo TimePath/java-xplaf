@@ -9,7 +9,7 @@ import org.java.ayatana.AyatanaDesktop;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class Ayatana {
 

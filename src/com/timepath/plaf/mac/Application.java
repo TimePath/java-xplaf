@@ -13,7 +13,7 @@ import javax.swing.JMenuBar;
 /**
  * Reflected com.apple.eawt.Application
  *
- * @author timepath
+ * @author TimePath
  */
 @SuppressWarnings("rawtypes")
 public class Application {

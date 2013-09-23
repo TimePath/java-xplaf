@@ -13,7 +13,7 @@ import javax.swing.UIManager;
  *
  * @author
  * http://www.ailis.de/~k/archives/67-Workaround-for-borderless-Java-Swing-menus-on-Linux.html
- * @author timepath
+ * @author TimePath
  */
 public class GtkFixer {
 

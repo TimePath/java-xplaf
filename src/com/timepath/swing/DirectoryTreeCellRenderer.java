@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 @SuppressWarnings("serial")
 public class DirectoryTreeCellRenderer extends DefaultTreeCellRenderer {

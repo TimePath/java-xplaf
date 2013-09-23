@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public interface Savable {
 

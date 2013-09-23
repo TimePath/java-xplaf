@@ -22,7 +22,7 @@ import javax.swing.event.HyperlinkListener;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class Utils {
 

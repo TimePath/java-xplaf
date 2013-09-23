@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class ZenityFileChooser extends BaseFileChooser {
 

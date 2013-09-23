@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class IconList {
 

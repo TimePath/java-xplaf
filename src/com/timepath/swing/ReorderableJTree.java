@@ -18,7 +18,7 @@ import javax.swing.tree.TreePath;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class ReorderableJTree extends JTree {
 

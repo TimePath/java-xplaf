@@ -10,7 +10,7 @@ import net.tomahawk.XFileDialog;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class XFileDialogFileChooser extends BaseFileChooser {
 

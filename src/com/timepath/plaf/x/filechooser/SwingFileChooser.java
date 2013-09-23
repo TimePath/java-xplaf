@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  *
- * @author timepath
+ * @author TimePath
  */
 public class SwingFileChooser extends BaseFileChooser {
 
