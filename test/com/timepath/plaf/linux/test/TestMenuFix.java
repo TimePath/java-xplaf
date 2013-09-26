@@ -19,7 +19,7 @@ public class TestMenuFix extends JFrame {
             public void run() {
 
                 TestMenuFix test = new TestMenuFix();
-                test.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                test.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                 test.setPreferredSize(new Dimension(400, 300));
                 test.pack();
                 test.setLocationRelativeTo(null);
