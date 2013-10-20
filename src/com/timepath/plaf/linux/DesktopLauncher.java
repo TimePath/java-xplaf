@@ -93,18 +93,20 @@ public class DesktopLauncher {
             try {
                 File destFile = new File(
                         LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] + icons[i].substring(
-                        icons[i].lastIndexOf('.') > 0 ? icons[i].lastIndexOf('.') : icons[i].length()));
+                                icons[i].lastIndexOf('.') > 0 ? icons[i].lastIndexOf('.') : icons[i].length()));
+
+                LOG.log(Level.INFO, "Extracting icon: {0}{1} to {2}", new Object[] {root, icons[i], destFile});
+
+                InputStream in = DesktopLauncher.class.getResourceAsStream(root + icons[i]);
+                if(in == null) {
+                    continue;
+                }
 
                 if(!destFile.getParentFile().exists()) {
                     destFile.getParentFile().mkdirs();
                 }
                 if(!destFile.exists()) {
                     destFile.createNewFile();
-                }
-
-                InputStream in = DesktopLauncher.class.getResourceAsStream(root + icons[i]);
-                if(in == null) {
-                    continue;
                 }
                 FileOutputStream out = new FileOutputStream(destFile);
                 try {

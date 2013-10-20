@@ -67,7 +67,7 @@ public class FTPFS extends VFSStub implements Runnable {
     }
 
     public static void main(String... args) throws IOException {
-        FTPFS f = new FTPFS(8000);
+        FTPFS f = new FTPFS(2121, null);
         f.add(new MockFile("test.txt", "It works!"));
         f.add(new MockFile("world.txt", "Hello world"));
         f.run();
@@ -88,15 +88,31 @@ public class FTPFS extends VFSStub implements Runnable {
     private final ServerSocket servsock;
 
     public FTPFS() throws IOException {
-        this(8000);
+        this(2121);
+    }
+    
+    /**
+     * Creates a local-only server
+     * @param port
+     * @throws IOException 
+     */
+    public FTPFS(int port) throws IOException {
+        this(port, InetAddress.getByName(null)); // cannot use java7 InetAddress.getLoopbackAddress(). On windows, this prevents firewall warnings. It's also good for security in general
     }
 
-    public FTPFS(int port) throws IOException {
-        servsock = new ServerSocket(port);//, 0, InetAddress.getByName(null)); // cannot use java7 InetAddress.getLoopbackAddress(). On windows, this prevents firewall warnings. It's also good for security in general
+    /**
+     * Creates a server on the specified address.
+     * @param port
+     * @param addr If null, listen on all available interfaces
+     * @throws IOException 
+     */
+    public FTPFS(int port, InetAddress addr) throws IOException {
+        servsock = new ServerSocket(port, 0, addr);
         LOG.log(Level.INFO, "Listening on {0}:{1}", new Object[] {
-            InetAddress.getLocalHost().getHostAddress(), servsock.getLocalPort()});
+                    servsock.getInetAddress().getHostAddress(), servsock.getLocalPort()});
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
+
             @Override
             public void run() {
                 LOG.info("FTP server shutting down...");
@@ -119,6 +135,7 @@ public class FTPFS extends VFSStub implements Runnable {
     private static final DateFormat mdtm = new SimpleDateFormat("yyyyMMddhhmmss");
 
     private Comparator<VFile> nameComparator = new Comparator<VFile>() {
+
         public int compare(VFile o1, VFile o2) {
             return o1.name().compareTo(o2.name());
         }
@@ -141,7 +158,9 @@ public class FTPFS extends VFSStub implements Runnable {
 
         public void run() {
             try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                byte[] h = servsock.getInetAddress().getAddress();
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(client.getInputStream()));
                 PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
                 out(pw, "220 Welcome");
                 while(!client.isClosed()) {
@@ -150,32 +169,32 @@ public class FTPFS extends VFSStub implements Runnable {
                         if(cmd == null) {
                             client.close();
                             break;
-                        } else if(cmd.startsWith("GET")) {
+                        } else if(cmd.toUpperCase().startsWith("GET")) {
                             out(pw, "This is an FTP server.");
                             client.close();
                             break;
                         }
-                        if(cmd.startsWith("USER")) {
+                        if(cmd.toUpperCase().startsWith("USER")) {
                             out(pw, "331 Please specify the password.");
-                        } else if(cmd.startsWith("PASS")) {
+                        } else if(cmd.toUpperCase().startsWith("PASS")) {
                             out(pw, "230 Login successful.");
-                        } else if(cmd.startsWith("SYST")) {
+                        } else if(cmd.toUpperCase().startsWith("SYST")) {
                             out(pw, "215 UNIX Type: L8");
-                        } else if(cmd.startsWith("PWD")) {
+                        } else if(cmd.toUpperCase().startsWith("PWD")) {
                             boolean dirKnowable = true;
                             if(dirKnowable) {
                                 out(pw, "257 \"" + cwd + "\"");
                             } else {
                                 out(pw, "550 Error");
                             }
-                        } else if(cmd.startsWith("TYPE")) {
+                        } else if(cmd.toUpperCase().startsWith("TYPE")) {
                             char c = cmd.charAt(5);
                             if(c == 'I') {
                                 out(pw, "200 Switching to Binary mode.");
                             } else if(c == 'A') {
                                 out(pw, "200 Switching to ASCII mode.");
                             }
-                        } else if(cmd.startsWith("PORT")) {
+                        } else if(cmd.toUpperCase().startsWith("PORT")) {
                             String[] args = cmd.substring(5).split(",");
                             String sep = ".";
                             String dataAddress = args[0] + sep + args[1] + sep + args[2] + sep + args[3];
@@ -184,7 +203,7 @@ public class FTPFS extends VFSStub implements Runnable {
                             data = new Socket(InetAddress.getByName(dataAddress), dataPort);
                             LOG.log(Level.INFO, "*** Data receiver: {0}", data);
                             out(pw, "200 PORT command successful.");
-                        } else if(cmd.startsWith("EPRT")) {
+                        } else if(cmd.toUpperCase().startsWith("EPRT")) {
                             String payload = cmd.substring(5);
 //                            String delimeter = "\\x" + Integer.toHexString((int) payload.charAt(0));
                             String delimeter = Pattern.quote(payload.charAt(0) + "");
@@ -195,12 +214,11 @@ public class FTPFS extends VFSStub implements Runnable {
                             data = new Socket(InetAddress.getByName(dataAddress), dataPort);
                             LOG.log(Level.INFO, "*** Data receiver: {0}", data);
                             out(pw, "200 PORT command successful.");
-                        } else if(cmd.startsWith("PASV")) {
+                        } else if(cmd.toUpperCase().startsWith("PASV")) {
                             if(pasv != null) {
                                 pasv.close();
                             }
                             pasv = new ServerSocket(0);
-                            byte[] h = InetAddress.getLocalHost().getAddress();
                             int[] p = {pasv.getLocalPort() / 256,
                                        pasv.getLocalPort() % 256};
                             String con = String.format("%s,%s,%s,%s,%s,%s",
@@ -208,14 +226,14 @@ public class FTPFS extends VFSStub implements Runnable {
                                                        h[2] & 0xFF, h[3] & 0xFF,
                                                        p[0] & 0xFF, p[1] & 0xFF);
                             out(pw, "227 Entering Passive Mode (" + con + ").");
-                        } else if(cmd.startsWith("EPSV")) {
+                        } else if(cmd.toUpperCase().startsWith("EPSV")) {
                             if(pasv != null) {
                                 pasv.close();
                             }
                             pasv = new ServerSocket(0);
                             int p = pasv.getLocalPort();
                             out(pw, "229 Entering Extended Passive Mode (|||" + p + "|).");
-                        } else if(cmd.startsWith("SIZE")) {
+                        } else if(cmd.toUpperCase().startsWith("SIZE")) {
                             String req = cmd.substring(5);
                             VFile f = get(req);
                             if(f == null || f.isDirectory()) {
@@ -223,7 +241,7 @@ public class FTPFS extends VFSStub implements Runnable {
                             } else {
                                 out(pw, "213 " + f.fileSize());
                             }
-                        } else if(cmd.startsWith("MODE")) {
+                        } else if(cmd.toUpperCase().startsWith("MODE")) {
                             String[] modes = new String[] {"S", "B", "C"};
                             String mode = cmd.substring(5);
                             boolean has = Arrays.asList(modes).contains(mode);
@@ -232,12 +250,13 @@ public class FTPFS extends VFSStub implements Runnable {
                             } else {
                                 out(pw, "504 Bad MODE command.");
                             }
-                        } else if(cmd.startsWith("CWD") || cmd.startsWith("CDUP")) {
+                        } else if(cmd.toUpperCase().startsWith("CWD") || cmd.toUpperCase().startsWith(
+                                "CDUP")) {
                             String ch;
-                            if(cmd.startsWith("CDUP")) {
+                            if(cmd.toUpperCase().startsWith("CDUP")) {
                                 ch = canonicalize(cwd + "/..");
                             } else {
-                                String dir = cmd.substring(4);
+                                String dir = canonicalize(cmd.substring(4));
                                 if(!dir.endsWith("/")) {
                                     dir = dir + "/";
                                 }
@@ -254,7 +273,7 @@ public class FTPFS extends VFSStub implements Runnable {
                             } else {
                                 out(pw, "550 Failed to change directory.");
                             }
-                        } else if(cmd.startsWith("LIST")) {
+                        } else if(cmd.toUpperCase().startsWith("LIST")) {
                             out(pw, "150 Here comes the directory listing.");
                             if(pasv != null) {
                                 data = pasv.accept();
@@ -268,10 +287,10 @@ public class FTPFS extends VFSStub implements Runnable {
                             }
                             out.close();
                             out(pw, "226 Directory send OK.");
-                        } else if(cmd.startsWith("QUIT")) {
+                        } else if(cmd.toUpperCase().startsWith("QUIT")) {
                             out(pw, "221 Goodbye");
                             client.close();
-                        } else if(cmd.startsWith("MDTM")) {
+                        } else if(cmd.toUpperCase().startsWith("MDTM")) {
                             String req = cmd.substring(5);
                             String ch;
                             if(req.startsWith("/")) {
@@ -283,7 +302,7 @@ public class FTPFS extends VFSStub implements Runnable {
                             Calendar cal = Calendar.getInstance();
                             cal.setTimeInMillis(f.modified());
                             out(pw, "200 " + mdtm.format(cal.getTime()));
-                        } else if(cmd.startsWith("RETR")) {
+                        } else if(cmd.toUpperCase().startsWith("RETR")) {
                             String req = cmd.substring(5);
                             String ch;
                             if(req.startsWith("/")) {
@@ -311,9 +330,9 @@ public class FTPFS extends VFSStub implements Runnable {
                             } else {
                                 out(pw, "550 Failed to open file.");
                             }
-                        } else if(cmd.startsWith("DELE")) {
+                        } else if(cmd.toUpperCase().startsWith("DELE")) {
                             out(pw, "550 Permission denied.");
-                        } else if(cmd.startsWith("FEAT")) {
+                        } else if(cmd.toUpperCase().startsWith("FEAT")) {
                             out(pw, "211-Features:");
                             String[] features = {"MDTM", "PASV"};
                             Arrays.sort(features);
@@ -321,20 +340,20 @@ public class FTPFS extends VFSStub implements Runnable {
                                 out(pw, " " + feature);
                             }
                             out(pw, "211 end");
-                        } else if(cmd.startsWith("HELP")) {
+                        } else if(cmd.toUpperCase().startsWith("HELP")) {
                             out(pw, "214-Commands supported:");
                             out(pw, "MDTM PASV");
                             out(pw, "214 End");
-                        } else if(cmd.startsWith("SITE")) {
+                        } else if(cmd.toUpperCase().startsWith("SITE")) {
                             out(pw, "200 Nothing to see here");
-                        } else if(cmd.startsWith("RNFR")) {
+                        } else if(cmd.toUpperCase().startsWith("RNFR")) {
                             //<editor-fold defaultstate="collapsed" desc="Rename file">
                             String from = cmd.substring(5);
                             out(pw, "350 Okay");
                             String to = in(br).substring(5);
                             out(pw, "250 Renamed");
                             //</editor-fold>
-                        } else if(cmd.startsWith("STOR")) {
+                        } else if(cmd.toUpperCase().startsWith("STOR")) {
                             //<editor-fold defaultstate="collapsed" desc="Upload file">
                             String file = cmd.substring(5);
                             String text = "";
@@ -361,8 +380,13 @@ public class FTPFS extends VFSStub implements Runnable {
                             LOG.log(Level.INFO, "***\r\n{0}", text);
                             out(pw, "226 File uploaded successfully");
                             //</editor-fold>
-                        } else if(cmd.startsWith("NOOP")) {
+                        } else if(cmd.toUpperCase().startsWith("NOOP")) {
                             out(pw, "200 NOOP ok.");
+                        } else if(cmd.toUpperCase().startsWith("OPTS")) {
+                            String[] args = cmd.toUpperCase().substring(5).split(" ");
+                            String opt = args[0];
+                            String status = args[1];
+                            out(pw, "200 " + opt + " always " + status + ".");
                         } else {
                             LOG.log(Level.WARNING, "Unsupported operation {0}", cmd);
                             out(pw, "502 " + cmd.split(" ")[0] + " not implemented.");
@@ -380,6 +404,9 @@ public class FTPFS extends VFSStub implements Runnable {
         }
 
         private String canonicalize(String string) {
+            if(string.endsWith("/")) {
+                string = string.substring(0, string.length() - 1);
+            }
             String[] split = string.split("/");
             ArrayList<String> pieces = new ArrayList<String>();
             for(String s : split) {
@@ -396,9 +423,9 @@ public class FTPFS extends VFSStub implements Runnable {
             for(String s : pieces) {
                 sb.append("/").append(s);
             }
-            return sb.toString();
+            String ret = sb.toString();
+            LOG.info(ret);
+            return ret;
         }
-
     }
-
 }

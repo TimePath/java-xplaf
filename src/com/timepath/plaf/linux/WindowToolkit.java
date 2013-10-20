@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.timepath.plaf.linux;
 
-import com.timepath.plaf.OS;
 import java.awt.Toolkit;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
@@ -43,10 +38,6 @@ public class WindowToolkit {
         } catch(Exception ex) {
             LOG.log(Level.WARNING, null, ex);
         }
-
-        DesktopLauncher.create(windowClass, "/com/timepath/tf2/hudeditor/resources",
-                               new String[] {"Icon.png", "Icon.svg"},
-                               new String[] {windowClass, windowClass});
     }
 
     private WindowToolkit() {
