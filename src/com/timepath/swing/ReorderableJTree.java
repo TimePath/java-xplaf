@@ -177,7 +177,7 @@ public class ReorderableJTree extends JTree {
                     }
                 }
                 DefaultMutableTreeNode[] nodes = copies.toArray(
-                        new DefaultMutableTreeNode[copies.size()]);
+                    new DefaultMutableTreeNode[copies.size()]);
                 nodesToRemove = toRemove.toArray(new DefaultMutableTreeNode[toRemove.size()]);
                 return new NodesTransferable(nodes);
             }
@@ -189,9 +189,8 @@ public class ReorderableJTree extends JTree {
             if((action & MOVE) == MOVE) {
                 JTree tree = (JTree) source;
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                // Remove nodes saved in nodesToRemove in createTransferable.
-                for(int i = 0; i < nodesToRemove.length; i++) {
-                    model.removeNodeFromParent(nodesToRemove[i]);
+                for(DefaultMutableTreeNode nodesToRemove1 : nodesToRemove) {
+                    model.removeNodeFromParent(nodesToRemove1);
                 }
             }
         }
@@ -215,13 +214,14 @@ public class ReorderableJTree extends JTree {
             if(dest == null) {
                 return false;
             }
+            
             DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
 
             // Convert nodes to usable format
             DefaultMutableTreeNode[] clodedNodes;
             try {
                 clodedNodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(
-                        nodesFlavor);
+                    nodesFlavor);
             } catch(Exception ex) {
                 return false;
             }
@@ -231,8 +231,9 @@ public class ReorderableJTree extends JTree {
             }
 
             // Sanity check
-
-            if((maxDropLevel > -1 && target.getLevel() > maxDropLevel) || (minDropLevel > -1 && target.getLevel() < minDropLevel)) {
+            if((maxDropLevel > -1 && target.getLevel() > maxDropLevel) || (minDropLevel > -1
+                                                                           && target.getLevel()
+                                                                              < minDropLevel)) {
                 return false;
             }
 
@@ -241,17 +242,18 @@ public class ReorderableJTree extends JTree {
             if(support.getDropAction() == MOVE && !haveCompleteNode(tree)) {
 //                return false;
             }
-
-            for(int i = 0; i < nodes.length; i++) {
-                if((minDragLevel > -1 && nodes[i].getLevel() < minDragLevel) || (maxDragLevel > -1 && nodes[i].getLevel() > maxDragLevel)) {
+            
+            for(DefaultMutableTreeNode node : nodes) {
+                if((minDragLevel > -1 && node.getLevel() < minDragLevel) ||
+                   (maxDragLevel > -1 && node.getLevel() > maxDragLevel)) {
                     return false;
                 }
-                // Do not allow a drop on the drag source selections
-                if(nodes[i] == target) {
+                // Do not allow a drop on the drag source's parent
+                if(target == node.getParent()) {
                     return false;
                 }
                 // Do not allow a drop on the drag source's descendants
-                if(nodes[i].isNodeDescendant(target)) {
+                if(node.isNodeDescendant(target)) {
                     return false;
                 }
             }
@@ -278,7 +280,7 @@ public class ReorderableJTree extends JTree {
             DefaultMutableTreeNode[] nodes = null;
             try {
                 nodes = (DefaultMutableTreeNode[]) support.getTransferable().getTransferData(
-                        nodesFlavor);
+                    nodesFlavor);
             } catch(UnsupportedFlavorException ufe) {
                 LOG.log(Level.WARNING, "UnsupportedFlavor: {0}", ufe.getMessage());
             } catch(java.io.IOException ioe) {
