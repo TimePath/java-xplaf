@@ -15,12 +15,16 @@ public class AggregateOutputStream extends OutputStream {
 
     private final ArrayList<OutputStream> out = new ArrayList<OutputStream>();
 
-    public synchronized void register(OutputStream outputStream) {
-        out.add(outputStream);
+    public void register(OutputStream outputStream) {
+        synchronized(out) {
+            out.add(outputStream);
+        }
     }
 
-    public synchronized void deregister(OutputStream outputStream) {
-        out.remove(outputStream);
+    public void deregister(OutputStream outputStream) {
+        synchronized(out) {
+            out.remove(outputStream);
+        }
     }
 
     @Override
@@ -40,18 +44,22 @@ public class AggregateOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
+        ArrayList<OutputStream> streams = new ArrayList<OutputStream>();
         ArrayList<OutputStream> dereg = new ArrayList<OutputStream>();
         synchronized(out) {
-            for(OutputStream os : out) {
-                synchronized(os) {
-                    try {
-                        os.write(b, off, len);
-                    } catch(Exception e) {
-                        dereg.add(os);
-                    }
-                }
+            streams.addAll(out);
+        }
+        for(OutputStream os : streams) {
+            try {
+                os.write(b, off, len);
+            } catch(Exception e) {
+                dereg.add(os);
             }
-            out.removeAll(dereg);
+        }
+        if(!dereg.isEmpty()) {
+            synchronized(out) {
+                out.removeAll(dereg);
+            }
         }
     }
 
