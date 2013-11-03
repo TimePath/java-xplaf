@@ -1,7 +1,10 @@
 package com.timepath.plaf.linux;
 
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +41,18 @@ public class WindowToolkit {
         } catch(Exception ex) {
             LOG.log(Level.WARNING, null, ex);
         }
+    }
+
+    public static long getWindowID(Frame parent) {
+        try {
+            Method f = Class.forName("sun.awt.X11.XWindow").getDeclaredMethod("getParentWindowID",
+                                                                              Component.class);
+            f.setAccessible(true);
+            return (Long) f.invoke(null, parent.getComponent(0));
+        } catch(Exception ex) {
+            LOG.log(Level.WARNING, null, ex);
+        }
+        return 0;
     }
 
     private WindowToolkit() {

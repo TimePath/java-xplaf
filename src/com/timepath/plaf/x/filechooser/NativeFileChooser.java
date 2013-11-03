@@ -14,34 +14,17 @@ public class NativeFileChooser extends BaseFileChooser {
     private static final Logger LOG = Logger.getLogger(NativeFileChooser.class.getName());
 
     private BaseFileChooser getChooser() {
-        BaseFileChooser chooser;
-        if(OS.isWindows()) {
-            chooser = new XFileDialogFileChooser();
-        } else if(OS.isMac()) {
-            chooser = new AWTFileChooser();
-        } else if(OS.isLinux()) {
-//            if(System.getProperties().getProperty("java.class.path").contains("NetBeansProjects")) {
-//                LOG.warning("Running from NetBeans, ZenityFileChooser may not work");
-//                chooser = new SwingFileChooser();
-//            } else {
-//            try {
-                chooser = new ZenityFileChooser();
-//            } catch(IOException ex) {
-//                chooser = new SwingFileChooser();  
-//            }
-//            }
-        } else {
-            chooser = new SwingFileChooser();
-        }
+        BaseFileChooser chooser = which();
+
         chooser
-                .setApproveButtonText(approveButtonText)
-                .setTitle(dialogTitle)
-                .setDialogType(dialogType)
-                .setDirectory(directory)
-                .setFile(file)
-                .setFileMode(fileMode)
-                .setMultiSelectionEnabled(multiSelectionEnabled)
-                .setParent(parent);
+            .setApproveButtonText(approveButtonText)
+            .setTitle(dialogTitle)
+            .setDialogType(dialogType)
+            .setDirectory(directory)
+            .setFile(file)
+            .setFileMode(fileMode)
+            .setMultiSelectionEnabled(multiSelectionEnabled)
+            .setParent(parent);
         for(ExtensionFilter ef : filters) {
             chooser.addFilter(ef);
         }
@@ -52,6 +35,24 @@ public class NativeFileChooser extends BaseFileChooser {
     @Override
     public File[] choose() throws IOException {
         return getChooser().choose();
+    }
+
+    private BaseFileChooser which() {
+        if(OS.isWindows()) {
+            return new XFileDialogFileChooser();
+        } else if(OS.isMac()) {
+            return new AWTFileChooser();
+        } else if(OS.isLinux()) {
+            String de = System.getenv("XDG_CURRENT_DESKTOP");
+            if(de != null) {
+                if(de.equalsIgnoreCase("KDE")) {
+                    return new KDialogFileChooser();
+                } else {
+                    return new ZenityFileChooser();
+                }
+            }
+        }
+        return new SwingFileChooser();
     }
 
 }
