@@ -39,6 +39,39 @@ public class FTPFS extends VFSStub implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(FTPFS.class.getName());
 
+    public static FTPFS create() throws IOException {
+        return create(2121);
+    }
+
+    /**
+     * Creates a local-only server
+     * <p>
+     * @param port
+     *             <p>
+     * @return
+     * @throws java.io.IOException
+     */
+    public static FTPFS create(int port) throws IOException {
+        return create(port, null); // cannot use java7 InetAddress.getLoopbackAddress(). On windows, this prevents firewall warnings. It's also good for security in general
+    }
+
+    /**
+     * Creates a server on the specified address.
+     * <p>
+     * @param port
+     * @param addr If null, listen on all available interfaces
+     * <p>
+     * @return
+     * @throws java.io.IOException
+     */
+    public static FTPFS create(int port, InetAddress addr) throws IOException {
+        FTPFS f = new FTPFS();
+        f.port = port;
+        f.address = addr;
+        f.bind();
+        return f;
+    }
+
     private static String toFTPString(VFile file) {
         char spec = '-'; // TODO: links
         char[][] f = {{'r', '-', '-'}, {'r', '-', '-'}, {'r', '-', '-'}}; // RWX: User, Group, Everybody
@@ -84,8 +117,8 @@ public class FTPFS extends VFSStub implements Runnable {
         return str;
     }
 
-    public static void main(String... args) throws IOException {
-        FTPFS f = new FTPFS(2121, null);
+    public static void main(String[] args) throws IOException {
+        FTPFS f = FTPFS.create(2121, null);
         f.add(new MockFile("test.txt", "It works!"));
         f.add(new MockFile("world.txt", "Hello world"));
         f.run();
@@ -103,33 +136,32 @@ public class FTPFS extends VFSStub implements Runnable {
         LOG.log(Level.INFO, ">>> {0}", cmd);
     }
 
-    private final ServerSocket servsock;
-
-    public FTPFS() throws IOException {
-        this(2121);
+    /**
+     * Invoked when a file is modified
+     * <p>
+     * @param f
+     */
+    protected void fileModified(VFile f) {
+        for(int i = 0; i < listeners.size(); i++) {
+            listeners.get(i).fileModified(f);
+        }
     }
 
-    /**
-     * Creates a local-only server
-     * <p>
-     * @param port
-     *             <p>
-     * @throws IOException
-     */
-    public FTPFS(int port) throws IOException {
-        this(port, InetAddress.getByName(null)); // cannot use java7 InetAddress.getLoopbackAddress(). On windows, this prevents firewall warnings. It's also good for security in general
+    private InetAddress address;
+
+    private int port;
+
+    private ServerSocket servsock;
+
+    private void bind() throws IOException {
+        if(address == null) {
+            address = InetAddress.getByName(null);
+        }
+        servsock = new ServerSocket(port, 0, address);
     }
 
-    /**
-     * Creates a server on the specified address.
-     * <p>
-     * @param port
-     * @param addr If null, listen on all available interfaces
-     * <p>
-     * @throws IOException
-     */
-    public FTPFS(int port, InetAddress addr) throws IOException {
-        servsock = new ServerSocket(port, 0, addr);
+    public void run() {
+
         LOG.log(Level.INFO, "Listening on {0}:{1}", new Object[] {
             servsock.getInetAddress().getHostAddress(), servsock.getLocalPort()});
 
@@ -140,9 +172,6 @@ public class FTPFS extends VFSStub implements Runnable {
                 LOG.info("FTP server shutting down...");
             }
         });
-    }
-
-    public void run() {
         for(;;) {
 //            LOG.info("Waiting for client...");
             try {
@@ -381,9 +410,19 @@ public class FTPFS extends VFSStub implements Runnable {
                             String to = in(br).substring(5);
                             out(pw, "250 Renamed");
                             //</editor-fold>
+                        } else if(cmd.toUpperCase().startsWith("MKD")) {
+                            String folder = cmd.substring(4);
+                            VFile f = get(folder);
+                            if(f != null && f.isDirectory()) {
+                                out(pw, "550 Failed to create directory. (it exists)");
+                            } else {
+                                out(pw, "200 created directory.");
+                            }
+                            files.put(folder, new MockFile(folder, null));
                         } else if(cmd.toUpperCase().startsWith("STOR")) {
                             //<editor-fold defaultstate="collapsed" desc="Upload file">
                             String file = cmd.substring(5);
+                            System.out.println(file);
                             String text = "";
                             out(pw, "150 Entering Transfer Mode");
                             if(pasv != null) {
@@ -402,9 +441,9 @@ public class FTPFS extends VFSStub implements Runnable {
                                 }
                             }
                             data.close();
-                            for(int i = 0; i < listeners.size(); i++) {
-                                listeners.get(i).fileModified(null);
-                            }
+                            VFile f = new MockFile(file, text);
+                            files.put(file, f);
+                            fileModified(f);
                             LOG.log(Level.INFO, "***\r\n{0}", text);
                             out(pw, "226 File uploaded successfully");
                             //</editor-fold>

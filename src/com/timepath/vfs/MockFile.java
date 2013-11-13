@@ -33,7 +33,7 @@ public class MockFile extends VFile {
 
     @Override
     public long fileSize() {
-        return cont.getBytes().length;
+        return cont != null ? cont.getBytes().length : this.files.size();
     }
 
     @Override
