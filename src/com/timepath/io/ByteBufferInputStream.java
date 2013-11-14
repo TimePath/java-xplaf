@@ -14,6 +14,7 @@ public class ByteBufferInputStream extends InputStream {
 
     public ByteBufferInputStream(ByteBuffer buf) {
         this.buf = buf.asReadOnlyBuffer();
+        this.buf.rewind();
     }
 
     private int markpos = -1;
