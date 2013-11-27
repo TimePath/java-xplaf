@@ -1,6 +1,7 @@
 package com.timepath;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -38,8 +39,8 @@ public class Diff<X> {
      * @return Three lists: Objects now in changed, Objects only in changed, Objects modified in changed (requires exact Comparator)
      */
     @SuppressWarnings("unchecked") // EMPTY_COMPARATOR
-    public static <X> Diff<X> diff(List<X> original, List<X> changed, Comparator<X> similar,
-                                   Comparator<X> exact) {
+    public static <X> Diff<X> diff(List<X> original, List<X> changed,
+                                   Comparator<X> similar, Comparator<X> exact) {
         Diff<X> d = new Diff<X>();
 
         ArrayList<X> added = new ArrayList<X>(changed);
@@ -68,6 +69,11 @@ public class Diff<X> {
         d.modified = modified;
         d.same = same;
         return d;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <X> Diff<X> diff(X original, X changed, Comparator<X> similar, Comparator<X> exact) {
+        return diff(Arrays.asList(original), Arrays.asList(changed), similar, exact);
     }
 
     @Override

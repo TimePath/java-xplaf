@@ -8,70 +8,108 @@ import java.util.logging.Logger;
 /**
  *
  * @author TimePath
- * @param <X>
+ * @param <A> Property type
+ * @param <B> Your subclass
  */
-public class Node<X> {
+public class Node<A, B extends Node<A, B>> {
 
-    private X value;
+    public Object custom;
+
+    private A value;
 
     private static final Logger LOG = Logger.getLogger(Node.class.getName());
 
-    private Node<X> parent;
+    protected B parent;
 
-    private ArrayList<Node<X>> children = new ArrayList<Node<X>>();
+    private ArrayList<B> children = new ArrayList<B>();
 
-    private ArrayList<X> properties = new ArrayList<X>();
+    private ArrayList<A> properties = new ArrayList<A>();
 
-    public Node(Object a) {
-
+    public Node() {
+        this.custom = this.toString();
     }
 
-    public void add(Node<X> e) {
-        e.parent = this;
+    public Node(Object a) {
+        this.custom = a;
+    }
+
+    public Object getCustom() {
+        return custom;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addNode(B e) {
+        e.parent = (B) this;
         getChildren().add(e);
     }
 
-    public void add(Node<X>... a) {
-        for(Node<X> n : a) {
-            add(n);
+    public void removeNode(B e) {
+        e.parent = null;
+        getChildren().remove(e);
+    }
+
+    public void addAllNodes(Collection<B> c) {
+        for(B n : c) {
+            addNode(n);
         }
     }
 
-    public void add(Collection<Node<X>> c) {
-        for(Node<X> n : c) {
-            add(n);
+    public void addAllNodes(B... nodes) {
+        addAllNodes(Arrays.asList(nodes));
+    }
+
+    public void add(A property) {
+        this.getProperties().add(property);
+    }
+
+    public void addAll(Collection<A> c) {
+        for(A property : c) {
+            add(property);
         }
     }
 
-    public void add(X... properties) {
-        this.getProperties().addAll(Arrays.asList(properties));
+    public void addAll(A... properties) {
+        addAll(Arrays.asList(properties));
+    }
+
+    public B getNamedNode(Object identifier) {
+        for(B c : this.getChildren()) {
+            if(c.custom.equals(identifier)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public boolean has(Object identifier) {
+        return getNamedNode(identifier) != null;
     }
 
     /**
      * @return the children
      */
-    public ArrayList<Node<X>> getChildren() {
+    public ArrayList<B> getChildren() {
         return children;
     }
 
     /**
      * @return the parent
      */
-    public Node<X> getParent() {
+    public B getParent() {
         return parent;
     }
 
     /**
      * @return the properties
      */
-    public ArrayList<X> getProperties() {
+    public ArrayList<A> getProperties() {
         return properties;
     }
 
     /**
      * @return the value
      */
-    public X getValue() {
+    public A getValue() {
         return value;
     }
 
