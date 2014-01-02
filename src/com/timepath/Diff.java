@@ -15,6 +15,8 @@ public class Diff<X> {
 
     public List<X> added, removed, same;
 
+    public X in, out;
+
     public List<Pair<X, X>> modified;
 
     private static final Logger LOG = Logger.getLogger(Diff.class.getName());
