@@ -39,7 +39,7 @@ public class NativeFileChooser extends BaseFileChooser {
 
     private BaseFileChooser which() {
         if(OS.isWindows()) {
-            return new XFileDialogFileChooser();
+            return new com.timepath.plaf.win.JnaFileChooser(); // XFileDialogFileChooser();
         } else if(OS.isMac()) {
             return new AWTFileChooser();
         } else if(OS.isLinux()) {
