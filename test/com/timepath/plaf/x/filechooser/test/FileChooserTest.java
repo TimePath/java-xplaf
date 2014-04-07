@@ -1,13 +1,9 @@
 package com.timepath.plaf.x.filechooser.test;
 
-import com.timepath.plaf.x.filechooser.AWTFileChooser;
-import com.timepath.plaf.x.filechooser.BaseFileChooser;
+import com.timepath.plaf.win.JnaFileChooser;
+import com.timepath.plaf.x.filechooser.*;
 import com.timepath.plaf.x.filechooser.BaseFileChooser.ExtensionFilter;
 import com.timepath.plaf.x.filechooser.BaseFileChooser.FileMode;
-import com.timepath.plaf.x.filechooser.NativeFileChooser;
-import com.timepath.plaf.x.filechooser.SwingFileChooser;
-import com.timepath.plaf.x.filechooser.XFileDialogFileChooser;
-import com.timepath.plaf.x.filechooser.ZenityFileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -240,21 +236,19 @@ public class FileChooserTest extends javax.swing.JFrame {
         return new AbstractListModel() {
             private static final long serialVersionUID = 1L;
 
-            private Class<? extends BaseFileChooser>[] strings = generate();
-
             @SuppressWarnings("unchecked")
-            private Class<? extends BaseFileChooser>[] generate() {
-                return new Class[] {NativeFileChooser.class, AWTFileChooser.class,
-                                    SwingFileChooser.class, XFileDialogFileChooser.class,
-                                    ZenityFileChooser.class};
+            private final Class<? extends BaseFileChooser>[] strings = new Class[] {
+                NativeFileChooser.class, AWTFileChooser.class,
+                SwingFileChooser.class, ZenityFileChooser.class,
+                KDialogFileChooser.class, JnaFileChooser.class
+            };
+
+            public Object getElementAt(int i) {
+                return strings[i];
             }
 
             public int getSize() {
                 return strings.length;
-            }
-
-            public Object getElementAt(int i) {
-                return strings[i];
             }
         };
     }
@@ -268,13 +262,16 @@ public class FileChooserTest extends javax.swing.JFrame {
             }
             BaseFileChooser c = (BaseFileChooser) o;
             c
-                    .setParent(this)
-                    .setFileMode(
-                    this.checkDirectories.isSelected() ? FileMode.DIRECTORIES_ONLY : (this.checkFiles.isSelected() ? FileMode.FILES_ONLY : FileMode.FILES_AND_DIRECTORIES))
-                    .setDialogType(
-                    this.checkSave.isSelected() ? BaseFileChooser.DialogType.SAVE_DIALOG : BaseFileChooser.DialogType.OPEN_DIALOG)
-                    .setMultiSelectionEnabled(this.checkMulti.isSelected())
-                    .setTitle(this.textTitle.getText());
+                .setParent(this)
+                .setFileMode(
+                    this.checkDirectories.isSelected() ? FileMode.DIRECTORIES_ONLY
+                        : (this.checkFiles.isSelected() ? FileMode.FILES_ONLY
+                           : FileMode.FILES_AND_DIRECTORIES))
+                .setDialogType(
+                    this.checkSave.isSelected() ? BaseFileChooser.DialogType.SAVE_DIALOG
+                        : BaseFileChooser.DialogType.OPEN_DIALOG)
+                .setMultiSelectionEnabled(this.checkMulti.isSelected())
+                .setTitle(this.textTitle.getText());
 
             c.addFilter(new ExtensionFilter("All files", ".*"));
 
