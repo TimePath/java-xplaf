@@ -70,13 +70,15 @@ public class KDialogFileChooser extends BaseFileChooser {
         }
         cmd.add(sb.toString());
 
-        long wid = WindowToolkit.getWindowID(parent);
-        if(wid != 0) {
-            cmd.add("--attach");
-            cmd.add("" + wid);
-            wasEnabled = parent.isEnabled();
-            wasDisabled = true;
-            parent.setEnabled(false);
+        if(parent != null) {
+            long wid = WindowToolkit.getWindowID(parent);
+            if(wid != 0) {
+                cmd.add("--attach");
+                cmd.add("" + wid);
+                wasEnabled = parent.isEnabled();
+                wasDisabled = true;
+                parent.setEnabled(false);
+            }
         }
 
         if(this.getTitle() != null && this.getTitle().trim().length() > 0) {
