@@ -54,7 +54,7 @@
  Copyright © 2003-2007 Apple, Inc., All Rights Reserved
 
  */
-package apple;
+package com.apple;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

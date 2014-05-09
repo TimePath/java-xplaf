@@ -1,6 +1,6 @@
 package com.timepath.plaf.mac;
 
-import apple.OSXAdapter;
+import com.apple.OSXAdapter;
 import java.awt.Image;
 import java.awt.PopupMenu;
 import java.lang.reflect.InvocationHandler;
