@@ -1,53 +1,57 @@
 package com.timepath.plaf.x.filechooser;
 
 import com.timepath.plaf.OS;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 
 /**
- *
  * @author TimePath
  */
 public class SwingFileChooser extends BaseFileChooser {
 
+    private static final Logger LOG = Logger.getLogger(SwingFileChooser.class.getName());
+
     @Override
     public File[] choose() {
         if(OS.isLinux()) {
-//            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
+            //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
         JFileChooser fd = new JFileChooser(directory);
         fd.setAcceptAllFileFilterUsed(true);
         for(final ExtensionFilter ef : filters) {
-            FileFilter ff = new FileFilter() {
-                public boolean accept(File file) {
+            FileFilter fileFilter = new FileFilter() {
+                @Override
+                public boolean accept(File f) {
                     for(String e : ef.getExtensions()) {
-                        if(file.getName().matches(".+" + e)) {
+                        if(f.getName().matches(".+" + e)) {
                             return true;
                         }
                     }
-                    return file.isDirectory();
+                    return f.isDirectory();
                 }
 
+                @Override
                 public String getDescription() {
                     StringBuilder filter = new StringBuilder();
                     filter.append(" (*").append(ef.getExtensions().get(0));
                     for(String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
                         filter.append(", *").append(e);
                     }
-                    filter.append(")");
-                    return ef.getDescription() + filter.toString();
+                    filter.append(')');
+                    return ef.getDescription() + filter;
                 }
             };
-            fd.addChoosableFileFilter(ff);
+            fd.addChoosableFileFilter(fileFilter);
             if(fd.isAcceptAllFileFilterUsed()) {
                 fd.setAcceptAllFileFilterUsed(false);
-                fd.setFileFilter(ff);
+                fd.setFileFilter(fileFilter);
             }
         }
         fd.setDialogTitle(dialogTitle);
-        fd.setDialogType(this.isSaveDialog() ? JFileChooser.SAVE_DIALOG : JFileChooser.OPEN_DIALOG);
+        fd.setDialogType(isSaveDialog() ? JFileChooser.SAVE_DIALOG : JFileChooser.OPEN_DIALOG);
         if(directory != null) {
             if(file != null) {
                 fd.setSelectedFile(new File(directory, file));
@@ -55,22 +59,14 @@ public class SwingFileChooser extends BaseFileChooser {
                 fd.setSelectedFile(directory);
             }
         }
-        fd.setFileSelectionMode(
-                this.isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
-        if(!this.isSaveDialog()) {
+        fd.setFileSelectionMode(isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
+        if(!isSaveDialog()) {
             fd.setMultiSelectionEnabled(multiSelectionEnabled);
         }
         File[] selection = null;
         if(fd.showDialog(parent, approveButtonText) == JFileChooser.APPROVE_OPTION) {
-            if(this.multiSelectionEnabled) {
-                selection = fd.getSelectedFiles();
-            } else {
-                selection = new File[] {fd.getSelectedFile()};
-            }
+            selection = multiSelectionEnabled ? fd.getSelectedFiles() : new File[] { fd.getSelectedFile() };
         }
         return selection;
     }
-
-    private static final Logger LOG = Logger.getLogger(SwingFileChooser.class.getName());
-
 }

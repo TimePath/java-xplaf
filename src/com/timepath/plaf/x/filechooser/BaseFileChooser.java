@@ -1,22 +1,47 @@
 package com.timepath.plaf.x.filechooser;
 
-import java.awt.Frame;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
  * @author TimePath
  */
 public abstract class BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(BaseFileChooser.class.getName());
+    protected Frame  parent;
+    protected String dialogTitle;
+    protected File   directory;
+    protected Collection<ExtensionFilter> filters = new LinkedList<>();
+    String file;
+    String approveButtonText;
+    DialogType dialogType = DialogType.OPEN_DIALOG;
+    FileMode   fileMode   = FileMode.FILES_ONLY;
+    boolean multiSelectionEnabled;
 
-    protected Frame parent;
+    protected BaseFileChooser() {
+    }
+
+    private BaseFileChooser(File currentDirectory) {
+        setDirectory(currentDirectory);
+    }
+
+    private BaseFileChooser(String currentDirectoryPath) {
+        setDirectory(currentDirectoryPath);
+    }
+
+    BaseFileChooser setDirectory(String directoryPath) {
+        if(directoryPath == null) {
+            directory = null;
+        } else {
+            setDirectory(new File(directoryPath));
+        }
+        return this;
+    }
 
     public Frame getParent() {
         return parent;
@@ -27,21 +52,21 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    protected String dialogTitle;
-
-    public String getTitle() {
+    String getTitle() {
         if(dialogTitle == null) {
-            return this.isSaveDialog() ? "Save" : "Open";
+            return isSaveDialog() ? "Save" : "Open";
         }
         return dialogTitle;
     }
 
     public BaseFileChooser setTitle(String title) {
-        this.dialogTitle = title;
+        dialogTitle = title;
         return this;
     }
 
-    protected File directory;
+    protected boolean isSaveDialog() {
+        return dialogType == DialogType.SAVE_DIALOG;
+    }
 
     public File getDirectory() {
         return directory;
@@ -49,22 +74,6 @@ public abstract class BaseFileChooser {
 
     public BaseFileChooser setDirectory(File directory) {
         this.directory = directory;
-        return this;
-    }
-
-    public BaseFileChooser setDirectory(String directoryPath) {
-        if(directoryPath == null) {
-            this.directory = null;
-        } else {
-            setDirectory(new File(directoryPath));
-        }
-        return this;
-    }
-
-    protected String file;
-
-    public BaseFileChooser setFile(String file) {
-        this.file = file;
         return this;
     }
 
@@ -80,25 +89,19 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    protected String approveButtonText;
-
-    public String getApproveButtonText() {
-        return approveButtonText;
-    }
-
-    public BaseFileChooser setApproveButtonText(String approveButtonText) {
-        this.approveButtonText = approveButtonText;
+    BaseFileChooser setFile(String file) {
+        this.file = file;
         return this;
     }
 
-    public static enum DialogType {
-
-        SAVE_DIALOG,
-        OPEN_DIALOG
-
+    String getApproveButtonText() {
+        return approveButtonText;
     }
 
-    protected DialogType dialogType = DialogType.OPEN_DIALOG;
+    BaseFileChooser setApproveButtonText(String approveButtonText) {
+        this.approveButtonText = approveButtonText;
+        return this;
+    }
 
     public DialogType getDialogType() {
         return dialogType;
@@ -109,21 +112,11 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    public boolean isSaveDialog() {
-        return dialogType == DialogType.SAVE_DIALOG;
+    protected boolean isDirectoryMode() {
+        return fileMode == FileMode.DIRECTORIES_ONLY;
     }
 
-    public static enum FileMode {
-
-        DIRECTORIES_ONLY,
-        FILES_ONLY,
-        FILES_AND_DIRECTORIES
-
-    }
-
-    protected FileMode fileMode = FileMode.FILES_ONLY;
-
-    public FileMode getFileMode() {
+    FileMode getFileMode() {
         return fileMode;
     }
 
@@ -132,13 +125,7 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    public boolean isDirectoryMode() {
-        return this.getFileMode() == FileMode.DIRECTORIES_ONLY;
-    }
-
-    protected boolean multiSelectionEnabled;
-
-    public boolean isMultiSelectionEnabled() {
+    protected boolean isMultiSelectionEnabled() {
         return multiSelectionEnabled;
     }
 
@@ -147,45 +134,40 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    public BaseFileChooser() {
-    }
-
-    public BaseFileChooser(File currentDirectory) {
-        setDirectory(currentDirectory);
-    }
-
-    public BaseFileChooser(String currentDirectoryPath) {
-        setDirectory(currentDirectoryPath);
-    }
-
     public abstract File[] choose() throws IOException;
-
-    protected ArrayList<ExtensionFilter> filters = new ArrayList<ExtensionFilter>();
 
     public BaseFileChooser addFilter(ExtensionFilter ef) {
         filters.add(ef);
         return this;
     }
 
+    public enum DialogType {
+        SAVE_DIALOG,
+        OPEN_DIALOG
+    }
+
+    public enum FileMode {
+        DIRECTORIES_ONLY,
+        FILES_ONLY,
+        FILES_AND_DIRECTORIES
+    }
+
     public static class ExtensionFilter {
 
+        private final List<String> extensions;
+        private final String       description;
+
         public ExtensionFilter(String shortDescription, String... extensions) {
-            this.description = shortDescription;
+            description = shortDescription;
             this.extensions = Arrays.asList(extensions);
         }
 
-        private final List<String> extensions;
-
         public List<String> getExtensions() {
-            return extensions;
+            return Collections.unmodifiableList(extensions);
         }
-
-        private final String description;
 
         public String getDescription() {
             return description;
         }
-
     }
-
 }
