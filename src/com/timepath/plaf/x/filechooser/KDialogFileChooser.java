@@ -22,6 +22,8 @@ public class KDialogFileChooser extends BaseFileChooser {
     private boolean wasDisabled;
     private boolean wasEnabled;
 
+    public KDialogFileChooser() {}
+
     @Override
     public File[] choose() throws IOException {
         Collection<String> cmd = new LinkedList<>();

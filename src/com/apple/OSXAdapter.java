@@ -103,9 +103,10 @@ public class OSXAdapter implements InvocationHandler {
         } catch(ClassNotFoundException cnfe) {
             System.err.println(
                     "This version of Mac OS X does not support the Apple EAWT.  ApplicationEvent handling has been disabled (" +
-                    cnfe + ")");
+                    cnfe + ")"
+                              );
         } catch(Exception ex) {  // Likely a NoSuchMethodException or an IllegalAccessException loading/invoking eawt
-        // .Application methods
+            // .Application methods
             System.err.println("Mac OS X Adapter could not talk to EAWT:");
             ex.printStackTrace();
         }

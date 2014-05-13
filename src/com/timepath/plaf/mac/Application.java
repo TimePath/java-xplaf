@@ -1,14 +1,14 @@
 package com.timepath.plaf.mac;
 
 import com.apple.OSXAdapter;
-import java.awt.Image;
-import java.awt.PopupMenu;
+
+import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JMenuBar;
 
 /**
  * Reflected com.apple.eawt.Application
@@ -19,52 +19,8 @@ import javax.swing.JMenuBar;
 public class Application {
 
     private static final Logger LOG = Logger.getLogger(Application.class.getName());
-
-    public class AboutEvent {
-
-        public AboutEvent() {
-        }
-
-    }
-
-    public interface AboutHandler {
-
-        public abstract void handleAbout(AboutEvent e);
-
-    }
-
-    public class PreferencesEvent {
-
-        public PreferencesEvent() {
-        }
-
-    }
-
-    public interface PreferencesHandler {
-
-        public abstract void handlePreferences(PreferencesEvent e);
-
-    }
-
-    public class QuitEvent {
-
-        public QuitEvent() {
-        }
-
-    }
-
-    public class QuitResponse {
-
-        public QuitResponse() {
-        }
-
-    }
-
-    public interface QuitHandler {
-
-        public abstract void handleQuitRequestWith(QuitEvent qe, QuitResponse qr);
-
-    }
+    //
+    private Object macOSXApplication;
 
     private Application() {
     }
@@ -97,48 +53,23 @@ public class Application {
                  */));
     }
 
-    //
-    private Object macOSXApplication;
-
-    private Object getMacOSXApplication() {
-        return macOSXApplication;
-    }
-
-    private void setMacOSXApplication(Object amacOSXApplication) {
-        macOSXApplication = amacOSXApplication;
-    }
-
-    private class OSXHandler implements InvocationHandler {
-
-        private OSXHandler() {
-        }
-
-        public Object invoke(Object arg0, Method arg1, Object[] arg2)
-                throws Throwable {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-    }
-
-    private void setHandler(OSXHandler adapter) {
+    private void setHandler(InvocationHandler adapter) {
         try {
             Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
-            if(getMacOSXApplication() == null) {
+            if(macOSXApplication == null) {
                 // com.apple.eawt.Application()
-                setMacOSXApplication(applicationClass.getConstructor((Class[]) null).newInstance(
-                        (Object[]) null));
+                macOSXApplication = applicationClass.getConstructor((Class[]) null).newInstance((Object[]) null);
             }
             Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
             // com.apple.eawt.Application.addApplicationListener(com.apple.eawt.ApplicationListener)
-            Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener",
-                                                                          new Class[] {
-                applicationListenerClass});
-
+            Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[] {
+                                                                                  applicationListenerClass
+                                                                          }
+                                                                         );
             Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
-                                                            new Class[] {applicationListenerClass},
+                                                            new Class[] { applicationListenerClass },
                                                             adapter);
-            addListenerMethod.invoke(getMacOSXApplication(), new Object[] {osxAdapterProxy});
+            addListenerMethod.invoke(macOSXApplication, osxAdapterProxy);
         } catch(ClassNotFoundException cnfe) {
             LOG.log(Level.WARNING,
                     "This version of Mac OS X does not support the Apple EAWT. ApplicationEvent handling has been disabled ({0})",
@@ -149,4 +80,62 @@ public class Application {
         }
     }
 
+    private Object getMacOSXApplication() {
+        return macOSXApplication;
+    }
+
+    private void setMacOSXApplication(Object amacOSXApplication) {
+        macOSXApplication = amacOSXApplication;
+    }
+
+    public interface AboutHandler {
+
+        void handleAbout(AboutEvent e);
+    }
+
+    public interface PreferencesHandler {
+
+        void handlePreferences(PreferencesEvent e);
+    }
+
+    public interface QuitHandler {
+
+        void handleQuitRequestWith(QuitEvent qe, QuitResponse qr);
+    }
+
+    public static class AboutEvent {
+
+        public AboutEvent() {
+        }
+    }
+
+    public static class PreferencesEvent {
+
+        public PreferencesEvent() {
+        }
+    }
+
+    public static class QuitEvent {
+
+        public QuitEvent() {
+        }
+    }
+
+    public static class QuitResponse {
+
+        public QuitResponse() {
+        }
+    }
+
+    private static class OSXHandler implements InvocationHandler {
+
+        private OSXHandler() {
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    }
 }

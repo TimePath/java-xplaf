@@ -75,6 +75,8 @@ public class Comdlg32 {
         Native.register("comdlg32");
     }
 
+    private Comdlg32() {}
+
     public static native int CommDlgExtendedError();
 
     public static native boolean GetOpenFileNameW(OpenFileName params);

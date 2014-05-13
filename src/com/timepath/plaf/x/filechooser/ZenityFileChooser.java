@@ -22,6 +22,8 @@ public class ZenityFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(ZenityFileChooser.class.getName());
 
+    public ZenityFileChooser() {}
+
     @Override
     public File[] choose() throws IOException {
         Collection<String> cmd = new LinkedList<>();

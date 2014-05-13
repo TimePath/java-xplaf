@@ -15,6 +15,8 @@ public class AWTFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(AWTFileChooser.class.getName());
 
+    public AWTFileChooser() {}
+
     @Override
     public File[] choose() {
         if(OS.isMac()) {

@@ -127,7 +127,8 @@ public class FileChooserTest extends JFrame {
                                                                                                                                .addComponent(
                                                                                                                                        checkFiles)
                                                                                                                                .addComponent(
-                                                                                                                                       checkDirectories))
+                                                                                                                                       checkDirectories)
+                                                                                                                        )
                                                                                                                .addContainerGap())
                                                                           );
         jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
@@ -201,7 +202,8 @@ public class FileChooserTest extends JFrame {
                                                                                                                                                        GroupLayout.PREFERRED_SIZE,
                                                                                                                                                        105,
                                                                                                                                                        GroupLayout.PREFERRED_SIZE)
-                                                                                                                                        ))
+                                                                                                                                        )
+                                                                                                                        )
                                                                                                                .addContainerGap
                                                                                                                        (43,
                                                                                                                                 Short.MAX_VALUE))

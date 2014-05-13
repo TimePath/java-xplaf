@@ -14,6 +14,8 @@ public class NativeFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(NativeFileChooser.class.getName());
 
+    public NativeFileChooser() {}
+
     @Override
     public File[] choose() throws IOException {
         return getChooser().choose();

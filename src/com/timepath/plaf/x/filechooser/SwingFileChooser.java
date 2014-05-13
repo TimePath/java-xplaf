@@ -14,6 +14,8 @@ public class SwingFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(SwingFileChooser.class.getName());
 
+    public SwingFileChooser() {}
+
     @Override
     public File[] choose() {
         if(OS.isLinux()) {

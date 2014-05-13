@@ -28,6 +28,8 @@ public class JnaFileChooser extends BaseFileChooser {
     private static final Logger LOG         = Logger.getLogger(JnaFileChooser.class.getName());
     private static final int    MAX_PATH    = 260;
 
+    public JnaFileChooser() {}
+
     @Override
     public File[] choose() throws IOException {
         return isDirectoryMode() ? chooseDirectory() : chooseFile();
