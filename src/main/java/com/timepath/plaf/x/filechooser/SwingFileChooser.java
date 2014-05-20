@@ -21,7 +21,7 @@ public class SwingFileChooser extends BaseFileChooser {
         if(OS.isLinux()) {
             //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
-        JFileChooser fd = new JFileChooser(directory);
+        JFileChooser fd = new JFileChooser();
         fd.setAcceptAllFileFilterUsed(true);
         for(final ExtensionFilter ef : filters) {
             FileFilter fileFilter = new FileFilter() {
@@ -58,7 +58,7 @@ public class SwingFileChooser extends BaseFileChooser {
             if(file != null) {
                 fd.setSelectedFile(new File(directory, file));
             } else {
-                fd.setSelectedFile(directory);
+                fd.setCurrentDirectory(directory);
             }
         }
         fd.setFileSelectionMode(isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
