@@ -1,0 +1,6 @@
+description = ''
+dependencies {
+  compile 'net.java.dev.jna:jna:4.1.0'
+  compile 'lib:jayatana-1.2.4.jar:135.999'
+  compile project(':commons')
+}
