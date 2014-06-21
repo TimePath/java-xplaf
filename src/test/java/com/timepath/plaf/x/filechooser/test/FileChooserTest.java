@@ -338,11 +338,7 @@ public class FileChooserTest extends JFrame {
                 Object[] row = new Object[] { aF.getParentFile().getPath(), aF.getName() }; table.addRow(row);
                 LOG.log(Level.INFO, "{0}: {1}", new Object[] { aF, Arrays.toString(row) });
             }
-        } catch(IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        } catch(InstantiationException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        } catch(IllegalAccessException ex) {
+        } catch(IOException | InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
