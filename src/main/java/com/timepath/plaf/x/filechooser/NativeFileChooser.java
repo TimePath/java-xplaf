@@ -39,10 +39,10 @@ public class NativeFileChooser extends BaseFileChooser {
 
     private static BaseFileChooser which() {
         if(OS.isWindows()) {
-            return new JnaFileChooser(); // XFileDialogFileChooser();
+            return new JnaFileChooser();
         }
         if(OS.isMac()) {
-            return new AWTFileChooser();
+//            return new AWTFileChooser(); // FIXME
         }
         if(OS.isLinux()) {
             String de = System.getenv("XDG_CURRENT_DESKTOP");
