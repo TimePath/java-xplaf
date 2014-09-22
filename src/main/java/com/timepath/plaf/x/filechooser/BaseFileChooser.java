@@ -17,7 +17,7 @@ public abstract class BaseFileChooser {
     protected String dialogTitle;
     protected File directory;
     protected Collection<ExtensionFilter> filters = new LinkedList<>();
-    String file;
+    String fileName;
     String approveButtonText;
     DialogType dialogType = DialogType.OPEN_DIALOG;
     FileMode fileMode = FileMode.FILES_ONLY;
@@ -77,14 +77,19 @@ public abstract class BaseFileChooser {
         return this;
     }
 
-    public String getFile() {
-        return file;
+    public String getFileName() {
+        return fileName;
+    }
+
+    public BaseFileChooser setFileName(String fileName) {
+        this.fileName = fileName;
+        return this;
     }
 
     public BaseFileChooser setFile(File file) {
         if (file != null) {
             setDirectory(file.getParentFile());
-            this.file = file.getName();
+            setFileName(file.getName());
         }
         return this;
     }

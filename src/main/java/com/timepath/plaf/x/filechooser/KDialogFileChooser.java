@@ -42,8 +42,8 @@ public class KDialogFileChooser extends BaseFileChooser {
                 cmd.add("--getopenfilename");
             }
         }
-        if ((file != null) || (directory != null)) {
-            cmd.add(((directory != null) ? (directory.getPath() + '/') : "") + ((file != null) ? file : ""));
+        if ((fileName != null) || (directory != null)) {
+            cmd.add(((directory != null) ? (directory.getPath() + '/') : "") + ((fileName != null) ? fileName : ""));
         } else {
             cmd.add("~");
         }

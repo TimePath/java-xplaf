@@ -40,8 +40,8 @@ public class AWTFileChooser extends BaseFileChooser {
         if (directory != null) {
             fd.setDirectory(directory.getPath());
         }
-        if (file != null) {
-            fd.setFile(file);
+        if (fileName != null) {
+            fd.setFile(fileName);
         }
         if (isDirectoryMode()) {
             if (!OS.isMac()) {

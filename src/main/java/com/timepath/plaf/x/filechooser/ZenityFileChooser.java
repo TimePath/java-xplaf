@@ -68,9 +68,9 @@ public class ZenityFileChooser extends BaseFileChooser {
         if (isMultiSelectionEnabled()) {
             cmd.add("--multiple");
         }
-        if ((file != null) || (directory != null)) {
+        if ((fileName != null) || (directory != null)) {
             cmd.add("--filename=" + ((directory != null) ? (directory.getPath() + '/') : "") +
-                    ((file != null) ? file : ""));
+                    ((fileName != null) ? fileName : ""));
         }
         String windowClass = WindowToolkit.getWindowClass();
         try {

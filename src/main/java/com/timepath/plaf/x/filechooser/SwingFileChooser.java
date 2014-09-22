@@ -56,8 +56,8 @@ public class SwingFileChooser extends BaseFileChooser {
         fd.setDialogTitle(dialogTitle);
         fd.setDialogType(isSaveDialog() ? JFileChooser.SAVE_DIALOG : JFileChooser.OPEN_DIALOG);
         if (directory != null) {
-            if (file != null) {
-                fd.setSelectedFile(new File(directory, file));
+            if (fileName != null) {
+                fd.setSelectedFile(new File(directory, fileName));
             } else {
                 fd.setCurrentDirectory(directory);
             }

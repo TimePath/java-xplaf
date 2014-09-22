@@ -44,7 +44,7 @@ public class NativeFileChooser extends BaseFileChooser {
                 .setTitle(dialogTitle)
                 .setDialogType(dialogType)
                 .setDirectory(directory)
-                .setFile(file)
+                .setFileName(fileName)
                 .setFileMode(fileMode)
                 .setMultiSelectionEnabled(multiSelectionEnabled)
                 .setParent(parent);
