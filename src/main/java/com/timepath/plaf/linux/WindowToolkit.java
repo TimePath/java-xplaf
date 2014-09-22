@@ -39,7 +39,7 @@ public class WindowToolkit {
             Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
             awtAppClassNameField.setAccessible(true);
             awtAppClassNameField.set(xToolkit, windowClass);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.WARNING, null, ex);
         }
     }
@@ -49,7 +49,7 @@ public class WindowToolkit {
             Method method = Class.forName("sun.awt.X11.XWindow").getDeclaredMethod("getParentWindowID", Component.class);
             method.setAccessible(true);
             return (Long) method.invoke(null, parent.getComponent(0));
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.WARNING, null, ex);
         }
         return 0;

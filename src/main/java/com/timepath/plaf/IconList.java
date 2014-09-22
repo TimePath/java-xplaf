@@ -14,16 +14,20 @@ public class IconList {
 
     private static final Logger LOG = Logger.getLogger(IconList.class.getName());
     private final List<Image> list;
-    private final int[]       sizes;
-    private final String      path;
-    private final String      ext;
+    private final int[] sizes;
+    private final String path;
+    private final String ext;
 
     public IconList(String path, String ext, int... sizes) {
-        this.path = path; this.ext = ext; this.sizes = sizes; list = new LinkedList<>(); populate();
+        this.path = path;
+        this.ext = ext;
+        this.sizes = sizes;
+        list = new LinkedList<>();
+        populate();
     }
 
     void populate() {
-        for(int i : sizes) {
+        for (int i : sizes) {
             list.add(new ImageIcon(getClass().getResource(path + i + '.' + ext)).getImage());
         }
     }

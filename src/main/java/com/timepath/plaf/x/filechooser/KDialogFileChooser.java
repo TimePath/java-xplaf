@@ -22,54 +22,55 @@ public class KDialogFileChooser extends BaseFileChooser {
     private boolean wasDisabled;
     private boolean wasEnabled;
 
-    public KDialogFileChooser() {}
+    public KDialogFileChooser() {
+    }
 
     @Override
     public File[] choose() throws IOException {
         Collection<String> cmd = new LinkedList<>();
         cmd.add("kdialog");
-        if(isMultiSelectionEnabled()) {
+        if (isMultiSelectionEnabled()) {
             cmd.add("--multiple");
             cmd.add("--separate-output");
         }
-        if(isDirectoryMode()) {
+        if (isDirectoryMode()) {
             cmd.add("--getexistingdirectory");
         } else {
-            if(isSaveDialog()) {
+            if (isSaveDialog()) {
                 cmd.add("--getsavefilename");
             } else {
                 cmd.add("--getopenfilename");
             }
         }
-        if(( file != null ) || ( directory != null )) {
-            cmd.add(( ( directory != null ) ? ( directory.getPath() + '/' ) : "" ) + ( ( file != null ) ? file : "" ));
+        if ((file != null) || (directory != null)) {
+            cmd.add(((directory != null) ? (directory.getPath() + '/') : "") + ((file != null) ? file : ""));
         } else {
             cmd.add("~");
         }
         StringBuilder sb = new StringBuilder();
-        if(filters.size() > 1) {
+        if (filters.size() > 1) {
             sb.append("*.*|All supported files\n");
         }
         int fnum = 0;
-        for(ExtensionFilter ef : filters) {
+        for (ExtensionFilter ef : filters) {
             List<String> exts = ef.getExtensions();
-            StringBuilder part = new StringBuilder(( exts.size() * 6 ) + ef.getDescription().length());
-            for(String e : exts) {
-                if(part.length() > 0) {
+            StringBuilder part = new StringBuilder((exts.size() * 6) + ef.getDescription().length());
+            for (String e : exts) {
+                if (part.length() > 0) {
                     part.append(' ');
                 }
                 part.append('*').append(e);
             }
             part.append('|').append(ef.getDescription());
             sb.append(part);
-            if(++fnum < filters.size()) {
+            if (++fnum < filters.size()) {
                 sb.append('\n');
             }
         }
         cmd.add(sb.toString());
-        if(parent != null) {
+        if (parent != null) {
             long wid = WindowToolkit.getWindowID(parent);
-            if(wid != 0) {
+            if (wid != 0) {
                 cmd.add("--attach");
                 cmd.add(String.valueOf(wid));
                 wasEnabled = parent.isEnabled();
@@ -77,10 +78,10 @@ public class KDialogFileChooser extends BaseFileChooser {
                 parent.setEnabled(false);
             }
         }
-        if(( getTitle() != null ) && !getTitle().trim().isEmpty()) {
+        if ((getTitle() != null) && !getTitle().trim().isEmpty()) {
             cmd.add("--title=" + getTitle());
         }
-        if(getApproveButtonText() != null) {
+        if (getApproveButtonText() != null) {
             cmd.add("--yes-label=" + getApproveButtonText());
         }
         String[] exec = new String[cmd.size()];
@@ -96,19 +97,19 @@ public class KDialogFileChooser extends BaseFileChooser {
         Collection<String> selected = new LinkedList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         String selection;
-        while(( selection = br.readLine() ) != null) {
+        while ((selection = br.readLine()) != null) {
             selected.add(selection);
         }
         LOG.log(Level.INFO, "KDialog selection: {0}", selected);
-        if(wasEnabled && wasDisabled) {
+        if (wasEnabled && wasDisabled) {
             parent.setEnabled(wasDisabled);
         }
-        if(selected.isEmpty()) {
+        if (selected.isEmpty()) {
             return null;
         } else {
             File[] files = new File[selected.size()];
             int i = 0;
-            for(String s : selected) {
+            for (String s : selected) {
                 files[i++] = new File(s);
             }
             return files;

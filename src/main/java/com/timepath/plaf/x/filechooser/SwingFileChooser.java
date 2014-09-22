@@ -14,21 +14,22 @@ public class SwingFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(SwingFileChooser.class.getName());
 
-    public SwingFileChooser() {}
+    public SwingFileChooser() {
+    }
 
     @Override
     public File[] choose() {
-        if(OS.isLinux()) {
+        if (OS.isLinux()) {
             //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
         JFileChooser fd = new JFileChooser();
         fd.setAcceptAllFileFilterUsed(true);
-        for(final ExtensionFilter ef : filters) {
+        for (final ExtensionFilter ef : filters) {
             FileFilter fileFilter = new FileFilter() {
                 @Override
                 public boolean accept(File f) {
-                    for(String e : ef.getExtensions()) {
-                        if(f.getName().matches(".+" + e)) {
+                    for (String e : ef.getExtensions()) {
+                        if (f.getName().matches(".+" + e)) {
                             return true;
                         }
                     }
@@ -39,7 +40,7 @@ public class SwingFileChooser extends BaseFileChooser {
                 public String getDescription() {
                     StringBuilder filter = new StringBuilder();
                     filter.append(" (*").append(ef.getExtensions().get(0));
-                    for(String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
+                    for (String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
                         filter.append(", *").append(e);
                     }
                     filter.append(')');
@@ -47,27 +48,27 @@ public class SwingFileChooser extends BaseFileChooser {
                 }
             };
             fd.addChoosableFileFilter(fileFilter);
-            if(fd.isAcceptAllFileFilterUsed()) {
+            if (fd.isAcceptAllFileFilterUsed()) {
                 fd.setAcceptAllFileFilterUsed(false);
                 fd.setFileFilter(fileFilter);
             }
         }
         fd.setDialogTitle(dialogTitle);
         fd.setDialogType(isSaveDialog() ? JFileChooser.SAVE_DIALOG : JFileChooser.OPEN_DIALOG);
-        if(directory != null) {
-            if(file != null) {
+        if (directory != null) {
+            if (file != null) {
                 fd.setSelectedFile(new File(directory, file));
             } else {
                 fd.setCurrentDirectory(directory);
             }
         }
         fd.setFileSelectionMode(isDirectoryMode() ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_AND_DIRECTORIES);
-        if(!isSaveDialog()) {
+        if (!isSaveDialog()) {
             fd.setMultiSelectionEnabled(multiSelectionEnabled);
         }
         File[] selection = null;
-        if(fd.showDialog(parent, approveButtonText) == JFileChooser.APPROVE_OPTION) {
-            selection = multiSelectionEnabled ? fd.getSelectedFiles() : new File[] { fd.getSelectedFile() };
+        if (fd.showDialog(parent, approveButtonText) == JFileChooser.APPROVE_OPTION) {
+            selection = multiSelectionEnabled ? fd.getSelectedFiles() : new File[]{fd.getSelectedFile()};
         }
         return selection;
     }

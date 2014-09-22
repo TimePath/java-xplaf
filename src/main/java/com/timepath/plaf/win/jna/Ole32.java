@@ -12,7 +12,8 @@ public class Ole32 {
         Native.register("ole32");
     }
 
-    private Ole32() {}
+    private Ole32() {
+    }
 
     public static native void CoTaskMemFree(Pointer pv);
 

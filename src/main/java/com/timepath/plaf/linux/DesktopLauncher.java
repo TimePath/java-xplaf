@@ -30,8 +30,8 @@ public class DesktopLauncher {
         sb.append("Version=1.0").append('\n');
         sb.append("StartupWMClass=").append(desktop).append('\n');
         sb.append("Exec=java -jar Dropbox/Public/tf/Hud\\ Editor/TF2\\ HUD\\ Editor.jar %U")
-          .append('\n'); // TODO: fixme. Get a dedicated install directory.
-        if(icon != null) {
+                .append('\n'); // TODO: fixme. Get a dedicated install directory.
+        if (icon != null) {
             sb.append("Icon=").append(icon).append('\n');
         }
         sb.append("Type=Application").append('\n');
@@ -50,27 +50,27 @@ public class DesktopLauncher {
         try {
             String md51 = Utils.takeMD5(Utils.loadFile(destFile));
             String md52 = Utils.takeMD5(sb.toString().getBytes());
-            if(!md51.equals(md52)) { // TODO: Check date to allow for user customisation
-                LOG.log(Level.INFO, "{0} vs {1}", new Object[] { md51, md52 });
+            if (!md51.equals(md52)) { // TODO: Check date to allow for user customisation
+                LOG.log(Level.INFO, "{0} vs {1}", new Object[]{md51, md52});
                 flag = true;
             }
-        } catch(Exception ignored) {
+        } catch (Exception ignored) {
             flag = true;
         }
-        if(flag) {
+        if (flag) {
             PrintWriter out = null;
             try {
-                if(!destFile.exists()) {
+                if (!destFile.exists()) {
                     destFile.getParentFile().mkdirs();
                     destFile.createNewFile();
                 }
                 FileUtils.chmod777(destFile);
                 out = new PrintWriter(new FileOutputStream(destFile));
                 out.print(sb);
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(DesktopLauncher.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
-                if(out != null) {
+                if (out != null) {
                     out.close();
                 }
             }
@@ -78,38 +78,38 @@ public class DesktopLauncher {
     }
 
     private static void createIcons(String root, String[] icons, String... iconFiles) {
-        if(!root.endsWith("/")) {
+        if (!root.endsWith("/")) {
             root += "/";
         }
-        for(int i = 0; i < icons.length; i++) {
+        for (int i = 0; i < icons.length; i++) {
             try {
                 File destFile = new File(LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] +
-                                         icons[i].substring(( icons[i].lastIndexOf('.') > 0 )
-                                                            ? icons[i].lastIndexOf('.')
-                                                            : icons[i].length())
+                        icons[i].substring((icons[i].lastIndexOf('.') > 0)
+                                ? icons[i].lastIndexOf('.')
+                                : icons[i].length())
                 );
-                LOG.log(Level.INFO, "Extracting icon: {0}{1} to {2}", new Object[] { root, icons[i], destFile });
+                LOG.log(Level.INFO, "Extracting icon: {0}{1} to {2}", new Object[]{root, icons[i], destFile});
                 InputStream in = DesktopLauncher.class.getResourceAsStream(root + icons[i]);
-                if(in == null) {
+                if (in == null) {
                     continue;
                 }
-                if(!destFile.getParentFile().exists()) {
+                if (!destFile.getParentFile().exists()) {
                     destFile.getParentFile().mkdirs();
                 }
-                if(!destFile.exists()) {
+                if (!destFile.exists()) {
                     destFile.createNewFile();
                 }
-                try(FileOutputStream out = new FileOutputStream(destFile)) {
+                try (FileOutputStream out = new FileOutputStream(destFile)) {
                     byte[] buf = new byte[1024];
                     int len;
-                    while(( len = in.read(buf) ) > 0) {
+                    while ((len = in.read(buf)) > 0) {
                         out.write(buf, 0, len);
                     }
                 } finally {
                     in.close();
                     destFile.setExecutable(false);
                 }
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.WARNING, null, ex);
             }
         }

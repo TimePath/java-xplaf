@@ -14,7 +14,7 @@ public class LinuxUtils {
 
     public static String getLinuxStore() {
         String root = System.getenv("XDG_DATA_HOME");
-        if(root == null) {
+        if (root == null) {
             root = System.getenv("HOME") + "/.local/share/";
         }
         return root;

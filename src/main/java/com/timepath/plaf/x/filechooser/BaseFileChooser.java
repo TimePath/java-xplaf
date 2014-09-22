@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 public abstract class BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(BaseFileChooser.class.getName());
-    protected Frame  parent;
+    protected Frame parent;
     protected String dialogTitle;
-    protected File   directory;
+    protected File directory;
     protected Collection<ExtensionFilter> filters = new LinkedList<>();
     String file;
     String approveButtonText;
     DialogType dialogType = DialogType.OPEN_DIALOG;
-    FileMode   fileMode   = FileMode.FILES_ONLY;
+    FileMode fileMode = FileMode.FILES_ONLY;
     boolean multiSelectionEnabled;
 
     protected BaseFileChooser() {
@@ -35,7 +35,7 @@ public abstract class BaseFileChooser {
     }
 
     BaseFileChooser setDirectory(String directoryPath) {
-        if(directoryPath == null) {
+        if (directoryPath == null) {
             directory = null;
         } else {
             setDirectory(new File(directoryPath));
@@ -53,7 +53,7 @@ public abstract class BaseFileChooser {
     }
 
     String getTitle() {
-        if(dialogTitle == null) {
+        if (dialogTitle == null) {
             return isSaveDialog() ? "Save" : "Open";
         }
         return dialogTitle;
@@ -82,15 +82,10 @@ public abstract class BaseFileChooser {
     }
 
     public BaseFileChooser setFile(File file) {
-        if(file != null) {
+        if (file != null) {
             setDirectory(file.getParentFile());
-            setFile(file.getName());
+            this.file = file.getName();
         }
-        return this;
-    }
-
-    BaseFileChooser setFile(String file) {
-        this.file = file;
         return this;
     }
 
@@ -155,7 +150,7 @@ public abstract class BaseFileChooser {
     public static class ExtensionFilter {
 
         private final List<String> extensions;
-        private final String       description;
+        private final String description;
 
         public ExtensionFilter(String shortDescription, String... extensions) {
             description = shortDescription;

@@ -28,7 +28,7 @@ public class GtkFixer {
         LookAndFeel laf = UIManager.getLookAndFeel();
         Class<?> lafClass = laf.getClass();
         // Do nothing when not using the problematic LaF
-        if(!"com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(lafClass.getName())) {
+        if (!"com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(lafClass.getName())) {
             return;
         }
         // We do reflection from here on. Failure is silently ignored. The
@@ -55,7 +55,7 @@ public class GtkFixer {
             //            f2.setAccessible(true);
             //            f2.set(style, new ColorUIResource(new Color(255, 0, 0)));
             //            f2.setAccessible(ac2);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Silently ignored. Workaround can't be applied.
         }
     }
@@ -64,13 +64,9 @@ public class GtkFixer {
      * Called internally by installGtkPopupBugWorkaround to fix the thickness
      * of a GTK style field by setting it to a minimum value of 1.
      *
-     * @param style
-     *         The GTK style object.
-     * @param fieldName
-     *         The field name.
-     *
-     * @throws Exception
-     *         When reflection fails.
+     * @param style     The GTK style object.
+     * @param fieldName The field name.
+     * @throws Exception When reflection fails.
      */
     private static void fixGtkThickness(Object style, String fieldName) throws Exception {
         Field field = style.getClass().getDeclaredField(fieldName);
@@ -84,17 +80,11 @@ public class GtkFixer {
      * Called internally by installGtkPopupBugWorkaround. Returns a specific
      * GTK style object.
      *
-     * @param styleFactory
-     *         The GTK style factory.
-     * @param component
-     *         The target component of the style.
-     * @param regionName
-     *         The name of the target region of the style.
-     *
+     * @param styleFactory The GTK style factory.
+     * @param component    The target component of the style.
+     * @param regionName   The name of the target region of the style.
      * @return The GTK style.
-     *
-     * @throws Exception
-     *         When reflection fails.
+     * @throws Exception When reflection fails.
      */
     private static Object getGtkStyle(Object styleFactory, JComponent component, String regionName) throws Exception {
         // Create the region object
@@ -103,14 +93,14 @@ public class GtkFixer {
         Object region = field.get(regionClass); // javax.swing.plaf.synth.Region
         // Get and return the style
         Class<?> styleFactoryClass = styleFactory.getClass();
-        Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[] {
+        Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[]{
                 JComponent.class, regionClass
         });
         boolean accessible = method.isAccessible();
         method.setAccessible(true);
         Object style = method.invoke(styleFactory,
-                                     component,
-                                     region); // javax.swing.plaf.synth.SynthStyle, com.sun.java.swing.plaf.gtk.GTKStyle
+                component,
+                region); // javax.swing.plaf.synth.SynthStyle, com.sun.java.swing.plaf.gtk.GTKStyle
         method.setAccessible(accessible);
         return style;
     }

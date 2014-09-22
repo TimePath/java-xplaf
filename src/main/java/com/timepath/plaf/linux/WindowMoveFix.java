@@ -12,7 +12,7 @@ import java.awt.event.ComponentEvent;
 public class WindowMoveFix {
 
     public static void install(final Frame f) {
-        if(!OS.isLinux()) return;
+        if (!OS.isLinux()) return;
         f.addComponentListener(new ComponentAdapter() {
             private boolean moved;
             private Point real = new Point();
@@ -28,22 +28,22 @@ public class WindowMoveFix {
             public void componentResized(ComponentEvent e) {
                 Rectangle b = f.getBounds();
                 Rectangle s = f.getGraphicsConfiguration().getBounds();
-                if(moved) {
+                if (moved) {
                     moved = false;
                     return;
                 }
-                if(updateReal) {
+                if (updateReal) {
                     real.x = b.x;
                     real.y = b.y;
                 }
                 updateReal = true;
                 b.x = real.x;
                 b.y = real.y;
-                if(( b.x + b.width ) > s.width) {
-                    b.x -= ( b.x + b.width ) - s.width;
+                if ((b.x + b.width) > s.width) {
+                    b.x -= (b.x + b.width) - s.width;
                     updateReal = false;
                 }
-                if(( b.y + b.height ) > s.height) {
+                if ((b.y + b.height) > s.height) {
                     b.y = 0;
                     updateReal = false;
                 }

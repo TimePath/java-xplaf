@@ -15,20 +15,21 @@ public class AWTFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(AWTFileChooser.class.getName());
 
-    public AWTFileChooser() {}
+    public AWTFileChooser() {
+    }
 
     @Override
     public File[] choose() {
-        if(OS.isMac()) {
+        if (OS.isMac()) {
             OSXProps.setFileDialogDirectoryMode(isDirectoryMode());
         }
         FileDialog fd = new FileDialog(parent, dialogTitle);
         fd.setFilenameFilter(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                for(ExtensionFilter ef : filters) {
-                    for(String e : ef.getExtensions()) {
-                        if(dir.getName().endsWith(e)) {
+                for (ExtensionFilter ef : filters) {
+                    for (String e : ef.getExtensions()) {
+                        if (dir.getName().endsWith(e)) {
                             return true;
                         }
                     }
@@ -36,14 +37,14 @@ public class AWTFileChooser extends BaseFileChooser {
                 return false;
             }
         });
-        if(directory != null) {
+        if (directory != null) {
             fd.setDirectory(directory.getPath());
         }
-        if(file != null) {
+        if (file != null) {
             fd.setFile(file);
         }
-        if(isDirectoryMode()) {
-            if(!OS.isMac()) {
+        if (isDirectoryMode()) {
+            if (!OS.isMac()) {
                 LOG.warning("Using AWT for directory selection on non mac system - not ideal");
             }
             fd.setFilenameFilter(new FilenameFilter() {
@@ -55,9 +56,9 @@ public class AWTFileChooser extends BaseFileChooser {
         }
         fd.setMode(isSaveDialog() ? FileDialog.SAVE : FileDialog.LOAD);
         fd.setVisible(true);
-        if(( fd.getDirectory() == null ) || ( fd.getFile() == null )) { // cancelled
+        if ((fd.getDirectory() == null) || (fd.getFile() == null)) { // cancelled
             return null;
         }
-        return new File[] { new File(fd.getDirectory() + File.pathSeparator + fd.getFile()) };
+        return new File[]{new File(fd.getDirectory() + File.pathSeparator + fd.getFile())};
     }
 }

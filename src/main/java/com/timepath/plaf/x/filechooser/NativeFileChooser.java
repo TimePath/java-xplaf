@@ -14,7 +14,24 @@ public class NativeFileChooser extends BaseFileChooser {
 
     private static final Logger LOG = Logger.getLogger(NativeFileChooser.class.getName());
 
-    public NativeFileChooser() {}
+    public NativeFileChooser() {
+    }
+
+    private static BaseFileChooser which() {
+        if (OS.isWindows()) {
+            return new JnaFileChooser();
+        }
+        if (OS.isMac()) {
+//            return new AWTFileChooser(); // FIXME
+        }
+        if (OS.isLinux()) {
+            String de = System.getenv("XDG_CURRENT_DESKTOP");
+            if (de != null) {
+                return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
+            }
+        }
+        return new SwingFileChooser();
+    }
 
     @Override
     public File[] choose() throws IOException {
@@ -24,32 +41,16 @@ public class NativeFileChooser extends BaseFileChooser {
     private BaseFileChooser getChooser() {
         BaseFileChooser chooser = which();
         chooser.setApproveButtonText(approveButtonText)
-               .setTitle(dialogTitle)
-               .setDialogType(dialogType)
-               .setDirectory(directory)
-               .setFile(file)
-               .setFileMode(fileMode)
-               .setMultiSelectionEnabled(multiSelectionEnabled)
-               .setParent(parent);
-        for(ExtensionFilter ef : filters) {
+                .setTitle(dialogTitle)
+                .setDialogType(dialogType)
+                .setDirectory(directory)
+                .setFile(file)
+                .setFileMode(fileMode)
+                .setMultiSelectionEnabled(multiSelectionEnabled)
+                .setParent(parent);
+        for (ExtensionFilter ef : filters) {
             chooser.addFilter(ef);
         }
         return chooser;
-    }
-
-    private static BaseFileChooser which() {
-        if(OS.isWindows()) {
-            return new JnaFileChooser();
-        }
-        if(OS.isMac()) {
-//            return new AWTFileChooser(); // FIXME
-        }
-        if(OS.isLinux()) {
-            String de = System.getenv("XDG_CURRENT_DESKTOP");
-            if(de != null) {
-                return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
-            }
-        }
-        return new SwingFileChooser();
     }
 }
