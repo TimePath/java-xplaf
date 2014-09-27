@@ -3,6 +3,7 @@ package com.timepath.plaf.win.jna;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,7 @@ public class Shell32 {
     private Shell32() {
     }
 
+    @NotNull
     public static native Pointer SHBrowseForFolder(BrowseInfo params);
 
     public static native boolean SHGetPathFromIDListW(Pointer pidl, Pointer path);
@@ -54,6 +56,7 @@ public class Shell32 {
         public BrowseInfo() {
         }
 
+        @NotNull
         @Override
         protected List<String> getFieldOrder() {
             return Arrays.asList("hwndOwner", "pidlRoot", "pszDisplayName", "lpszTitle", "ulFlags", "lpfn", "lParam", "iImage");

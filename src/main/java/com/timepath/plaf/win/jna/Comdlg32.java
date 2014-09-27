@@ -4,6 +4,7 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.WString;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -120,6 +121,7 @@ public class Comdlg32 {
             lStructSize = size();
         }
 
+        @NotNull
         @Override
         protected List<String> getFieldOrder() {
             return Arrays.asList("lStructSize",

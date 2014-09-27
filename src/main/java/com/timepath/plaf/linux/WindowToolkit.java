@@ -1,5 +1,7 @@
 package com.timepath.plaf.linux;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,7 +28,7 @@ public class WindowToolkit {
      *
      * @param windowClass
      */
-    public static void setWindowClass(String windowClass) {
+    public static void setWindowClass(@NotNull String windowClass) {
         WindowToolkit.windowClass = windowClass;
         System.setProperty("jayatana.startupWMClass", windowClass);
         //                boolean force = "Unity".equals(System.getenv("XDG_CURRENT_DESKTOP")); //
@@ -44,7 +46,7 @@ public class WindowToolkit {
         }
     }
 
-    public static long getWindowID(Frame parent) {
+    public static long getWindowID(@NotNull Frame parent) {
         try {
             Method method = Class.forName("sun.awt.X11.XWindow").getDeclaredMethod("getParentWindowID", Component.class);
             method.setAccessible(true);

@@ -1,6 +1,8 @@
 package com.timepath.plaf.mac;
 
 import com.apple.OSXAdapter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +27,7 @@ public class Application {
     private Application() {
     }
 
+    @NotNull
     public static Application getApplication() {
         return new Application();
     }
@@ -66,7 +69,7 @@ public class Application {
                             applicationListenerClass
                     }
             );
-            Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
+            @NotNull Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
                     new Class[]{applicationListenerClass},
                     adapter);
             addListenerMethod.invoke(macOSXApplication, osxAdapterProxy);
@@ -132,6 +135,7 @@ public class Application {
         private OSXHandler() {
         }
 
+        @Nullable
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             // TODO Auto-generated method stub

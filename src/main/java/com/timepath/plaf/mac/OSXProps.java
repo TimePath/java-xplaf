@@ -1,5 +1,7 @@
 package com.timepath.plaf.mac;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +18,7 @@ public class OSXProps {
         System.setProperty("apple.awt.brushMetalLook", Boolean.toString(flag));
     }
 
-    public static void setName(String str) {
+    public static void setName(@NotNull String str) {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", str);
     }
 

@@ -1,5 +1,8 @@
 package com.timepath.plaf.x.filechooser;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +18,9 @@ public abstract class BaseFileChooser {
     private static final Logger LOG = Logger.getLogger(BaseFileChooser.class.getName());
     protected Frame parent;
     protected String dialogTitle;
+    @Nullable
     protected File directory;
+    @NotNull
     protected Collection<ExtensionFilter> filters = new LinkedList<>();
     String fileName;
     String approveButtonText;
@@ -34,7 +39,8 @@ public abstract class BaseFileChooser {
         setDirectory(currentDirectoryPath);
     }
 
-    BaseFileChooser setDirectory(String directoryPath) {
+    @NotNull
+    BaseFileChooser setDirectory(@Nullable String directoryPath) {
         if (directoryPath == null) {
             directory = null;
         } else {
@@ -47,6 +53,7 @@ public abstract class BaseFileChooser {
         return parent;
     }
 
+    @NotNull
     public BaseFileChooser setParent(Frame parent) {
         this.parent = parent;
         return this;
@@ -59,6 +66,7 @@ public abstract class BaseFileChooser {
         return dialogTitle;
     }
 
+    @NotNull
     public BaseFileChooser setTitle(String title) {
         dialogTitle = title;
         return this;
@@ -68,10 +76,12 @@ public abstract class BaseFileChooser {
         return dialogType == DialogType.SAVE_DIALOG;
     }
 
+    @Nullable
     public File getDirectory() {
         return directory;
     }
 
+    @NotNull
     public BaseFileChooser setDirectory(File directory) {
         this.directory = directory;
         return this;
@@ -81,12 +91,14 @@ public abstract class BaseFileChooser {
         return fileName;
     }
 
+    @NotNull
     public BaseFileChooser setFileName(String fileName) {
         this.fileName = fileName;
         return this;
     }
 
-    public BaseFileChooser setFile(File file) {
+    @NotNull
+    public BaseFileChooser setFile(@Nullable File file) {
         if (file != null) {
             setDirectory(file.getParentFile());
             setFileName(file.getName());
@@ -98,6 +110,7 @@ public abstract class BaseFileChooser {
         return approveButtonText;
     }
 
+    @NotNull
     BaseFileChooser setApproveButtonText(String approveButtonText) {
         this.approveButtonText = approveButtonText;
         return this;
@@ -107,6 +120,7 @@ public abstract class BaseFileChooser {
         return dialogType;
     }
 
+    @NotNull
     public BaseFileChooser setDialogType(DialogType dialogType) {
         this.dialogType = dialogType;
         return this;
@@ -120,6 +134,7 @@ public abstract class BaseFileChooser {
         return fileMode;
     }
 
+    @NotNull
     public BaseFileChooser setFileMode(FileMode fileMode) {
         this.fileMode = fileMode;
         return this;
@@ -129,13 +144,16 @@ public abstract class BaseFileChooser {
         return multiSelectionEnabled;
     }
 
+    @NotNull
     public BaseFileChooser setMultiSelectionEnabled(boolean multiSelectionEnabled) {
         this.multiSelectionEnabled = multiSelectionEnabled;
         return this;
     }
 
+    @Nullable
     public abstract File[] choose() throws IOException;
 
+    @NotNull
     public BaseFileChooser addFilter(ExtensionFilter ef) {
         filters.add(ef);
         return this;
@@ -154,6 +172,7 @@ public abstract class BaseFileChooser {
 
     public static class ExtensionFilter {
 
+        @NotNull
         private final List<String> extensions;
         private final String description;
 

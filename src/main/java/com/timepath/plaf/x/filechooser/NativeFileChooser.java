@@ -2,6 +2,8 @@ package com.timepath.plaf.x.filechooser;
 
 import com.timepath.plaf.OS;
 import com.timepath.plaf.win.JnaFileChooser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class NativeFileChooser extends BaseFileChooser {
     public NativeFileChooser() {
     }
 
+    @NotNull
     private static BaseFileChooser which() {
         if (OS.isWindows()) {
             return new JnaFileChooser();
@@ -33,13 +36,15 @@ public class NativeFileChooser extends BaseFileChooser {
         return new SwingFileChooser();
     }
 
+    @Nullable
     @Override
     public File[] choose() throws IOException {
         return getChooser().choose();
     }
 
+    @NotNull
     private BaseFileChooser getChooser() {
-        BaseFileChooser chooser = which();
+        @NotNull BaseFileChooser chooser = which();
         chooser.setApproveButtonText(approveButtonText)
                 .setTitle(dialogTitle)
                 .setDialogType(dialogType)

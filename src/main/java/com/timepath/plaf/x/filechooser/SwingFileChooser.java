@@ -1,6 +1,8 @@
 package com.timepath.plaf.x.filechooser;
 
 import com.timepath.plaf.OS;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -17,17 +19,18 @@ public class SwingFileChooser extends BaseFileChooser {
     public SwingFileChooser() {
     }
 
+    @Nullable
     @Override
     public File[] choose() {
         if (OS.isLinux()) {
             //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
-        JFileChooser fd = new JFileChooser();
+        @NotNull JFileChooser fd = new JFileChooser();
         fd.setAcceptAllFileFilterUsed(true);
-        for (final ExtensionFilter ef : filters) {
-            FileFilter fileFilter = new FileFilter() {
+        for (@NotNull final ExtensionFilter ef : filters) {
+            @NotNull FileFilter fileFilter = new FileFilter() {
                 @Override
-                public boolean accept(File f) {
+                public boolean accept(@NotNull File f) {
                     for (String e : ef.getExtensions()) {
                         if (f.getName().matches(".+" + e)) {
                             return true;
@@ -36,9 +39,10 @@ public class SwingFileChooser extends BaseFileChooser {
                     return f.isDirectory();
                 }
 
+                @NotNull
                 @Override
                 public String getDescription() {
-                    StringBuilder filter = new StringBuilder();
+                    @NotNull StringBuilder filter = new StringBuilder();
                     filter.append(" (*").append(ef.getExtensions().get(0));
                     for (String e : ef.getExtensions().subList(1, ef.getExtensions().size())) {
                         filter.append(", *").append(e);
@@ -66,7 +70,7 @@ public class SwingFileChooser extends BaseFileChooser {
         if (!isSaveDialog()) {
             fd.setMultiSelectionEnabled(multiSelectionEnabled);
         }
-        File[] selection = null;
+        @Nullable File[] selection = null;
         if (fd.showDialog(parent, approveButtonText) == JFileChooser.APPROVE_OPTION) {
             selection = multiSelectionEnabled ? fd.getSelectedFiles() : new File[]{fd.getSelectedFile()};
         }

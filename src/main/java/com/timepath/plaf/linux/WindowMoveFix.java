@@ -1,6 +1,7 @@
 package com.timepath.plaf.linux;
 
 import com.timepath.plaf.OS;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -11,10 +12,11 @@ import java.awt.event.ComponentEvent;
  */
 public class WindowMoveFix {
 
-    public static void install(final Frame f) {
+    public static void install(@NotNull final Frame f) {
         if (!OS.isLinux()) return;
         f.addComponentListener(new ComponentAdapter() {
             private boolean moved;
+            @NotNull
             private Point real = new Point();
             private boolean updateReal = true;
 

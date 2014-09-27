@@ -4,6 +4,8 @@ import com.timepath.plaf.win.JnaFileChooser;
 import com.timepath.plaf.x.filechooser.*;
 import com.timepath.plaf.x.filechooser.BaseFileChooser.ExtensionFilter;
 import com.timepath.plaf.x.filechooser.BaseFileChooser.FileMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -49,6 +51,7 @@ public class FileChooserTest extends JFrame {
         this.jList1.setSelectedIndex(0);
     }
 
+    @NotNull
     private static ListModel getFileChoosers() {
         return new AbstractListModel() {
             private static final long serialVersionUID = 1L;
@@ -112,9 +115,11 @@ public class FileChooserTest extends JFrame {
                 "Path", "Name"
         }
         ) {
+            @NotNull
             Class[] types = new Class[]{
                     String.class, String.class
             };
+            @NotNull
             boolean[] canEdit = new boolean[]{
                     true, false
             };
@@ -140,7 +145,7 @@ public class FileChooserTest extends JFrame {
         jLabel1.setText("Title:");
         textTitle.setMinimumSize(new Dimension(78, 27));
         textTitle.setPreferredSize(new Dimension(78, 27));
-        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
+        @NotNull GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(jPanel2Layout
@@ -176,7 +181,7 @@ public class FileChooserTest extends JFrame {
         checkFiles.setSelected(true);
         checkFiles.setText("Files");
         checkDirectories.setText("Directories");
-        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
+        @NotNull GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(jPanel3Layout
@@ -203,7 +208,7 @@ public class FileChooserTest extends JFrame {
         );
         checkSave.setText("Save");
         checkMulti.setText("Multi");
-        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
+        @NotNull GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(jPanel4Layout.createSequentialGroup()
@@ -226,7 +231,7 @@ public class FileChooserTest extends JFrame {
                                         checkMulti)
                                 .addContainerGap())
         );
-        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+        @NotNull GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(jPanel1Layout
@@ -315,7 +320,7 @@ public class FileChooserTest extends JFrame {
                                         ))
                                 .addContainerGap())
         );
-        GroupLayout layout = new GroupLayout(getContentPane());
+        @NotNull GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -362,12 +367,12 @@ public class FileChooserTest extends JFrame {
 
     private void jButton1ActionPerformed(ActionEvent evt) {
         try {
-            Class<?> clazz = (Class) this.jList1.getSelectedValue();
+            @NotNull Class<?> clazz = (Class) this.jList1.getSelectedValue();
             Object o = clazz.newInstance();
             if (!(o instanceof BaseFileChooser)) {
                 return;
             }
-            BaseFileChooser c = (BaseFileChooser) o;
+            @NotNull BaseFileChooser c = (BaseFileChooser) o;
             c.setParent(this)
                     .setFileMode(this.checkDirectories.isSelected()
                                     ? FileMode.DIRECTORIES_ONLY
@@ -382,18 +387,18 @@ public class FileChooserTest extends JFrame {
                     .setMultiSelectionEnabled(this.checkMulti.isSelected())
                     .setTitle(this.textTitle.getText());
             c.addFilter(new ExtensionFilter("All files", ".*"));
-            File[] f = c.choose();
+            @Nullable File[] f = c.choose();
             if (f == null) {
                 return;
             }
-            DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
+            @NotNull DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
             table.setRowCount(0);
-            for (File aF : f) {
-                Object[] row = new Object[]{aF.getParentFile().getPath(), aF.getName()};
+            for (@NotNull File aF : f) {
+                @NotNull Object[] row = new Object[]{aF.getParentFile().getPath(), aF.getName()};
                 table.addRow(row);
                 LOG.log(Level.INFO, "{0}: {1}", new Object[]{aF, Arrays.toString(row)});
             }
-        } catch (IOException | InstantiationException | IllegalAccessException ex) {
+        } catch (@NotNull IOException | InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }

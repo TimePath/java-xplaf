@@ -8,6 +8,8 @@ import com.timepath.plaf.win.jna.Comdlg32;
 import com.timepath.plaf.win.jna.Ole32;
 import com.timepath.plaf.win.jna.Shell32;
 import com.timepath.plaf.x.filechooser.BaseFileChooser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,23 +33,25 @@ public class JnaFileChooser extends BaseFileChooser {
     public JnaFileChooser() {
     }
 
+    @Nullable
     @Override
     public File[] choose() throws IOException {
         return isDirectoryMode() ? chooseDirectory() : chooseFile();
     }
 
+    @Nullable
     private File[] chooseDirectory() {
         Ole32.OleInitialize(null);
-        Shell32.BrowseInfo params = new Shell32.BrowseInfo();
+        @NotNull Shell32.BrowseInfo params = new Shell32.BrowseInfo();
         params.hwndOwner = Native.getWindowPointer(parent);
         params.ulFlags = Shell32.BIF_RETURNONLYFSDIRS | Shell32.BIF_USENEWUI;
         if (dialogTitle != null) {
             params.lpszTitle = dialogTitle;
         }
-        Pointer pidl = Shell32.SHBrowseForFolder(params);
+        @NotNull Pointer pidl = Shell32.SHBrowseForFolder(params);
         if (pidl != null) {
             // MAX_PATH is 260 on Windows XP x32 so 4kB should be more than big enough
-            Pointer path = new Memory(1024 * 4);
+            @NotNull Pointer path = new Memory(1024 * 4);
             Shell32.SHGetPathFromIDListW(pidl, path);
             String filePath = path.getWideString(0);
             Ole32.CoTaskMemFree(pidl);
@@ -56,8 +60,9 @@ public class JnaFileChooser extends BaseFileChooser {
         return null;
     }
 
+    @Nullable
     private File[] chooseFile() {
-        Comdlg32.OpenFileName params = new Comdlg32.OpenFileName();
+        @NotNull Comdlg32.OpenFileName params = new Comdlg32.OpenFileName();
         params.Flags = Comdlg32.OFN_EXPLORER | Comdlg32.OFN_NOCHANGEDIR | Comdlg32.OFN_HIDEREADONLY |
                 Comdlg32.OFN_ENABLESIZING;
         if (parent != null) {
@@ -100,9 +105,10 @@ public class JnaFileChooser extends BaseFileChooser {
      * patterns (for example, "*.TXT;*.DOC;*.BAK").
      * http://msdn.microsoft.com/en-us/library/ms646839.aspx
      */
+    @NotNull
     private String buildFilterString() {
-        StringBuilder filterStr = new StringBuilder();
-        for (ExtensionFilter ef : filters) {
+        @NotNull StringBuilder filterStr = new StringBuilder();
+        for (@NotNull ExtensionFilter ef : filters) {
             filterStr.append(ef.getDescription()).append('\0');
             for (String pattern : ef.getExtensions()) {
                 filterStr.append('*').append(pattern).append(';');

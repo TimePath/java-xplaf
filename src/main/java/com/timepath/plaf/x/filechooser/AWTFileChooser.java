@@ -2,6 +2,8 @@ package com.timepath.plaf.x.filechooser;
 
 import com.timepath.plaf.OS;
 import com.timepath.plaf.mac.OSXProps;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
@@ -18,17 +20,18 @@ public class AWTFileChooser extends BaseFileChooser {
     public AWTFileChooser() {
     }
 
+    @Nullable
     @Override
     public File[] choose() {
         if (OS.isMac()) {
             OSXProps.setFileDialogDirectoryMode(isDirectoryMode());
         }
-        FileDialog fd = new FileDialog(parent, dialogTitle);
+        @NotNull FileDialog fd = new FileDialog(parent, dialogTitle);
         fd.setFilenameFilter(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String name) {
-                for (ExtensionFilter ef : filters) {
-                    for (String e : ef.getExtensions()) {
+            public boolean accept(@NotNull File dir, String name) {
+                for (@NotNull ExtensionFilter ef : filters) {
+                    for (@NotNull String e : ef.getExtensions()) {
                         if (dir.getName().endsWith(e)) {
                             return true;
                         }
@@ -49,7 +52,7 @@ public class AWTFileChooser extends BaseFileChooser {
             }
             fd.setFilenameFilter(new FilenameFilter() {
                 @Override
-                public boolean accept(File dir, String name) {
+                public boolean accept(File dir, @NotNull String name) {
                     return new File(dir, name).isDirectory();
                 }
             });

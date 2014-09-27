@@ -1,5 +1,7 @@
 package com.timepath.plaf.linux;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -68,7 +70,7 @@ public class GtkFixer {
      * @param fieldName The field name.
      * @throws Exception When reflection fails.
      */
-    private static void fixGtkThickness(Object style, String fieldName) throws Exception {
+    private static void fixGtkThickness(@NotNull Object style, String fieldName) throws Exception {
         Field field = style.getClass().getDeclaredField(fieldName);
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
@@ -86,7 +88,7 @@ public class GtkFixer {
      * @return The GTK style.
      * @throws Exception When reflection fails.
      */
-    private static Object getGtkStyle(Object styleFactory, JComponent component, String regionName) throws Exception {
+    private static Object getGtkStyle(@NotNull Object styleFactory, JComponent component, String regionName) throws Exception {
         // Create the region object
         Class<?> regionClass = Class.forName("javax.swing.plaf.synth.Region");
         Field field = regionClass.getField(regionName);

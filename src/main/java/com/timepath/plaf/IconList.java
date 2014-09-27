@@ -1,5 +1,7 @@
 package com.timepath.plaf;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collections;
@@ -13,6 +15,7 @@ import java.util.logging.Logger;
 public class IconList {
 
     private static final Logger LOG = Logger.getLogger(IconList.class.getName());
+    @NotNull
     private final List<Image> list;
     private final int[] sizes;
     private final String path;

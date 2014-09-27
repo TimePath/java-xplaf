@@ -1,6 +1,7 @@
 package com.timepath.plaf.linux.test;
 
 import com.timepath.plaf.linux.GtkFixer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,20 +17,20 @@ public class TestMenuFix extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                TestMenuFix test = new TestMenuFix();
+                @NotNull TestMenuFix test = new TestMenuFix();
                 test.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                 test.setPreferredSize(new Dimension(400, 300));
                 test.pack();
                 test.setLocationRelativeTo(null);
-                JMenuBar menuBar = new JMenuBar();
-                JMenu menu1 = new JMenu("Menu 1");
+                @NotNull JMenuBar menuBar = new JMenuBar();
+                @NotNull JMenu menu1 = new JMenu("Menu 1");
                 menu1.add(new JMenuItem("Item 1.1"));
-                JMenuItem t = new JMenuItem("Item 1.2");
+                @NotNull JMenuItem t = new JMenuItem("Item 1.2");
                 t.setEnabled(false);
                 menu1.add(t);
                 menu1.add(new JMenuItem("Item 1.3"));
                 menuBar.add(menu1);
-                JMenu menu2 = new JMenu("Menu 2");
+                @NotNull JMenu menu2 = new JMenu("Menu 2");
                 menu2.add(new JMenuItem("Item 2.1"));
                 menu2.add(new JMenuItem("Item 2.2"));
                 menu2.add(new JMenuItem("Item 2.3"));

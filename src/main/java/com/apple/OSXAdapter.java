@@ -56,6 +56,9 @@
  */
 package com.apple;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -96,7 +99,7 @@ public class OSXAdapter implements InvocationHandler {
                     }
             );
             // Create a proxy object around this handler that can be reflectively added as an Apple ApplicationListener
-            Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
+            @NotNull Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
                     new Class[]{applicationListenerClass},
                     adapter);
             addListenerMethod.invoke(getMacOSXApplication(), new Object[]{osxAdapterProxy});
@@ -128,7 +131,7 @@ public class OSXAdapter implements InvocationHandler {
 
     // Pass this method an Object and Method equipped to display application info
     // They will be called when the About menu item is selected from the application menu
-    public static void setAboutHandler(Object target, Method aboutHandler) {
+    public static void setAboutHandler(@Nullable Object target, @Nullable Method aboutHandler) {
         boolean enableAboutMenu = (target != null && aboutHandler != null);
         if (enableAboutMenu) {
             setHandler(new OSXAdapter("handleAbout", target, aboutHandler));
@@ -150,7 +153,7 @@ public class OSXAdapter implements InvocationHandler {
 
     // Pass this method an Object and a Method equipped to display application options
     // They will be called when the Preferences menu item is selected from the application menu
-    public static void setPreferencesHandler(Object target, Method prefsHandler) {
+    public static void setPreferencesHandler(@Nullable Object target, @Nullable Method prefsHandler) {
         boolean enablePrefsMenu = (target != null && prefsHandler != null);
         if (enablePrefsMenu) {
             setHandler(new OSXAdapter("handlePreferences", target, prefsHandler));
@@ -178,11 +181,11 @@ public class OSXAdapter implements InvocationHandler {
             // Override OSXAdapter.callTarget to send information on the
             // file to be opened
             @Override
-            public boolean callTarget(Object appleEvent) {
+            public boolean callTarget(@Nullable Object appleEvent) {
                 if (appleEvent != null) {
                     try {
                         Method getFilenameMethod = appleEvent.getClass().getDeclaredMethod("getFilename", (Class[]) null);
-                        String filename = (String) getFilenameMethod.invoke(appleEvent, (Object[]) null);
+                        @NotNull String filename = (String) getFilenameMethod.invoke(appleEvent, (Object[]) null);
                         this.targetMethod.invoke(this.targetObject, new Object[]{filename});
                     } catch (Exception ex) {
                     }
@@ -194,7 +197,8 @@ public class OSXAdapter implements InvocationHandler {
 
     // InvocationHandler implementation
     // This is the entry point for our proxy object; it is called every time an ApplicationListener method is invoked
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    @Nullable
+    public Object invoke(Object proxy, @NotNull Method method, @NotNull Object[] args) throws Throwable {
         if (isCorrectMethod(method, args)) {
             boolean handled = callTarget(args[0]);
             setApplicationEventHandled(args[0], handled);
@@ -216,13 +220,13 @@ public class OSXAdapter implements InvocationHandler {
 
     // Compare the method that was called to the intended method when the OSXAdapter instance was created
     // (e.g. handleAbout, handleQuit, handleOpenFile, etc.)
-    protected boolean isCorrectMethod(Method method, Object[] args) {
+    protected boolean isCorrectMethod(@NotNull Method method, @NotNull Object[] args) {
         return (targetMethod != null && proxySignature.equals(method.getName()) && args.length == 1);
     }
 
     // It is important to mark the ApplicationEvent as handled and cancel the default behavior
     // This method checks for a boolean result from the proxy method and sets the event accordingly
-    protected void setApplicationEventHandled(Object event, boolean handled) {
+    protected void setApplicationEventHandled(@Nullable Object event, boolean handled) {
         if (event != null) {
             try {
                 Method setHandledMethod = event.getClass().getDeclaredMethod("setHandled", new Class[]{

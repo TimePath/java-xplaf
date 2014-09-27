@@ -2,6 +2,8 @@ package com.timepath.plaf.linux;
 
 import com.timepath.FileUtils;
 import com.timepath.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.logging.Level;
@@ -17,15 +19,15 @@ public class DesktopLauncher {
     private DesktopLauncher() {
     }
 
-    public static void create(String desktop, String root, String[] icons, String... iconFiles) {
+    public static void create(String desktop, @NotNull String root, @NotNull String[] icons, String... iconFiles) {
         createLauncher(desktop, iconFiles[0]);
         createIcons(root, icons, iconFiles);
     }
 
-    private static void createLauncher(String desktop, String icon) {
-        File destFile = new File(LinuxUtils.getLinuxStore() + "applications/" + desktop + ".desktop");
+    private static void createLauncher(String desktop, @Nullable String icon) {
+        @NotNull File destFile = new File(LinuxUtils.getLinuxStore() + "applications/" + desktop + ".desktop");
         LOG.log(Level.INFO, "Linux .desktop file: {0}", destFile);
-        StringBuilder sb = new StringBuilder();
+        @NotNull StringBuilder sb = new StringBuilder();
         sb.append("[Desktop Entry]").append('\n');
         sb.append("Version=1.0").append('\n');
         sb.append("StartupWMClass=").append(desktop).append('\n');
@@ -48,8 +50,8 @@ public class DesktopLauncher {
         sb.append("Exec=java -jar Dropbox/Public/tf/Hud\\ Editor/TF2\\ HUD\\ Editor.jar"); // TODO: fixme
         boolean flag = false;
         try {
-            String md51 = Utils.takeMD5(Utils.loadFile(destFile));
-            String md52 = Utils.takeMD5(sb.toString().getBytes());
+            @NotNull String md51 = Utils.takeMD5(Utils.loadFile(destFile));
+            @NotNull String md52 = Utils.takeMD5(sb.toString().getBytes());
             if (!md51.equals(md52)) { // TODO: Check date to allow for user customisation
                 LOG.log(Level.INFO, "{0} vs {1}", new Object[]{md51, md52});
                 flag = true;
@@ -58,7 +60,7 @@ public class DesktopLauncher {
             flag = true;
         }
         if (flag) {
-            PrintWriter out = null;
+            @Nullable PrintWriter out = null;
             try {
                 if (!destFile.exists()) {
                     destFile.getParentFile().mkdirs();
@@ -77,13 +79,13 @@ public class DesktopLauncher {
         }
     }
 
-    private static void createIcons(String root, String[] icons, String... iconFiles) {
+    private static void createIcons(@NotNull String root, @NotNull String[] icons, String... iconFiles) {
         if (!root.endsWith("/")) {
             root += "/";
         }
         for (int i = 0; i < icons.length; i++) {
             try {
-                File destFile = new File(LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] +
+                @NotNull File destFile = new File(LinuxUtils.getLinuxStore() + "icons/" + iconFiles[i] +
                         icons[i].substring((icons[i].lastIndexOf('.') > 0)
                                 ? icons[i].lastIndexOf('.')
                                 : icons[i].length())
@@ -99,8 +101,8 @@ public class DesktopLauncher {
                 if (!destFile.exists()) {
                     destFile.createNewFile();
                 }
-                try (FileOutputStream out = new FileOutputStream(destFile)) {
-                    byte[] buf = new byte[1024];
+                try (@NotNull FileOutputStream out = new FileOutputStream(destFile)) {
+                    @NotNull byte[] buf = new byte[1024];
                     int len;
                     while ((len = in.read(buf)) > 0) {
                         out.write(buf, 0, len);
