@@ -2,12 +2,11 @@ package com.timepath.plaf.x.filechooser;
 
 import com.timepath.plaf.OS;
 import com.timepath.plaf.win.JnaFileChooser;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author TimePath
@@ -21,17 +20,20 @@ public class NativeFileChooser extends BaseFileChooser {
 
     @NotNull
     private static BaseFileChooser which() {
-        if (OS.isWindows()) {
-            return new JnaFileChooser();
-        }
-        if (OS.isMac()) {
-//            return new AWTFileChooser(); // FIXME
-        }
-        if (OS.isLinux()) {
-            String de = System.getenv("XDG_CURRENT_DESKTOP");
-            if (de != null) {
-                return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
+        try {
+            if (OS.isWindows()) {
+                return new JnaFileChooser();
             }
+//            if (OS.isMac()) {
+//                return new AWTFileChooser(); // FIXME
+//            }
+            if (OS.isLinux()) {
+                String de = System.getenv("XDG_CURRENT_DESKTOP");
+                if (de != null) {
+                    return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
+                }
+            }
+        } catch (final Throwable ignored) {
         }
         return new SwingFileChooser();
     }
