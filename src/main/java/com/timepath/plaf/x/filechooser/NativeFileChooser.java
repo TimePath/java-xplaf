@@ -33,7 +33,7 @@ public class NativeFileChooser extends BaseFileChooser {
                     return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
                 }
             }
-        } catch (final Throwable ignored) {
+        } catch (@NotNull final Throwable ignored) {
         }
         return new SwingFileChooser();
     }

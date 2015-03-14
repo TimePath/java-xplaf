@@ -181,6 +181,7 @@ public abstract class BaseFileChooser {
             this.extensions = Arrays.asList(extensions);
         }
 
+        @NotNull
         public List<String> getExtensions() {
             return Collections.unmodifiableList(extensions);
         }

@@ -87,14 +87,14 @@ public class OSXAdapter implements InvocationHandler {
     }
 
     // setHandler creates a Proxy object from the passed OSXAdapter and adds it as an ApplicationListener
-    public static void setHandler(OSXAdapter adapter) {
+    public static void setHandler(@NotNull OSXAdapter adapter) {
         try {
-            Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
+            @NotNull Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
             if (getMacOSXApplication() == null) {
                 setMacOSXApplication(applicationClass.getConstructor((Class[]) null).newInstance((Object[]) null));
             }
-            Class<?> applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
-            Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[]{
+            @NotNull Class<?> applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+            @NotNull Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[]{
                             applicationListenerClass
                     }
             );
@@ -139,7 +139,7 @@ public class OSXAdapter implements InvocationHandler {
         // If we're setting a handler, enable the About menu item by calling
         // com.apple.eawt.Application reflectively
         try {
-            Method enableAboutMethod = getMacOSXApplication().getClass()
+            @NotNull Method enableAboutMethod = getMacOSXApplication().getClass()
                     .getDeclaredMethod("setEnabledAboutMenu",
                             new Class[]{boolean.class});
             enableAboutMethod.invoke(getMacOSXApplication(), new Object[]{
@@ -161,7 +161,7 @@ public class OSXAdapter implements InvocationHandler {
         // If we're setting a handler, enable the Preferences menu item by calling
         // com.apple.eawt.Application reflectively
         try {
-            Method enablePrefsMethod = getMacOSXApplication().getClass()
+            @NotNull Method enablePrefsMethod = getMacOSXApplication().getClass()
                     .getDeclaredMethod("setEnabledPreferencesMenu",
                             new Class[]{boolean.class});
             enablePrefsMethod.invoke(getMacOSXApplication(), new Object[]{
@@ -184,7 +184,7 @@ public class OSXAdapter implements InvocationHandler {
             public boolean callTarget(@Nullable Object appleEvent) {
                 if (appleEvent != null) {
                     try {
-                        Method getFilenameMethod = appleEvent.getClass().getDeclaredMethod("getFilename", (Class[]) null);
+                        @NotNull Method getFilenameMethod = appleEvent.getClass().getDeclaredMethod("getFilename", (Class[]) null);
                         @NotNull String filename = (String) getFilenameMethod.invoke(appleEvent, (Object[]) null);
                         this.targetMethod.invoke(this.targetObject, new Object[]{filename});
                     } catch (Exception ex) {
@@ -229,7 +229,7 @@ public class OSXAdapter implements InvocationHandler {
     protected void setApplicationEventHandled(@Nullable Object event, boolean handled) {
         if (event != null) {
             try {
-                Method setHandledMethod = event.getClass().getDeclaredMethod("setHandled", new Class[]{
+                @NotNull Method setHandledMethod = event.getClass().getDeclaredMethod("setHandled", new Class[]{
                                 boolean.class
                         }
                 );

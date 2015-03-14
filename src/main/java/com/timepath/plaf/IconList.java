@@ -35,6 +35,7 @@ public class IconList {
         }
     }
 
+    @NotNull
     public List<Image> getIcons() {
         return Collections.unmodifiableList(list);
     }

@@ -32,6 +32,7 @@ public class WinRegistry {
     private static final Logger LOG = Logger.getLogger(WinRegistry.class.getName());
     private static Preferences userRoot = Preferences.userRoot();
     private static Preferences systemRoot = Preferences.systemRoot();
+    @NotNull
     private static Class<? extends Preferences> userClass = userRoot.getClass();
     @Nullable
     private static Method regOpenKey = null;

@@ -78,7 +78,7 @@ public class ZenityFileChooser extends BaseFileChooser {
         String windowClass = WindowToolkit.getWindowClass();
         try {
             Toolkit xToolkit = Toolkit.getDefaultToolkit();
-            Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
+            @NotNull Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
             boolean accessible = awtAppClassNameField.isAccessible();
             awtAppClassNameField.setAccessible(true);
             windowClass = (String) awtAppClassNameField.get(xToolkit);
@@ -101,7 +101,7 @@ public class ZenityFileChooser extends BaseFileChooser {
         @NotNull String[] exec = new String[cmd.size()];
         cmd.toArray(exec);
         LOG.log(Level.INFO, "zenity: {0}", Arrays.toString(exec));
-        final Process proc = Runtime.getRuntime().exec(exec);
+        @NotNull final Process proc = Runtime.getRuntime().exec(exec);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {

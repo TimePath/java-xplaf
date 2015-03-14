@@ -28,8 +28,8 @@ public class WindowMoveFix {
              */
             @Override
             public void componentResized(ComponentEvent e) {
-                Rectangle b = f.getBounds();
-                Rectangle s = f.getGraphicsConfiguration().getBounds();
+                @NotNull Rectangle b = f.getBounds();
+                @NotNull Rectangle s = f.getGraphicsConfiguration().getBounds();
                 if (moved) {
                     moved = false;
                     return;
@@ -54,7 +54,7 @@ public class WindowMoveFix {
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                Rectangle b = f.getBounds();
+                @NotNull Rectangle b = f.getBounds();
                 moved = true;
                 real.x = b.x;
                 real.y = b.y;

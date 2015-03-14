@@ -56,7 +56,7 @@ public class KDialogFileChooser extends BaseFileChooser {
         }
         int fnum = 0;
         for (@NotNull ExtensionFilter ef : filters) {
-            List<String> exts = ef.getExtensions();
+            @NotNull List<String> exts = ef.getExtensions();
             @NotNull StringBuilder part = new StringBuilder((exts.size() * 6) + ef.getDescription().length());
             for (String e : exts) {
                 if (part.length() > 0) {
@@ -90,7 +90,7 @@ public class KDialogFileChooser extends BaseFileChooser {
         @NotNull String[] exec = new String[cmd.size()];
         cmd.toArray(exec);
         LOG.log(Level.INFO, "kdialog: {0}", Arrays.toString(exec));
-        final Process proc = Runtime.getRuntime().exec(exec);
+        @NotNull final Process proc = Runtime.getRuntime().exec(exec);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {

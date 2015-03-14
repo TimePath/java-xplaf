@@ -38,7 +38,7 @@ public class WindowToolkit {
         //                }
         try {
             Toolkit xToolkit = Toolkit.getDefaultToolkit();
-            Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
+            @NotNull Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
             awtAppClassNameField.setAccessible(true);
             awtAppClassNameField.set(xToolkit, windowClass);
         } catch (Exception ex) {
@@ -48,7 +48,7 @@ public class WindowToolkit {
 
     public static long getWindowID(@NotNull Frame parent) {
         try {
-            Method method = Class.forName("sun.awt.X11.XWindow").getDeclaredMethod("getParentWindowID", Component.class);
+            @NotNull Method method = Class.forName("sun.awt.X11.XWindow").getDeclaredMethod("getParentWindowID", Component.class);
             method.setAccessible(true);
             return (Long) method.invoke(null, parent.getComponent(0));
         } catch (Exception ex) {

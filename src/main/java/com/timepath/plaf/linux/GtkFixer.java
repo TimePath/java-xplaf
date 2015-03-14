@@ -28,7 +28,7 @@ public class GtkFixer {
     public static void installGtkPopupBugWorkaround() {
         // Get current look-and-feel implementation class
         LookAndFeel laf = UIManager.getLookAndFeel();
-        Class<?> lafClass = laf.getClass();
+        @NotNull Class<?> lafClass = laf.getClass();
         // Do nothing when not using the problematic LaF
         if (!"com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(lafClass.getName())) {
             return;
@@ -37,7 +37,7 @@ public class GtkFixer {
         // workaround is simply not installed when something goes wrong here
         try {
             // Access the GTK style factory
-            Field field = lafClass.getDeclaredField("styleFactory");
+            @NotNull Field field = lafClass.getDeclaredField("styleFactory");
             boolean accessible = field.isAccessible();
             field.setAccessible(true);
             Object styleFactory = field.get(laf); // com.sun.java.swing.plaf.gtk.GTKStyleFactory
@@ -70,8 +70,8 @@ public class GtkFixer {
      * @param fieldName The field name.
      * @throws Exception When reflection fails.
      */
-    private static void fixGtkThickness(@NotNull Object style, String fieldName) throws Exception {
-        Field field = style.getClass().getDeclaredField(fieldName);
+    private static void fixGtkThickness(@NotNull Object style, @NotNull String fieldName) throws Exception {
+        @NotNull Field field = style.getClass().getDeclaredField(fieldName);
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
         field.setInt(style, Math.max(1, field.getInt(style)));
@@ -88,14 +88,14 @@ public class GtkFixer {
      * @return The GTK style.
      * @throws Exception When reflection fails.
      */
-    private static Object getGtkStyle(@NotNull Object styleFactory, JComponent component, String regionName) throws Exception {
+    private static Object getGtkStyle(@NotNull Object styleFactory, JComponent component, @NotNull String regionName) throws Exception {
         // Create the region object
-        Class<?> regionClass = Class.forName("javax.swing.plaf.synth.Region");
-        Field field = regionClass.getField(regionName);
+        @NotNull Class<?> regionClass = Class.forName("javax.swing.plaf.synth.Region");
+        @NotNull Field field = regionClass.getField(regionName);
         Object region = field.get(regionClass); // javax.swing.plaf.synth.Region
         // Get and return the style
-        Class<?> styleFactoryClass = styleFactory.getClass();
-        Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[]{
+        @NotNull Class<?> styleFactoryClass = styleFactory.getClass();
+        @NotNull Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[]{
                 JComponent.class, regionClass
         });
         boolean accessible = method.isAccessible();

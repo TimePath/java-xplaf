@@ -56,16 +56,16 @@ public class Application {
                  */));
     }
 
-    private void setHandler(InvocationHandler adapter) {
+    private void setHandler(@NotNull InvocationHandler adapter) {
         try {
-            Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
+            @NotNull Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
             if (macOSXApplication == null) {
                 // com.apple.eawt.Application()
                 macOSXApplication = applicationClass.getConstructor((Class[]) null).newInstance((Object[]) null);
             }
-            Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+            @NotNull Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
             // com.apple.eawt.Application.addApplicationListener(com.apple.eawt.ApplicationListener)
-            Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[]{
+            @NotNull Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[]{
                             applicationListenerClass
                     }
             );
