@@ -65,10 +65,8 @@ public class Application {
             }
             @NotNull Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
             // com.apple.eawt.Application.addApplicationListener(com.apple.eawt.ApplicationListener)
-            @NotNull Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[]{
-                            applicationListenerClass
-                    }
-            );
+            @NotNull Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener",
+                    applicationListenerClass);
             @NotNull Object osxAdapterProxy = Proxy.newProxyInstance(OSXAdapter.class.getClassLoader(),
                     new Class[]{applicationListenerClass},
                     adapter);

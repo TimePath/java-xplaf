@@ -95,9 +95,7 @@ public class GtkFixer {
         Object region = field.get(regionClass); // javax.swing.plaf.synth.Region
         // Get and return the style
         @NotNull Class<?> styleFactoryClass = styleFactory.getClass();
-        @NotNull Method method = styleFactoryClass.getMethod("getStyle", new Class<?>[]{
-                JComponent.class, regionClass
-        });
+        @NotNull Method method = styleFactoryClass.getMethod("getStyle", JComponent.class, regionClass);
         boolean accessible = method.isAccessible();
         method.setAccessible(true);
         Object style = method.invoke(styleFactory,
