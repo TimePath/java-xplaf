@@ -13,7 +13,7 @@ import java.awt.event.ComponentEvent;
 public class WindowMoveFix {
 
     public static void install(@NotNull final Frame f) {
-        if (!OS.isLinux()) return;
+        if (!OS.OBJECT$.isLinux()) return;
         f.addComponentListener(new ComponentAdapter() {
             private boolean moved;
             @NotNull

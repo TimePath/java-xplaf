@@ -124,6 +124,7 @@ public class FileChooserTest extends JFrame {
                     true, false
             };
 
+            @NotNull
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
@@ -368,7 +369,7 @@ public class FileChooserTest extends JFrame {
     private void jButton1ActionPerformed(ActionEvent evt) {
         try {
             @NotNull Class<?> clazz = (Class) this.jList1.getSelectedValue();
-            Object o = clazz.newInstance();
+            @NotNull Object o = clazz.newInstance();
             if (!(o instanceof BaseFileChooser)) {
                 return;
             }

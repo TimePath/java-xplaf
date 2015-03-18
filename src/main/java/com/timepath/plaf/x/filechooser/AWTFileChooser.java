@@ -23,7 +23,7 @@ public class AWTFileChooser extends BaseFileChooser {
     @Nullable
     @Override
     public File[] choose() {
-        if (OS.isMac()) {
+        if (OS.OBJECT$.isMac()) {
             OSXProps.setFileDialogDirectoryMode(isDirectoryMode());
         }
         @NotNull FileDialog fd = new FileDialog(parent, dialogTitle);
@@ -47,7 +47,7 @@ public class AWTFileChooser extends BaseFileChooser {
             fd.setFile(fileName);
         }
         if (isDirectoryMode()) {
-            if (!OS.isMac()) {
+            if (!OS.OBJECT$.isMac()) {
                 LOG.warning("Using AWT for directory selection on non mac system - not ideal");
             }
             fd.setFilenameFilter(new FilenameFilter() {

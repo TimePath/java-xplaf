@@ -22,7 +22,7 @@ public class SwingFileChooser extends BaseFileChooser {
     @Nullable
     @Override
     public File[] choose() {
-        if (OS.isLinux()) {
+        if (OS.OBJECT$.isLinux()) {
             //            UIManager.put("FileChooserUI", "eu.kostia.gtkjfilechooser.ui.GtkFileChooserUI");
         }
         @NotNull JFileChooser fd = new JFileChooser();

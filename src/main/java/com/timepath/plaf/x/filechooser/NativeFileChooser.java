@@ -21,13 +21,13 @@ public class NativeFileChooser extends BaseFileChooser {
     @NotNull
     private static BaseFileChooser which() {
         try {
-            if (OS.isWindows()) {
+            if (OS.OBJECT$.isWindows()) {
                 return new JnaFileChooser();
             }
 //            if (OS.isMac()) {
 //                return new AWTFileChooser(); // FIXME
 //            }
-            if (OS.isLinux()) {
+            if (OS.OBJECT$.isLinux()) {
                 String de = System.getenv("XDG_CURRENT_DESKTOP");
                 if (de != null) {
                     return "KDE".equalsIgnoreCase(de) ? new KDialogFileChooser() : new ZenityFileChooser();
