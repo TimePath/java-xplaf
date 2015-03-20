@@ -80,7 +80,7 @@ public class ZenityFileChooser : BaseFileChooser() {
         if (WindowToolkit.getWindowClass() != null) {
             cmd.add("--window-icon=" + LinuxUtils.getLinuxStore() + "icons/" + WindowToolkit.getWindowClass() + ".png")
         }
-        if ((getTitle() != null) && !getTitle().trim().isEmpty()) {
+        if (getTitle().trim().isNotEmpty()) {
             cmd.add("--title=" + getTitle())
         }
         if (approveButtonText != null) {

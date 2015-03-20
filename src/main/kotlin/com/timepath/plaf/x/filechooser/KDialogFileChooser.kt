@@ -61,17 +61,17 @@ public class KDialogFileChooser : BaseFileChooser() {
             }
         }
         cmd.add(sb.toString())
-        if (parent != null) {
-            val wid = WindowToolkit.getWindowID(parent)
+        parent?.let {
+            val wid = WindowToolkit.getWindowID(it)
             if (wid != 0L) {
                 cmd.add("--attach")
                 cmd.add(wid.toString())
-                wasEnabled = parent!!.isEnabled()
+                wasEnabled = it.isEnabled()
                 wasDisabled = true
-                parent!!.setEnabled(false)
+                it.setEnabled(false)
             }
         }
-        if ((getTitle() != null) && !getTitle().trim().isEmpty()) {
+        if (getTitle().trim().isNotEmpty()) {
             cmd.add("--title=" + getTitle())
         }
         if (approveButtonText != null) {

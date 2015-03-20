@@ -48,6 +48,7 @@ public class SwingFileChooser : BaseFileChooser() {
         fd.setDialogTitle(dialogTitle)
         fd.setDialogType(if (isSaveDialog()) JFileChooser.SAVE_DIALOG else JFileChooser.OPEN_DIALOG)
         if (directory != null) {
+            val fileName = fileName
             if (fileName != null) {
                 fd.setSelectedFile(File(directory, fileName))
             } else {

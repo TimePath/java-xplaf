@@ -59,9 +59,7 @@ public class FileChooserTest : JFrame() {
         jScrollPane2.setViewportView(jTable1)
         jButton1.setText("Test")
         jButton1.addActionListener(object : ActionListener {
-            override fun actionPerformed(e: ActionEvent) {
-                jButton1ActionPerformed(e)
-            }
+            override fun actionPerformed(e: ActionEvent) = jButton1ActionPerformed()
         })
         jLabel1.setText("Title:")
         textTitle.setMinimumSize(Dimension(78, 27))
@@ -95,7 +93,7 @@ public class FileChooserTest : JFrame() {
         this.jList1.setSelectedIndex(0)
     }
 
-    private fun jButton1ActionPerformed(evt: ActionEvent) {
+    private fun jButton1ActionPerformed() {
         try {
             val clazz = this.jList1.getSelectedValue() as Class<*>
             val bfc = clazz.newInstance()

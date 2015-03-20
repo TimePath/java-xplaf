@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author TimePath
@@ -37,7 +38,7 @@ public class Shell32 {
     private Shell32() {
     }
 
-    @NotNull
+    @Nullable
     public static native Pointer SHBrowseForFolder(BrowseInfo params);
 
     public static native boolean SHGetPathFromIDListW(Pointer pidl, Pointer path);
