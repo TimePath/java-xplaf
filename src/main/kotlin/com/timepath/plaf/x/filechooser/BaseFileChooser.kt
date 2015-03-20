@@ -124,7 +124,7 @@ public abstract class BaseFileChooser {
 
         private val extensions: List<String>
 
-        {
+        init {
             this.extensions = Arrays.asList<String>(*extensions)
         }
 
@@ -133,7 +133,7 @@ public abstract class BaseFileChooser {
         }
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<BaseFileChooser>().getName())
     }

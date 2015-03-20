@@ -103,7 +103,7 @@ public class JnaFileChooser : BaseFileChooser() {
         return filterStr.toString()
     }
 
-    class object {
+    companion object {
 
         /**
          * lpstrFile contains the selection path after the dialog returns. It must be big enough for

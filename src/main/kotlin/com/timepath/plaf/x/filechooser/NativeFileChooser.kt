@@ -32,7 +32,7 @@ public class NativeFileChooser : BaseFileChooser() {
         return chooser
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<NativeFileChooser>().getName())
 

@@ -65,7 +65,7 @@ public class SwingFileChooser : BaseFileChooser() {
         return selection
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<SwingFileChooser>().getName())
     }

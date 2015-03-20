@@ -55,7 +55,7 @@ public class AWTFileChooser : BaseFileChooser() {
         return array(File(fd.getDirectory() + File.pathSeparator + fd.getFile()))
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<AWTFileChooser>().getName())
     }

@@ -109,7 +109,7 @@ public class ZenityFileChooser : BaseFileChooser() {
         }
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<ZenityFileChooser>().getName())
     }

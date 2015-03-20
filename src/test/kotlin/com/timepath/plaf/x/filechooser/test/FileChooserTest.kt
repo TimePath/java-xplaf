@@ -38,7 +38,7 @@ public class FileChooserTest : JFrame() {
     private val jTable1 = JTable()
     private val textTitle = JTextField()
 
-            ;{
+    init {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
         setTitle("File dialog tester")
         jList1.setModel(getFileChoosers())
@@ -97,7 +97,7 @@ public class FileChooserTest : JFrame() {
 
     private fun jButton1ActionPerformed(evt: ActionEvent) {
         try {
-            val clazz = this.jList1!!.getSelectedValue() as Class<Any>
+            val clazz = this.jList1.getSelectedValue() as Class<*>
             val bfc = clazz.newInstance()
             if (bfc !is BaseFileChooser) {
                 return
@@ -113,7 +113,7 @@ public class FileChooserTest : JFrame() {
             bfc.setDialogType(if (this.checkSave.isSelected())
                 BaseFileChooser.DialogType.SAVE_DIALOG
             else
-                BaseFileChooser.DialogType.OPEN_DIALOG).setMultiSelectionEnabled(this.checkMulti.isSelected()).setTitle(this.textTitle!!.getText())
+                BaseFileChooser.DialogType.OPEN_DIALOG).setMultiSelectionEnabled(this.checkMulti.isSelected()).setTitle(this.textTitle.getText())
             bfc.addFilter(ExtensionFilter("All files", ".*"))
             val f = bfc.choose()
             if (f == null) {
@@ -136,7 +136,7 @@ public class FileChooserTest : JFrame() {
 
     }
 
-    class object {
+    companion object {
 
         private val serialVersionUID = 1
         private val LOG = Logger.getLogger(javaClass<FileChooserTest>().getName())

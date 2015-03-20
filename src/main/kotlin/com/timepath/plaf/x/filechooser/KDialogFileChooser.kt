@@ -102,7 +102,7 @@ public class KDialogFileChooser : BaseFileChooser() {
         }
     }
 
-    class object {
+    companion object {
 
         private val LOG = Logger.getLogger(javaClass<KDialogFileChooser>().getName())
     }
