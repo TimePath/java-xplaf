@@ -2,8 +2,7 @@ package com.timepath.plaf.x.filechooser
 
 import com.timepath.plaf.linux.LinuxUtils
 import com.timepath.plaf.linux.WindowToolkit
-
-import java.awt.*
+import java.awt.Toolkit
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException

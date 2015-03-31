@@ -4,18 +4,18 @@ import com.timepath.plaf.win.JnaFileChooser
 import com.timepath.plaf.x.filechooser.*
 import com.timepath.plaf.x.filechooser.BaseFileChooser.ExtensionFilter
 import com.timepath.plaf.x.filechooser.BaseFileChooser.FileMode
-
-import javax.swing.*
-import javax.swing.GroupLayout.Alignment
-import javax.swing.LayoutStyle.ComponentPlacement
-import javax.swing.table.DefaultTableModel
-import java.awt.*
+import java.awt.Dimension
+import java.awt.EventQueue
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.IOException
 import java.util.Arrays
 import java.util.logging.Level
 import java.util.logging.Logger
+import javax.swing.*
+import javax.swing.GroupLayout.Alignment
+import javax.swing.LayoutStyle.ComponentPlacement
+import javax.swing.table.DefaultTableModel
 import kotlin.platform.platformStatic
 
 /**

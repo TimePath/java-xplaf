@@ -4,10 +4,10 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author TimePath

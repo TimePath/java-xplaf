@@ -2,13 +2,11 @@ package com.timepath.plaf.win
 
 import com.sun.jna.Memory
 import com.sun.jna.Native
-import com.sun.jna.Pointer
 import com.sun.jna.WString
 import com.timepath.plaf.win.jna.Comdlg32
 import com.timepath.plaf.win.jna.Ole32
 import com.timepath.plaf.win.jna.Shell32
 import com.timepath.plaf.x.filechooser.BaseFileChooser
-
 import java.io.File
 import java.io.IOException
 import java.util.logging.Logger

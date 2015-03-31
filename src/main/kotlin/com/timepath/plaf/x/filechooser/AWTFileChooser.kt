@@ -2,8 +2,7 @@ package com.timepath.plaf.x.filechooser
 
 import com.timepath.plaf.OS
 import com.timepath.plaf.mac.OSXProps
-
-import java.awt.*
+import java.awt.FileDialog
 import java.io.File
 import java.io.FilenameFilter
 import java.util.logging.Logger
